@@ -1,4 +1,4 @@
-package org.jeecg.module.appapi;
+package org.jeecg.modules.appapi;
 
 /**
  * Hello world!

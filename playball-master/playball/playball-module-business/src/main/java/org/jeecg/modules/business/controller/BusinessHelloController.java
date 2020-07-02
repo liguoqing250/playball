@@ -1,4 +1,4 @@
-package org.jeecg.module.business.controller;
+package org.jeecg.modules.business.controller;
 
 /*import org.jeecg.common.api.vo.Result;
 import org.springframework.web.bind.annotation.GetMapping;

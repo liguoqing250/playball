@@ -1,4 +1,4 @@
-package org.jeecg.module.business;
+package org.jeecg.modules.business;
 
 /**
  * Hello world!
