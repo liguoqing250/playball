@@ -62,7 +62,32 @@ public class JwtUtil {
 			return null;
 		}
 	}
-
+	/**
+	 * APP
+	 * 生成签名
+	 *
+	 * @param userinfo 用户数据
+	 * @param secret   用户的id
+	 * @return 加密的token
+	 */
+	public static String appSign(String userinfo, String secret) {
+		Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+		Algorithm algorithm = Algorithm.HMAC256(secret);
+		return JWT.create().withClaim("userinfo", userinfo).withExpiresAt(date).sign(algorithm);
+	}
+	/**
+	 * 获得token中的信息
+	 *
+	 * @return token中包含的用户信息
+	 */
+	public static String getUserInfo(String token) {
+		try {
+			DecodedJWT jwt = JWT.decode(token);
+			return jwt.getClaim("userinfo").asString();
+		} catch (JWTDecodeException e) {
+			return null;
+		}
+	}
 	/**
 	 * 生成签名,5min后过期
 	 *

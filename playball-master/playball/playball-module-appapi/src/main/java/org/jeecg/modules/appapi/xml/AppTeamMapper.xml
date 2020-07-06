@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.AppTeamMapper">
+    <resultMap id="AppTeamResultMap" type="org.jeecg.modules.appapi.entity.AppTeam">
+        <result column="team_id" jdbcType="INTEGER" property="team_id" />
+        <result column="t_name" jdbcType="VARCHAR" property="t_name" />
+        <result column="t_image" jdbcType="VARCHAR" property="t_image" />
+        <result column="t_unitname" jdbcType="VARCHAR" property="t_unitname" />
+        <result column="st_id" jdbcType="INTEGER" property="st_id" />
+        <result column="t_players_total" jdbcType="INTEGER" property="t_players_total" />
+        <result column="t_introduce" jdbcType="VARCHAR" property="t_introduce" />
+        <result column="t_win_total" jdbcType="INTEGER" property="t_win_total" />
+        <result column="t_divide_total" jdbcType="INTEGER" property="t_divide_total" />
+        <result column="t_lost_total" jdbcType="INTEGER" property="t_lost_total" />
+        <result column="u_id" jdbcType="INTEGER" property="u_id" />
+        <result column="t_province" jdbcType="INTEGER" property="t_province" />
+        <result column="t_city" jdbcType="INTEGER" property="t_city" />
+        <result column="t_district" jdbcType="INTEGER" property="t_district" />
+        <result column="t_createTeamTime" jdbcType="TIMESTAMP" property="t_createTeamTime" />
+        <result column="t_captain" jdbcType="INTEGER" property="t_captain" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+    </resultMap>
+
+    <!-- 查询字段-->
+    <sql id="AppTeam_Column_List">
+        team_id,t_name,t_image,t_unitname,st_id,t_players_total,t_introduce,t_win_total,t_divide_total,t_lost_total,u_id,t_province,t_city,t_district,t_createTeamTime,t_captain,createTime,updateTime,is_delete,version
+    </sql>
+
+    <!--条件分页查询-->
+    <select id="selectByPage" parameterType="java.util.Map" resultMap="AppTeamResultMap">
+        select
+        <include refid="AppTeam_Column_List" />
+        from app_team
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+                <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+            </if>
+        </foreach>
+        <if test="params.sortField != null">
+            order by ${params.sortField} ${params.sortRule}
+        </if>
+        LIMIT #{params.PageNum},#{params.PageSize}
+    </select>
+
+    <!--获取总条数-->
+    <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        COUNT(*)
+        from app_team
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+                <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+            </if>
+        </foreach>
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByKey" parameterType="java.util.Map" resultMap="AppTeamResultMap">
+        select
+        <include refid="AppTeam_Column_List" />
+        from app_team
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+        </foreach>
+    </select>
+
+    <!--根据ID查询-->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        select
+        <include refid="AppTeam_Column_List" />
+        from app_team
+        where team_id = #{team_id,jdbcType=INTEGER}
+    </select>
+    <!--删 根据ID-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from app_team
+ where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <!--增 返回ID-->
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="team_id" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
+        insert into app_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="team_id != null">
+                team_id,
+            </if>
+            <if test="t_name != null">
+                t_name,
+            </if>
+            <if test="t_image != null">
+                t_image,
+            </if>
+            <if test="t_unitname != null">
+                t_unitname,
+            </if>
+            <if test="st_id != null">
+                st_id,
+            </if>
+            <if test="t_players_total != null">
+                t_players_total,
+            </if>
+            <if test="t_introduce != null">
+                t_introduce,
+            </if>
+            <if test="t_win_total != null">
+                t_win_total,
+            </if>
+            <if test="t_divide_total != null">
+                t_divide_total,
+            </if>
+            <if test="t_lost_total != null">
+                t_lost_total,
+            </if>
+            <if test="u_id != null">
+                u_id,
+            </if>
+            <if test="t_province != null">
+                t_province,
+            </if>
+            <if test="t_city != null">
+                t_city,
+            </if>
+            <if test="t_district != null">
+                t_district,
+            </if>
+            <if test="t_createTeamTime != null">
+                t_createTeamTime,
+            </if>
+            <if test="t_captain != null">
+                t_captain,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="is_delete != null">
+                is_delete,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="team_id != null">
+                #{team_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_name != null">
+                #{t_name,jdbcType=VARCHAR},
+            </if>
+            <if test="t_image != null">
+                #{t_image,jdbcType=VARCHAR},
+            </if>
+            <if test="t_unitname != null">
+                #{t_unitname,jdbcType=VARCHAR},
+            </if>
+            <if test="st_id != null">
+                #{st_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_players_total != null">
+                #{t_players_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_introduce != null">
+                #{t_introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="t_win_total != null">
+                #{t_win_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_divide_total != null">
+                #{t_divide_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_lost_total != null">
+                #{t_lost_total,jdbcType=INTEGER},
+            </if>
+            <if test="u_id != null">
+                #{u_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_province != null">
+                #{t_province,jdbcType=INTEGER},
+            </if>
+            <if test="t_city != null">
+                #{t_city,jdbcType=INTEGER},
+            </if>
+            <if test="t_district != null">
+                #{t_district,jdbcType=INTEGER},
+            </if>
+            <if test="t_createTeamTime != null">
+                #{t_createTeamTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="t_captain != null">
+                #{t_captain,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <!--更新-->
+    <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
+        update app_team
+        <set>
+            <if test="team_id != null">
+                team_id=#{team_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_name != null">
+                t_name=#{t_name,jdbcType=VARCHAR},
+            </if>
+            <if test="t_image != null">
+                t_image=#{t_image,jdbcType=VARCHAR},
+            </if>
+            <if test="t_unitname != null">
+                t_unitname=#{t_unitname,jdbcType=VARCHAR},
+            </if>
+            <if test="st_id != null">
+                st_id=#{st_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_players_total != null">
+                t_players_total=#{t_players_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_introduce != null">
+                t_introduce=#{t_introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="t_win_total != null">
+                t_win_total=#{t_win_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_divide_total != null">
+                t_divide_total=#{t_divide_total,jdbcType=INTEGER},
+            </if>
+            <if test="t_lost_total != null">
+                t_lost_total=#{t_lost_total,jdbcType=INTEGER},
+            </if>
+            <if test="u_id != null">
+                u_id=#{u_id,jdbcType=INTEGER},
+            </if>
+            <if test="t_province != null">
+                t_province=#{t_province,jdbcType=INTEGER},
+            </if>
+            <if test="t_city != null">
+                t_city=#{t_city,jdbcType=INTEGER},
+            </if>
+            <if test="t_district != null">
+                t_district=#{t_district,jdbcType=INTEGER},
+            </if>
+            <if test="t_createTeamTime != null">
+                t_createTeamTime=#{t_createTeamTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="t_captain != null">
+                t_captain=#{t_captain,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime=#{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="is_delete != null">
+                is_delete=#{is_delete,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                version=#{version,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

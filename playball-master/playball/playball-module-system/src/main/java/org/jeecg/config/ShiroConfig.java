@@ -11,6 +11,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.shiro.authc.AppShiroRealm;
 import org.jeecg.modules.shiro.authc.ShiroRealm;
 import org.jeecg.modules.shiro.authc.aop.JwtFilter;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -19,8 +20,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.util.StringUtils;
+import sun.security.krb5.Realm;
 
 import javax.servlet.Filter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -69,6 +72,9 @@ public class ShiroConfig {
 
 		//cas验证登录
 		filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");
+
+		//APP 注册登录相关接口 排除
+		filterChainDefinitionMap.put("/appopen/**","anon");
 		// 配置不会被拦截的链接 顺序判断
 		filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
 		filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //登录验证码接口排除
@@ -143,10 +149,12 @@ public class ShiroConfig {
 	}
 
 	@Bean("securityManager")
-	public DefaultWebSecurityManager securityManager(ShiroRealm myRealm) {
+	public DefaultWebSecurityManager securityManager(ShiroRealm myRealm, AppShiroRealm appShiroRealm) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+
 		securityManager.setRealm(myRealm);
 
+		securityManager.setRealm(appShiroRealm);
 		/*
 		 * 关闭shiro自带的session，详情见文档
 		 * http://shiro.apache.org/session-management.html#SessionManagement-

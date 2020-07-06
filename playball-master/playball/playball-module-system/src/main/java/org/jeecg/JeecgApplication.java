@@ -26,12 +26,12 @@ public class JeecgApplication {
     String ip = InetAddress.getLocalHost().getHostAddress();
     String port = env.getProperty("server.port");
     String path = env.getProperty("server.servlet.context-path");
-    log.info("\n----------------------------------------------------------\n\t" +
-        "Application Jeecg-Boot is running! Access URLs:\n\t" +
-        "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
-        "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
-        "Swagger-UI: \t\thttp://" + ip + ":" + port + path + "/doc.html\n" +
-        "----------------------------------------------------------");
+//    log.info("\n----------------------------------------------------------\n\t" +
+//        "Application Jeecg-Boot is running! Access URLs:\n\t" +
+//        "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
+//        "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
+//        "Swagger-UI: \t\thttp://" + ip + ":" + port + path + "/doc.html\n" +
+//        "----------------------------------------------------------");
 
   }
 

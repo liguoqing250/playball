@@ -27,12 +27,19 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
 	</repositories>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jeecgframework.boot</groupId>
 			<artifactId>playball-base-common</artifactId>
+		</dependency>
+		<!-- 阿里云短信验证码  -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>4.0.3</version>
 		</dependency>
 	</dependencies>
 

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.AppUsersMapper">
+    <resultMap id="AppUsersResultMap" type="org.jeecg.modules.appapi.entity.AppUsers">
+        <result column="u_id" jdbcType="INTEGER" property="u_id" />
+        <result column="u_name" jdbcType="VARCHAR" property="u_name" />
+        <result column="u_nickName" jdbcType="VARCHAR" property="u_nickName" />
+        <result column="u_phoneNumber" jdbcType="VARCHAR" property="u_phoneNumber" />
+        <result column="u_passworld" jdbcType="VARCHAR" property="u_passworld" />
+        <result column="u_sex" jdbcType="VARCHAR" property="u_sex" />
+        <result column="u_age" jdbcType="VARCHAR" property="u_age" />
+        <result column="u_height" jdbcType="INTEGER" property="u_height" />
+        <result column="u_weight" jdbcType="INTEGER" property="u_weight" />
+        <result column="u_headImage" jdbcType="VARCHAR" property="u_headImage" />
+        <result column="u_registerWay" jdbcType="INTEGER" property="u_registerWay" />
+        <result column="wx_openid" jdbcType="VARCHAR" property="wx_openid" />
+        <result column="qq_openid" jdbcType="VARCHAR" property="qq_openid" />
+        <result column="u_alipayid" jdbcType="VARCHAR" property="u_alipayid" />
+        <result column="u_idCard" jdbcType="VARCHAR" property="u_idCard" />
+        <result column="u_province" jdbcType="INTEGER" property="u_province" />
+        <result column="u_city" jdbcType="INTEGER" property="u_city" />
+        <result column="u_district" jdbcType="INTEGER" property="u_district" />
+        <result column="u_address" jdbcType="VARCHAR" property="u_address" />
+        <result column="u_lastlogin_time" jdbcType="TIMESTAMP" property="u_lastlogin_time" />
+        <result column="u_invited_user" jdbcType="INTEGER" property="u_invited_user" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
+        <result column="version" jdbcType="VARCHAR" property="version" />
+    </resultMap>
+
+    <!-- 查询字段-->
+    <sql id="AppUsers_Column_List">
+        u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version
+    </sql>
+
+    <select id="selectMyRegisterWay" parameterType="org.jeecg.modules.appapi.entity.AppUsers" resultMap="AppUsersResultMap">
+        select
+        <include refid="AppUsers_Column_List" />
+        from app_users
+        where
+        <if test="u_registerWay == 1">
+            u_phoneNumber= #{u_phoneNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="u_registerWay == 2">
+            qq_openid= #{qq_openid,jdbcType=VARCHAR}
+        </if>
+        <if test="u_registerWay == 3">
+            wx_openid= #{wx_openid,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+    <!--条件分页查询-->
+    <select id="selectByPage" parameterType="java.util.Map" resultMap="AppUsersResultMap">
+        select
+        <include refid="AppUsers_Column_List" />
+        from app_users
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+                <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+            </if>
+        </foreach>
+        <if test="params.sortField != null">
+            order by ${params.sortField} ${params.sortRule}
+        </if>
+        LIMIT #{params.PageNum},#{params.PageSize}
+    </select>
+
+    <!--获取总条数-->
+    <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        COUNT(*)
+        from app_users
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+                <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+            </if>
+        </foreach>
+    </select>
+
+    <!--条件查询-->
+    <select id="selectByKey" parameterType="java.util.Map" resultMap="AppUsersResultMap">
+        select
+        <include refid="AppUsers_Column_List" />
+        from app_users
+        where 1=1
+        <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
+            <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
+        </foreach>
+    </select>
+
+    <!--根据ID查询-->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="AppUsersResultMap">
+        select
+        <include refid="AppUsers_Column_List" />
+        from app_users
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <!--删 根据ID-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from app_users
+ where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <!--增 返回ID-->
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="u_id" parameterType="org.jeecg.modules.appapi.entity.AppUsers">
+        insert into app_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="u_name != null">
+                u_name,
+            </if>
+            <if test="u_nickName != null">
+                u_nickName,
+            </if>
+            <if test="u_phoneNumber != null">
+                u_phoneNumber,
+            </if>
+            <if test="u_passworld != null">
+                u_passworld,
+            </if>
+            <if test="u_sex != null">
+                u_sex,
+            </if>
+            <if test="u_age != null">
+                u_age,
+            </if>
+            <if test="u_height != null">
+                u_height,
+            </if>
+            <if test="u_weight != null">
+                u_weight,
+            </if>
+            <if test="u_headImage != null">
+                u_headImage,
+            </if>
+            <if test="u_registerWay != null">
+                u_registerWay,
+            </if>
+            <if test="wx_openid != null">
+                wx_openid,
+            </if>
+            <if test="qq_openid != null">
+                qq_openid,
+            </if>
+            <if test="u_alipayid != null">
+                u_alipayid,
+            </if>
+            <if test="u_idCard != null">
+                u_idCard,
+            </if>
+            <if test="u_province != null">
+                u_province,
+            </if>
+            <if test="u_city != null">
+                u_city,
+            </if>
+            <if test="u_district != null">
+                u_district,
+            </if>
+            <if test="u_address != null">
+                u_address,
+            </if>
+            <if test="u_lastlogin_time != null">
+                u_lastlogin_time,
+            </if>
+            <if test="u_invited_user != null">
+                u_invited_user,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
+            </if>
+            <if test="is_delete != null">
+                is_delete,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="u_name != null">
+                #{u_name,jdbcType=VARCHAR},
+            </if>
+            <if test="u_nickName != null">
+                #{u_nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="u_phoneNumber != null">
+                #{u_phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="u_passworld != null">
+                #{u_passworld,jdbcType=VARCHAR},
+            </if>
+            <if test="u_sex != null">
+                #{u_sex,jdbcType=VARCHAR},
+            </if>
+            <if test="u_age != null">
+                #{u_age,jdbcType=VARCHAR},
+            </if>
+            <if test="u_height != null">
+                #{u_height,jdbcType=INTEGER},
+            </if>
+            <if test="u_weight != null">
+                #{u_weight,jdbcType=INTEGER},
+            </if>
+            <if test="u_headImage != null">
+                #{u_headImage,jdbcType=VARCHAR},
+            </if>
+            <if test="u_registerWay != null">
+                #{u_registerWay,jdbcType=INTEGER},
+            </if>
+            <if test="wx_openid != null">
+                #{wx_openid,jdbcType=VARCHAR},
+            </if>
+            <if test="qq_openid != null">
+                #{qq_openid,jdbcType=VARCHAR},
+            </if>
+            <if test="u_alipayid != null">
+                #{u_alipayid,jdbcType=VARCHAR},
+            </if>
+            <if test="u_idCard != null">
+                #{u_idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="u_province != null">
+                #{u_province,jdbcType=INTEGER},
+            </if>
+            <if test="u_city != null">
+                #{u_city,jdbcType=INTEGER},
+            </if>
+            <if test="u_district != null">
+                #{u_district,jdbcType=INTEGER},
+            </if>
+            <if test="u_address != null">
+                #{u_address,jdbcType=VARCHAR},
+            </if>
+            <if test="u_lastlogin_time != null">
+                #{u_lastlogin_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="u_invited_user != null">
+                #{u_invited_user,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="is_delete != null">
+                #{is_delete,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--更新-->
+    <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppUsers">
+        update app_users
+        <set>
+            <if test="u_name != null">
+                u_name=#{u_name,jdbcType=VARCHAR},
+            </if>
+            <if test="u_nickName != null">
+                u_nickName=#{u_nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="u_phoneNumber != null">
+                u_phoneNumber=#{u_phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="u_passworld != null">
+                u_passworld=#{u_passworld,jdbcType=VARCHAR},
+            </if>
+            <if test="u_sex != null">
+                u_sex=#{u_sex,jdbcType=VARCHAR},
+            </if>
+            <if test="u_age != null">
+                u_age=#{u_age,jdbcType=VARCHAR},
+            </if>
+            <if test="u_height != null">
+                u_height=#{u_height,jdbcType=INTEGER},
+            </if>
+            <if test="u_weight != null">
+                u_weight=#{u_weight,jdbcType=INTEGER},
+            </if>
+            <if test="u_headImage != null">
+                u_headImage=#{u_headImage,jdbcType=VARCHAR},
+            </if>
+            <if test="u_registerWay != null">
+                u_registerWay=#{u_registerWay,jdbcType=INTEGER},
+            </if>
+            <if test="wx_openid != null">
+                wx_openid=#{wx_openid,jdbcType=VARCHAR},
+            </if>
+            <if test="qq_openid != null">
+                qq_openid=#{qq_openid,jdbcType=VARCHAR},
+            </if>
+            <if test="u_alipayid != null">
+                u_alipayid=#{u_alipayid,jdbcType=VARCHAR},
+            </if>
+            <if test="u_idCard != null">
+                u_idCard=#{u_idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="u_province != null">
+                u_province=#{u_province,jdbcType=INTEGER},
+            </if>
+            <if test="u_city != null">
+                u_city=#{u_city,jdbcType=INTEGER},
+            </if>
+            <if test="u_district != null">
+                u_district=#{u_district,jdbcType=INTEGER},
+            </if>
+            <if test="u_address != null">
+                u_address=#{u_address,jdbcType=VARCHAR},
+            </if>
+            <if test="u_lastlogin_time != null">
+                u_lastlogin_time=#{u_lastlogin_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="u_invited_user != null">
+                u_invited_user=#{u_invited_user,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                createTime=#{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                updateTime=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="is_delete != null">
+                is_delete=#{is_delete,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                version=#{version,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>
