@@ -74,6 +74,12 @@ public class MybatisInterceptor implements Interceptor {
 							field.setAccessible(false);
 						}
 					}
+					// 注入更新时间
+					if ("updateTime".equals(field.getName())) {
+						field.setAccessible(true);
+						field.set(parameter, new Date());
+						field.setAccessible(false);
+					}
 					//注入部门编码
 					if ("sysOrgCode".equals(field.getName())) {
 						field.setAccessible(true);

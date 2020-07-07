@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.DemoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.appapi.entity.Demo">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="key_word" property="keyWord" />
+        <result column="punch_time" property="punchTime" />
+        <result column="salary_money" property="salaryMoney" />
+        <result column="bonus_money" property="bonusMoney" />
+        <result column="sex" property="sex" />
+        <result column="age" property="age" />
+        <result column="birthday" property="birthday" />
+        <result column="email" property="email" />
+        <result column="content" property="content" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="sys_org_code" property="sysOrgCode" />
+    </resultMap>
+    
+    <select id="testDemo" resultMap="BaseResultMap">
+    	select * from demo
+    </select>
+
+</mapper>
