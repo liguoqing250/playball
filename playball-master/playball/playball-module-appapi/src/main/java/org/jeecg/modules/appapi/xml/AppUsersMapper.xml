@@ -7,11 +7,12 @@
         <result column="u_nickName" jdbcType="VARCHAR" property="u_nickName" />
         <result column="u_phoneNumber" jdbcType="VARCHAR" property="u_phoneNumber" />
         <result column="u_passworld" jdbcType="VARCHAR" property="u_passworld" />
-        <result column="u_sex" jdbcType="VARCHAR" property="u_sex" />
+        <result column="u_sex" jdbcType="INTEGER" property="u_sex" />
         <result column="u_age" jdbcType="VARCHAR" property="u_age" />
         <result column="u_height" jdbcType="INTEGER" property="u_height" />
         <result column="u_weight" jdbcType="INTEGER" property="u_weight" />
         <result column="u_headImage" jdbcType="VARCHAR" property="u_headImage" />
+        <result column="u_profile" jdbcType="VARCHAR" property="u_profile" />
         <result column="u_registerWay" jdbcType="INTEGER" property="u_registerWay" />
         <result column="wx_openid" jdbcType="VARCHAR" property="wx_openid" />
         <result column="qq_openid" jdbcType="VARCHAR" property="qq_openid" />
@@ -31,7 +32,7 @@
 
     <!-- 查询字段-->
     <sql id="AppUsers_Column_List">
-        u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version
+        u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_profile,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version
     </sql>
 
     <select id="selectMyRegisterWay" parameterType="org.jeecg.modules.appapi.entity.AppUsers" resultMap="AppUsersResultMap">
@@ -96,12 +97,11 @@
         select
         <include refid="AppUsers_Column_List" />
         from app_users
-        where id = #{id,jdbcType=INTEGER}
+        where u_id = #{u_id,jdbcType=INTEGER}
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from app_users
- where id = #{id,jdbcType=INTEGER}
+        delete from app_users where u_id = #{u_id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="u_id" parameterType="org.jeecg.modules.appapi.entity.AppUsers">
@@ -133,6 +133,9 @@
             </if>
             <if test="u_headImage != null">
                 u_headImage,
+            </if>
+            <if test="u_profile != null">
+                u_profile,
             </if>
             <if test="u_registerWay != null">
                 u_registerWay,
@@ -194,7 +197,7 @@
                 #{u_passworld,jdbcType=VARCHAR},
             </if>
             <if test="u_sex != null">
-                #{u_sex,jdbcType=VARCHAR},
+                #{u_sex,jdbcType=INTEGER},
             </if>
             <if test="u_age != null">
                 #{u_age,jdbcType=VARCHAR},
@@ -207,6 +210,9 @@
             </if>
             <if test="u_headImage != null">
                 #{u_headImage,jdbcType=VARCHAR},
+            </if>
+            <if test="u_profile != null">
+                #{u_profile,jdbcType=VARCHAR},
             </if>
             <if test="u_registerWay != null">
                 #{u_registerWay,jdbcType=INTEGER},
@@ -272,7 +278,7 @@
                 u_passworld=#{u_passworld,jdbcType=VARCHAR},
             </if>
             <if test="u_sex != null">
-                u_sex=#{u_sex,jdbcType=VARCHAR},
+                u_sex=#{u_sex,jdbcType=INTEGER},
             </if>
             <if test="u_age != null">
                 u_age=#{u_age,jdbcType=VARCHAR},
@@ -285,6 +291,9 @@
             </if>
             <if test="u_headImage != null">
                 u_headImage=#{u_headImage,jdbcType=VARCHAR},
+            </if>
+            <if test="u_profile != null">
+                u_profile=#{u_profile,jdbcType=VARCHAR},
             </if>
             <if test="u_registerWay != null">
                 u_registerWay=#{u_registerWay,jdbcType=INTEGER},
@@ -332,7 +341,7 @@
                 version=#{version,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where u_id = #{u_id,jdbcType=INTEGER}
     </update>
 
 </mapper>

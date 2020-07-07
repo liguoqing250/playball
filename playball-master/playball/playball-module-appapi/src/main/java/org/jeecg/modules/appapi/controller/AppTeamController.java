@@ -9,7 +9,9 @@ import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.jeecg.modules.appapi.service.AppTeamService;
+import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +21,46 @@ import java.util.Map;
 @RequestMapping("/appTeam")
 @Slf4j
 public class AppTeamController {
+
+
     @Autowired
     AppTeamService appTeamService;
+
+    @Autowired
+    JoinQuitTeamApplyService joinQuitTeamApplyService;
+
+    //申请加入球队
+    @PostMapping(value = "/joinTeamApply")
+    public Result<JSONObject> joinTeamApply(@RequestBody JoinQuitTeamApply joinQuitTeamApply) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            JSONObject obj = joinQuitTeamApplyService.joinTeamApply(joinQuitTeamApply);
+            result.success(obj.get("msg").toString());
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("申请失败");
+        }
+        return result;
+    }
+
+    @PostMapping(value = "/selectTeamById")
+    public Result<JSONObject> selectTeamById(@RequestBody AppTeam appTeam) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            JSONObject obj = new JSONObject();
+            obj.put("data", appTeamService.selectById(appTeam.getTeam_id()));
+            result.success("查询成功");
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("查询失败");
+        }
+        return result;
+    }
     //创建球队
     @PostMapping(value = "/createTeam")
     public Result<JSONObject> register(@RequestBody AppTeam appTeam) {
-        System.out.println(appTeam.getT_name());
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             //appTeamService.insert(appTeam);

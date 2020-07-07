@@ -19,6 +19,8 @@ public class AppTeam {
     private Integer st_id;
     //当前球队人数
     private Integer t_players_total;
+    //球队人数上限
+    private Integer t_players_max;
     //球队介绍 招募说明
     private String t_introduce;
     //胜 次数
@@ -47,6 +49,14 @@ public class AppTeam {
     private Integer is_delete;
     //版本号（用作乐观锁）
     private Integer version;
+
+    public Integer getT_players_max() {
+        return t_players_max;
+    }
+
+    public void setT_players_max(Integer t_players_max) {
+        this.t_players_max = t_players_max;
+    }
 
     public Integer getTeam_id() {
         return team_id;

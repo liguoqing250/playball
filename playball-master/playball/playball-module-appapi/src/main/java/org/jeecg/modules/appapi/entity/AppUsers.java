@@ -18,7 +18,7 @@ public class AppUsers {
     //密码，非空约束
     private String u_passworld;
     //性别 1男/ 2女
-    private String u_sex;
+    private int u_sex;
     //年龄
     private String u_age;
     //身高 单位 cm
@@ -27,6 +27,8 @@ public class AppUsers {
     private Integer u_weight;
     //头像
     private String u_headImage;
+    //个人简介
+    private String u_profile;
     //1 手机 2QQ   3微信
     private Integer u_registerWay;
     //QQ--唯一约束
@@ -98,11 +100,11 @@ public class AppUsers {
         this.u_passworld = u_passworld;
     }
 
-    public String getU_sex() {
+    public int getU_sex() {
         return u_sex;
     }
 
-    public void setU_sex(String u_sex) {
+    public void setU_sex(int u_sex) {
         this.u_sex = u_sex;
     }
 
@@ -252,6 +254,14 @@ public class AppUsers {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getU_profile() {
+        return u_profile;
+    }
+
+    public void setU_profile(String u_profile) {
+        this.u_profile = u_profile;
     }
 
     public void setVersion(String version) {

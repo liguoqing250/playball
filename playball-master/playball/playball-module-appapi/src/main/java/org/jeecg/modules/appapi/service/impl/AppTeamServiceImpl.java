@@ -37,10 +37,12 @@ public class AppTeamServiceImpl  implements AppTeamService {
         AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
         //创建球队
         record.setU_id(appUsers.getU_id());
+        record.setT_players_total(1);
         record.setT_captain(appUsers.getU_id());
         appTeamMapper.insert(record);
         //创建队员信息
         AppTeamPlayers appTeamPlayers=new AppTeamPlayers();
+
         appTeamPlayers.setTeam_id(record.getTeam_id());
         appTeamPlayers.setTp_joinTime(new Date());
         appTeamPlayers.setU_id(appUsers.getU_id());
