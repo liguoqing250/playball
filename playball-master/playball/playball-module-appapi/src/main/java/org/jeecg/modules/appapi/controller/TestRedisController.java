@@ -32,7 +32,6 @@ public class TestRedisController {
 		redis.set("liuerzxc", "iaou", 600L);//测试 Redis 
 		System.err.println(d);
 		int insert = mapper.insert(d);
-		mapper.select
 		if(insert>0){
 			return result.success("操作成功！！！");
 		}
