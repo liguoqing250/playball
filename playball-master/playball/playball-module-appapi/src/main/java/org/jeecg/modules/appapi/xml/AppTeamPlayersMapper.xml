@@ -24,7 +24,7 @@
     <select id="selectByPage" parameterType="java.util.Map" resultMap="AppTeamPlayersResultMap">
         select
         <include refid="AppTeamPlayers_Column_List" />
-        from app_team_players
+        from playball_team_players
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -41,7 +41,7 @@
     <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select
         COUNT(*)
-        from app_team_players
+        from playball_team_players
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -54,7 +54,7 @@
     <select id="selectByKey" parameterType="java.util.Map" resultMap="AppTeamPlayersResultMap">
         select
         <include refid="AppTeamPlayers_Column_List" />
-        from app_team_players
+        from playball_team_players
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
@@ -66,22 +66,22 @@
     <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="AppTeamPlayersResultMap">
         select
         <include refid="AppTeamPlayers_Column_List" />
-        from app_team_players  where u_id = #{userId,jdbcType=INTEGER}
+        from playball_team_players  where u_id = #{userId,jdbcType=INTEGER}
     </select>
     <!--根据ID查询-->
     <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamPlayersResultMap">
         select
         <include refid="AppTeamPlayers_Column_List" />
-        from app_team_players
+        from playball_team_players
  where tp_id = #{tp_id,jdbcType=INTEGER}
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from app_team_players where id = #{id,jdbcType=INTEGER}
+        delete from playball_team_players where id = #{id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="tp_id" parameterType="org.jeecg.modules.appapi.entity.AppTeamPlayers">
-        insert into app_team_players
+        insert into playball_team_players
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="u_id != null">
                 u_id,
@@ -149,7 +149,7 @@
     </insert>
     <!--更新-->
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppTeamPlayers">
-        update app_team_players
+        update playball_team_players
         <set>
             <if test="u_id != null">
                 u_id=#{u_id,jdbcType=INTEGER},

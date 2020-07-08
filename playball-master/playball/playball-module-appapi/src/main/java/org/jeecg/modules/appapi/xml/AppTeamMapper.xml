@@ -34,7 +34,7 @@
     <select id="selectByPage" parameterType="java.util.Map" resultMap="AppTeamResultMap">
         select
         <include refid="AppTeam_Column_List" />
-        from app_team
+        from playball_team
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -51,7 +51,7 @@
     <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select
         COUNT(*)
-        from app_team
+        from playball_team
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -64,7 +64,7 @@
     <select id="selectByKey" parameterType="java.util.Map" resultMap="AppTeamResultMap">
         select
         <include refid="AppTeam_Column_List" />
-        from app_team
+        from playball_team
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
@@ -75,17 +75,17 @@
     <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
         select
         <include refid="AppTeam_Column_List" />
-        from app_team
+        from playball_team
         where team_id = #{team_id,jdbcType=INTEGER}
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from app_team
+        delete from playball_team
  where id = #{id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="team_id" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
-        insert into app_team
+        insert into playball_team
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="team_id != null">
                 team_id,
@@ -219,7 +219,7 @@
     </insert>
     <!--更新-->
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
-        update app_team
+        update playball_team
         <set>
             <if test="team_id != null">
                 team_id=#{team_id,jdbcType=INTEGER},

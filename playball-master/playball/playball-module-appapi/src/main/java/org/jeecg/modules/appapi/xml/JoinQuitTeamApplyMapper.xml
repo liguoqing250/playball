@@ -23,7 +23,7 @@
     <select id="selectByPage" parameterType="java.util.Map" resultMap="JoinQuitTeamApplyResultMap">
         select
         <include refid="JoinQuitTeamApply_Column_List" />
-        from app_join_quit_team_apply
+        from playball_join_quit_team_apply
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -40,7 +40,7 @@
     <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select
         COUNT(*)
-        from app_join_quit_team_apply
+        from playball_join_quit_team_apply
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -53,7 +53,7 @@
     <select id="selectByKey" parameterType="java.util.Map" resultMap="JoinQuitTeamApplyResultMap">
         select
         <include refid="JoinQuitTeamApply_Column_List" />
-        from app_join_quit_team_apply
+        from playball_join_quit_team_apply
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
@@ -64,16 +64,16 @@
     <select id="selectById" parameterType="java.lang.Integer" resultMap="JoinQuitTeamApplyResultMap">
         select
         <include refid="JoinQuitTeamApply_Column_List" />
-        from app_join_quit_team_apply
+        from playball_join_quit_team_apply
  where jqta_id = #{jqta_id,jdbcType=INTEGER}
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from app_join_quit_team_apply where jqta_id = #{jqta_id,jdbcType=INTEGER}
+        delete from playball_join_quit_team_apply where jqta_id = #{jqta_id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="jqta_id" parameterType="org.jeecg.modules.appapi.entity.JoinQuitTeamApply">
-        insert into app_join_quit_team_apply
+        insert into playball_join_quit_team_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="team_id != null">
                 team_id,
@@ -135,7 +135,7 @@
     </insert>
     <!--更新-->
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.JoinQuitTeamApply">
-        update app_join_quit_team_apply
+        update playball_join_quit_team_apply
         <set>
             <if test="team_id != null">
                 team_id=#{team_id,jdbcType=INTEGER},

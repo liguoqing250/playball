@@ -38,7 +38,7 @@
     <select id="selectMyRegisterWay" parameterType="org.jeecg.modules.appapi.entity.AppUsers" resultMap="AppUsersResultMap">
         select
         <include refid="AppUsers_Column_List" />
-        from app_users
+        from playball_users
         where
         <if test="u_registerWay == 1">
             u_phoneNumber= #{u_phoneNumber,jdbcType=VARCHAR}
@@ -55,7 +55,7 @@
     <select id="selectByPage" parameterType="java.util.Map" resultMap="AppUsersResultMap">
         select
         <include refid="AppUsers_Column_List" />
-        from app_users
+        from playball_users
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -72,7 +72,7 @@
     <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         select
         COUNT(*)
-        from app_users
+        from playball_users
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
@@ -85,7 +85,7 @@
     <select id="selectByKey" parameterType="java.util.Map" resultMap="AppUsersResultMap">
         select
         <include refid="AppUsers_Column_List" />
-        from app_users
+        from playball_users
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
             <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
@@ -96,16 +96,16 @@
     <select id="selectById" parameterType="java.lang.Integer" resultMap="AppUsersResultMap">
         select
         <include refid="AppUsers_Column_List" />
-        from app_users
+        from playball_users
         where u_id = #{u_id,jdbcType=INTEGER}
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from app_users where u_id = #{u_id,jdbcType=INTEGER}
+        delete from playball_users where u_id = #{u_id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="u_id" parameterType="org.jeecg.modules.appapi.entity.AppUsers">
-        insert into app_users
+        insert into playball_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="u_name != null">
                 u_name,
@@ -263,7 +263,7 @@
     </insert>
     <!--更新-->
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppUsers">
-        update app_users
+        update playball_users
         <set>
             <if test="u_name != null">
                 u_name=#{u_name,jdbcType=VARCHAR},
