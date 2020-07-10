@@ -15,11 +15,12 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="机构名称"
+          label="球馆(商家)名称"
           :hidden="false"
           hasFeedback >
-          <a-input id="departName" placeholder="请输入机构/部门名称" v-decorator="['departName', validatorRules.departName ]"/>
+          <a-input id="departName" placeholder="请输入球馆(商家)名称" v-decorator="['departName', validatorRules.departName ]"/>
         </a-form-item>
+        <!--
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" :hidden="seen" label="上级部门" hasFeedback>
         <a-tree-select
           style="width:100%"
@@ -30,6 +31,7 @@
           :disabled="condition">
         </a-tree-select>
         </a-form-item>
+
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -52,12 +54,48 @@
             </a-radio-group>
           </template>
         </a-form-item>
+        -->
+        <a-form-item label="场馆图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-image-upload class="avatar-uploader" text="上传" v-model="fileList" ></j-image-upload>
+        </a-form-item>
+
+        <!--  JDate -->
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="电话">
-          <a-input placeholder="请输入电话" v-decorator="['mobile',validatorRules.mobile]" />
+          label="营业时间">
+          <j-date :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['openTime', {} ]"/>
         </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="打烊时间">
+          <j-date :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['closeTime', {} ]"/>
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="手机号">
+          <a-input placeholder="请输入手机号" v-decorator="['mobile',validatorRules.mobile]" />
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="银行卡号">
+          <a-input placeholder="请输入银行卡号" v-decorator="['bankCard', {'initialValue':''}]"/>
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="地址">
+          <a-input placeholder="请输入地址" v-decorator="['address', {'initialValue':''}]"/>
+        </a-form-item>
+
+        <!--
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -67,15 +105,11 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="地址">
-          <a-input placeholder="请输入地址" v-decorator="['address', {}]"  />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
           label="排序">
           <a-input-number v-decorator="[ 'departOrder',{'initialValue':0}]" />
         </a-form-item>
+      -->
+
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
@@ -93,9 +127,14 @@
   import { queryIdTree } from '@/api/api'
   import pick from 'lodash.pick'
   import ATextarea from 'ant-design-vue/es/input/TextArea'
+  import JDate from '@/components/jeecg/JDate'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
+
   export default {
     name: "SysDepartModal",
-    components: { ATextarea },
+    components: { ATextarea,
+      JDate,
+      JImageUpload},
     data () {
       return {
         departTree:[],
@@ -119,11 +158,12 @@
           sm: { span: 16 },
         },
 
+        jdate: {},
+        fileList:[],
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules:{
-        departName:{rules: [{ required: true, message: '请输入机构/部门名称!' }]},
-        orgCode:{rules: [{ required: true, message: '请输入机构编码!' }]},
+        departName:{rules: [{ required: true, message: '请输入商家(球馆)名称!' }]},
          mobile:{rules: [{validator:this.validateMobile}]}
         },
         url: {
@@ -145,32 +185,31 @@
               that.departTree.push(temp);
             }
           }
-
         })
       },
       add (depart) {
-        if(depart){
+        /*if(depart){
           this.seen = false;
           this.dictDisabled = false;
         }else{
           this.seen = true;
           this.dictDisabled = true;
-        }
+        }*/
         this.edit(depart);
       },
       edit (record) {
           this.form.resetFields();
-          this.model = Object.assign({}, {});
+          //this.model = Object.assign({}, {});
           this.visible = true;
           this.loadTreeData();
-          this.model.parentId = record!=null?record.toString():null;
+          /*this.model.parentId = record!=null?record.toString():null;
           if(this.seen){
             this.model.orgCategory = '1';
           }else{
             this.model.orgCategory = '2';
-          }
+          }*/
           this.$nextTick(() => {
-            this.form.setFieldsValue(pick(this.model,'orgCategory','departName','departNameEn','departNameAbbr','departOrder','description','orgType','orgCode','mobile','fax','address','memo','status','delFlag'))
+            this.form.setFieldsValue(pick(this.model,'openTime','closeTime','departNameAbbr','mobile','bankCard','address','memo','imageUrl'))
           });
       },
       close () {
@@ -185,8 +224,9 @@
           if (!err) {
             that.confirmLoading = true;
             let formData = Object.assign(this.model, values);
+            formData.imageUrl = that.fileList;
             //时间格式化
-            console.log(formData)
+            console.log("触发表单验证",formData)
             httpAction(this.url.add,formData,"post").then((res)=>{
               if(res.success){
                 that.$message.success(res.message);

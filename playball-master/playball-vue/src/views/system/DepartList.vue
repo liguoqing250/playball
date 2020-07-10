@@ -5,9 +5,9 @@
 
         <!-- 按钮操作区域 -->
         <a-row style="margin-left: 14px">
-          <a-button @click="handleAdd(1)" type="primary">添加部门</a-button>
-          <a-button @click="handleAdd(2)" type="primary">添加下级</a-button>
-          <a-button type="primary" icon="download" @click="handleExportXls('部门信息')">导出</a-button>
+          <a-button @click="handleAdd(1)" type="primary">添加商家(球馆)</a-button>
+          <!--<a-button @click="handleAdd(2)" type="primary">添加下级</a-button>-->
+          <a-button type="primary" icon="download" @click="handleExportXls('商家信息')">导出</a-button>
           <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
             <a-button type="primary" icon="import">导入</a-button>
           </a-upload>
@@ -21,38 +21,41 @@
               <a v-if="this.currSelected.title" style="margin-left: 10px" @click="onClearSelected">取消选择</a>
             </div>
           </a-alert>
-          <a-input-search @search="onSearch" style="width:100%;margin-top: 10px" placeholder="请输入部门名称"/>
+          <a-input-search @search="onSearch" style="width:100%;margin-top: 10px" placeholder="请输入商家名称"/>
           <!-- 树-->
           <a-col :md="10" :sm="24">
             <template>
-              <a-dropdown :trigger="[this.dropTrigger]" @visibleChange="dropStatus">
+
                <span style="user-select: none">
-            <a-tree
-              checkable
-              multiple
-              @select="onSelect"
-              @check="onCheck"
-              @rightClick="rightHandle"
-              :selectedKeys="selectedKeys"
-              :checkedKeys="checkedKeys"
-              :treeData="departTree"
-              :checkStrictly="checkStrictly"
-              :expandedKeys="iExpandedKeys"
-              :autoExpandParent="autoExpandParent"
-              @expand="onExpand"/>
+                  <a-tree
+                    checkable
+                    multiple
+                    @select="onSelect"
+                    @check="onCheck"
+                    @rightClick="rightHandle"
+                    :selectedKeys="selectedKeys"
+                    :checkedKeys="checkedKeys"
+                    :treeData="departTree"
+                    :checkStrictly="checkStrictly"
+                    :expandedKeys="iExpandedKeys"
+                    :autoExpandParent="autoExpandParent"
+                    @expand="onExpand"/>
                 </span>
                 <!--新增右键点击事件,和增加添加和删除功能-->
+                <!--
                 <a-menu slot="overlay">
                   <a-menu-item @click="handleAdd(3)" key="1">添加</a-menu-item>
                   <a-menu-item @click="handleDelete" key="2">删除</a-menu-item>
                   <a-menu-item @click="closeDrop" key="3">取消</a-menu-item>
                 </a-menu>
-              </a-dropdown>
+                -->
+
             </template>
           </a-col>
         </div>
       </a-card>
       <!---- author:os_chengtgen -- date:20190827 --  for:切换父子勾选模式 =======------>
+      <!--
       <div class="drawer-bootom-button">
         <a-dropdown :trigger="['click']" placement="topCenter">
           <a-menu slot="overlay">
@@ -68,6 +71,7 @@
           </a-button>
         </a-dropdown>
       </div>
+      -->
       <!---- author:os_chengtgen -- date:20190827 --  for:切换父子勾选模式 =======------>
     </a-col>
     <a-col :md="12" :sm="24">
@@ -78,9 +82,15 @@
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
-                label="机构名称">
-                <a-input placeholder="请输入机构/部门名称" v-decorator="['departName', validatorRules.departName ]"/>
+                label="球馆名称">
+                <a-input placeholder="请输入商户（球馆）名称" v-decorator="['departName', validatorRules.departName ]"/>
               </a-form-item>
+
+              <a-form-item label="场馆图片" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                <j-image-upload class="avatar-uploader" text="上传" v-model="fileList" ></j-image-upload>
+              </a-form-item>
+
+              <!--
               <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="上级部门">
                 <a-tree-select
                   style="width:100%"
@@ -91,12 +101,30 @@
                   placeholder="无">
                 </a-tree-select>
               </a-form-item>
+
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
                 label="机构编码">
                 <a-input disabled placeholder="请输入机构编码" v-decorator="['orgCode', validatorRules.orgCode ]"/>
               </a-form-item>
+              -->
+
+              <!--  JDate -->
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="营业时间">
+                <j-date v-model="jdate.value" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['openTime', {} ]"/>
+              </a-form-item>
+
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="打烊时间">
+                <j-date v-model="jdate.value" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['closeTime', {} ]"/>
+              </a-form-item>
+              <!--
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
@@ -119,24 +147,38 @@
                   </a-radio-group>
                 </template>
               </a-form-item>
+              -->
+
+              <!--
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
                 label="排序">
                 <a-input-number v-decorator="[ 'departOrder',{'initialValue':0}]"/>
               </a-form-item>
+              -->
+
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
                 label="手机号">
                 <a-input placeholder="请输入手机号" v-decorator="['mobile', {'initialValue':''}]"/>
               </a-form-item>
+
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="银行卡号">
+                <a-input placeholder="请输入银行卡号" v-decorator="['bankCard', {'initialValue':''}]"/>
+              </a-form-item>
+
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
                 label="地址">
                 <a-input placeholder="请输入地址" v-decorator="['address', {'initialValue':''}]"/>
               </a-form-item>
+
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
@@ -159,8 +201,8 @@
           <depart-auth-modal ref="departAuth"/>
         </a-tab-pane>
       </a-tabs>
-
     </a-col>
+
     <depart-modal ref="departModal" @ok="loadTree"></depart-modal>
   </a-row>
 </template>
@@ -171,6 +213,9 @@
   import {httpAction, deleteAction} from '@/api/manage'
   import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import DepartAuthModal from './modules/DepartAuthModal'
+  import JDate from '@/components/jeecg/JDate'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
+
   // 表头
   const columns = [
     {
@@ -187,8 +232,20 @@
       dataIndex: 'orgCode',
     },
     {
+      title: '营业时间',
+      dataIndex: 'openTime',
+    },
+    {
+      title: '打烊时间',
+      dataIndex: 'closeTime',
+    },
+    {
       title: '手机号',
       dataIndex: 'mobile'
+    },
+    {
+      title: '银行卡号',
+      dataIndex: 'bankCard'
     },
     {
       title: '传真',
@@ -215,7 +272,9 @@
     mixins: [JeecgListMixin],
     components: {
       DepartAuthModal,
-      DepartModal
+      DepartModal,
+      JDate,
+      JImageUpload
     },
     data() {
       return {
@@ -240,6 +299,9 @@
         selectedKeys: [],
         autoIncr: 1,
         currSelected: {},
+        fileList:[],
+
+        jdate: {},
 
         allTreeKeys:[],
         checkStrictly: true,
@@ -423,6 +485,10 @@
         this.setValuesToForm(record)
         this.$refs.departAuth.show(record.id);
 
+          setTimeout(() => {
+            this.fileList = record.imageUrl;
+          }, 5)
+
       },
       // 触发onSelect事件时,为部门树右侧的form表单赋值
       setValuesToForm(record) {
@@ -433,7 +499,7 @@
         }
         this.$nextTick(() => {
           this.form.getFieldDecorator('fax', {initialValue: ''})
-          this.form.setFieldsValue(pick(record, 'departName','orgCategory', 'orgCode', 'departOrder', 'mobile', 'fax', 'address', 'memo'))
+          this.form.setFieldsValue(pick(record, 'departName','orgCategory', 'orgCode','openTime','closeTime', 'departOrder', 'mobile','bankCard', 'fax', 'address', 'memo'))
         })
       },
       getCurrSelectedTitle() {
@@ -457,15 +523,22 @@
         this.currSelected.receiptTriggerType = value
       },
       submitCurrForm() {
+        const that = this;
         this.form.validateFields((err, values) => {
           if (!err) {
             if (!this.currSelected.id) {
               this.$message.warning('请点击选择要修改部门!')
               return
             }
-
             let formData = Object.assign(this.currSelected, values)
             console.log('Received values of form: ', formData)
+            console.log('Received values of form: ', that.fileList)
+            if(that.fileList != ''){
+              formData.imageUrl = that.fileList;
+            }else{
+              formData.imageUrl = null;
+            }
+
             httpAction(this.url.edit, formData, 'put').then((res) => {
               if (res.success) {
                 this.$message.success('保存成功!')
@@ -484,6 +557,7 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             console.log('Received values of form: ', values)
+
           }
         })
       },
@@ -584,7 +658,7 @@
         }
       }
       // <!---- author:os_chengtgen -- date:20190827 --  for:切换父子勾选模式 =======------>
-      
+
     },
     created() {
       this.currFlowId = this.$route.params.id

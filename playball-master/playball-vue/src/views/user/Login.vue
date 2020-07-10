@@ -84,6 +84,7 @@
         */
       </a-tabs>
 
+      <!--
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe', {initialValue: true, valuePropName: 'checked'}]" >自动登陆</a-checkbox>
         <router-link :to="{ name: 'alteration'}" class="forge-password" style="float: right;">
@@ -93,6 +94,7 @@
           注册账户
         </router-link>
       </a-form-item>
+      -->
 
       <a-form-item style="margin-top:24px">
         <a-button
@@ -428,11 +430,11 @@
           //0:无部门 1:一个部门 2:多个部门
           if(multi_depart==0){
             this.loginSuccess()
-            this.$notification.warn({
+            /*this.$notification.warn({
               message: '提示',
               description: `您尚未归属部门,请确认账号信息`,
               duration:3
-            });
+            });*/
           }else if(multi_depart==2){
             this.departVisible=true
             this.currentUsername=this.form.getFieldValue("username")

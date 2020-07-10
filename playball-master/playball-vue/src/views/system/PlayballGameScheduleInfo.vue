@@ -7,8 +7,8 @@
         <a-row :gutter="24">
 
           <a-col :md="6" :sm="24">
-            <a-form-item label="场地名称">
-              <a-input placeholder="请输入场地名称" v-model="queryParam.fieldName"></a-input>
+            <a-form-item label="比赛名称">
+              <a-input placeholder="请输入比赛名称" v-model="queryParam.gamesName"></a-input>
             </a-form-item>
           </a-col>
 
@@ -26,6 +26,21 @@
             </a-form-item>
           </a-col>
 
+        </a-row>
+      </a-form>
+    </div>
+
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="24">
+
+          <a-col :md="6" :sm="24">
+            <a-form-item label="场地名称">
+              <a-input placeholder="请输入场地名称" v-model="queryParam.fieldName"></a-input>
+            </a-form-item>
+          </a-col>
+
           <a-col :md="6" :sm="24" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -40,7 +55,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('场地列表')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('一对多示例')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -59,12 +74,6 @@
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
-
-      <template slot="avatarslot" slot-scope="text, record, index">
-        <div class="anty-img-wrap">
-          <a-avatar shape="square" :src="getAvatarView(record.imageUrl)" icon="user"/>
-        </div>
-      </template>
 
       <a-table
         ref="table"
@@ -97,22 +106,21 @@
       </a-table>
     </div>
     <!-- table区域-end -->
-    <FieldManager-modal ref="modalForm" @ok="modalFormOk"></FieldManager-modal>
+
+
   </a-card>
 </template>
 
 <script>
   import JDate from '@/components/jeecg/JDate'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
-  import FieldManagerModal from './modules/FieldManagerModal'
+  import { httpAction,getAction } from '@/api/manage'
 
   export default {
-    name: "fieldManager",
+    name: "PlayballGameScheduleInfo",
     mixins: [JeecgListMixin],
     components: {
-      JDate,
-      FieldManagerModal
+      JDate
     },
     data () {
       return {
@@ -131,32 +139,56 @@
             }
           },
           {
-            title: '场地名称',
+            title: '赛事名称',
             align:"center",
-            dataIndex: 'fieldName'
+            dataIndex: 'gamesName'
           },
           {
-            title: '场地图片',
-            align: "center",
-            width: 120,
+            title: '球队',
+            align:"center",
+            dataIndex: 'teamName'
+          },
+          {
+            title: '对阵球队',
+            align:"center",
             dataIndex: '',
-            scopedSlots: {customRender: "avatarslot"}
+            customRender:function (t,r,index) {
+              if(t.opponentId != null){
+                return t.opponentName
+              }else{
+                return "轮空"
+              }
+            }
           },
+          {
+            title: '比分',
+            align:"center",
+            dataIndex: '',
+            customRender:function (t,r,index) {
+              if(t.opponentId != null){
+                return t.enterBall+":"+t.lostBall;
+              }else{
+                return "3:0"
+              }
 
-          {
-            title: '所属球馆',
-            align:"center",
-            dataIndex: 'businessName'
+            }
           },
           {
-            title: '场地类型',
+            title: '状态',
             align:"center",
-            dataIndex: 'sportsName',
+            dataIndex: 'gameStatus',
+            customRender:function (text) {
+              if(text==1){
+                return "已赛";
+              }else{
+                return "未赛";
+              }
+            }
           },
           {
-            title: '预定价格',
+            title: '比赛日期',
             align:"center",
-            dataIndex: 'fieldPrice'
+            dataIndex: 'matchTime'
           },
           {
             title: '操作',
@@ -177,11 +209,11 @@
           gamesContent:'',
         },
 
-        url: {
-          list: "/businessinfo/field/list",
+		url: {
+          list: "/cms/schedule/list",
           //delete: "/test/jeecgOrderMain/delete",
           //deleteBatch: "/test/jeecgOrderMain/deleteBatch",
-          // exportXlsUrl: "/test/jeecgOrderMain/exportXls",
+         // exportXlsUrl: "/test/jeecgOrderMain/exportXls",
           sportsTypeList: "/bm/common/sportslist",
         }
       }
@@ -196,9 +228,10 @@
           }
         })
       },
-      getAvatarView: function (avatar) {
-        return getFileAccessHttpUrl(avatar)
+
+      changeSportsList(){
       },
+
 
       handleEditSchedule(record){
         this.$refs.schedule.show(record);

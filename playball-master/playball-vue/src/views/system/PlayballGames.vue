@@ -7,8 +7,8 @@
         <a-row :gutter="24">
 
           <a-col :md="6" :sm="24">
-            <a-form-item label="场地名称">
-              <a-input placeholder="请输入场地名称" v-model="queryParam.fieldName"></a-input>
+            <a-form-item label="比赛名称">
+              <a-input placeholder="请输入比赛名称" v-model="queryParam.gamesName"></a-input>
             </a-form-item>
           </a-col>
 
@@ -26,6 +26,42 @@
             </a-form-item>
           </a-col>
 
+        </a-row>
+      </a-form>
+    </div>
+
+    <div>
+    <j-modal
+      :visible.sync="modal.visible"
+      :width="1200"
+      :title="modal.title"
+    >
+      <template>
+        <div v-html="modal.gamesContent">{{modal.gamesContent}}</div>
+      </template>
+    </j-modal>
+    </div>
+
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="24">
+
+          <a-col :md="6" :sm="24">
+            <a-form-item label="场地名称">
+              <a-input placeholder="请输入场地名称" v-model="queryParam.fieldName"></a-input>
+            </a-form-item>
+          </a-col>
+
+          <a-col :lg="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="开始时间">
+              <j-date v-model="formData.value" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['openTime', {} ]"/>
+            </a-form-item>
+          </a-col>
+
           <a-col :md="6" :sm="24" >
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -40,7 +76,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('场地列表')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('一对多示例')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -59,12 +95,6 @@
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
-
-      <template slot="avatarslot" slot-scope="text, record, index">
-        <div class="anty-img-wrap">
-          <a-avatar shape="square" :src="getAvatarView(record.imageUrl)" icon="user"/>
-        </div>
-      </template>
 
       <a-table
         ref="table"
@@ -94,29 +124,45 @@
           </a-dropdown>
         </span>
 
+        <span slot="actionGamesInfo" slot-scope="text, record">
+          <a @click="showGamesInfo(record)">查看比赛信息</a>
+        </span>
+
+        <span slot="actionSchedule" slot-scope="text, record">
+          <a @click="handleEditSchedule(record)">编辑查看赛程</a>
+        </span>
+
       </a-table>
     </div>
     <!-- table区域-end -->
-    <FieldManager-modal ref="modalForm" @ok="modalFormOk"></FieldManager-modal>
+
+    <!-- 表单区域 -->
+    <playballGames-modal ref="modalForm" @ok="modalFormOk"></playballGames-modal>
+    <playball-schedule ref="schedule"></playball-schedule>
+
   </a-card>
 </template>
 
 <script>
   import JDate from '@/components/jeecg/JDate'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
-  import FieldManagerModal from './modules/FieldManagerModal'
+  import { httpAction,getAction } from '@/api/manage'
+  import PlayballGamesModal from '@views/system/modules/PlayballGamesModal'
+  import PlayballGamesContentModal from '@views/system/modules/PlayballSchedule'
+  import PlayballSchedule from './modules/PlayballSchedule'
+
 
   export default {
-    name: "fieldManager",
+    name: "PlayballGames",
     mixins: [JeecgListMixin],
     components: {
-      JDate,
-      FieldManagerModal
+      PlayballSchedule,
+      PlayballGamesModal,
+      JDate
     },
     data () {
       return {
-        description: '赛程信息页面',
+        description: '赛事管理页面',
         importExcelUrl:`${window._CONFIG['domianURL']}/test/jeecgOrderMain/importExcel`,
         // 表头
         columns: [
@@ -131,32 +177,41 @@
             }
           },
           {
-            title: '场地名称',
+            title: '赛事名称',
+            align:"center",
+            dataIndex: 'gamesName'
+          },
+          {
+            title: '赛事类型',
+            align:"center",
+            dataIndex: 'sportsName'
+          },
+          {
+            title: '比赛场地',
             align:"center",
             dataIndex: 'fieldName'
           },
           {
-            title: '场地图片',
-            align: "center",
-            width: 120,
-            dataIndex: '',
-            scopedSlots: {customRender: "avatarslot"}
-          },
-
-          {
-            title: '所属球馆',
+            title: '开始日期',
             align:"center",
-            dataIndex: 'businessName'
+            dataIndex: 'startTime'
           },
           {
-            title: '场地类型',
+            title: '结束日期',
             align:"center",
-            dataIndex: 'sportsName',
+            dataIndex: 'endTime'
           },
           {
-            title: '预定价格',
+            title: '赛事信息',
             align:"center",
-            dataIndex: 'fieldPrice'
+            dataIndex: 'actionGamesInfo',
+            scopedSlots: { customRender: 'actionGamesInfo' }
+          },
+          {
+            title: '赛程信息',
+            align:"center",
+            dataIndex: 'actionSchedule',
+            scopedSlots: { customRender: 'actionSchedule' }
           },
           {
             title: '操作',
@@ -177,11 +232,11 @@
           gamesContent:'',
         },
 
-        url: {
-          list: "/businessinfo/field/list",
+		url: {
+          list: "/cms/playball/list",
           //delete: "/test/jeecgOrderMain/delete",
           //deleteBatch: "/test/jeecgOrderMain/deleteBatch",
-          // exportXlsUrl: "/test/jeecgOrderMain/exportXls",
+         // exportXlsUrl: "/test/jeecgOrderMain/exportXls",
           sportsTypeList: "/bm/common/sportslist",
         }
       }
@@ -196,10 +251,15 @@
           }
         })
       },
-      getAvatarView: function (avatar) {
-        return getFileAccessHttpUrl(avatar)
+
+      changeSportsList(){
       },
 
+      showGamesInfo(record){
+        this.modal.visible = true
+        this.modal.title = record.gamesName
+        this.modal.gamesContent = record.gamesInfo
+      },
       handleEditSchedule(record){
         this.$refs.schedule.show(record);
       }
