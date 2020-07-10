@@ -90,4 +90,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         this.removeByIds(Arrays.asList(roleIds));
         return true;
     }
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysRole getByUserId(String userid) {
+    	return sysRoleMapper.getByUserId(userid);
+    }
+
 }

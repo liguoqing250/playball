@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballGameScheduleMapper">
+		
+	
+	<select id="getEnrollTeamByGamesId" resultType="org.jeecg.modules.playball.entity.PlayballTeam">
+		SELECT * FROM playball_team pt, playball_enroll pe where
+		pt.team_id = pe.team_id and  pe.games_id = #{gamesId}
+	</select>
+	
+	
+	<select id="getScheduleListByStage" resultType="org.jeecg.modules.playball.entity.PlayballGameSchedule">
+		SELECT * FROM playball_game_schedule where games_id=#{gamesId} and stage=#{stage}
+	</select>
+	
+	<select id="getTeamById" resultType="org.jeecg.modules.playball.entity.PlayballTeam">
+		SELECT * FROM playball_team where team_id=#{id}
+	</select>
+	
+	<!-- 获取信息 -->
+	<select id="getAllSchedule" resultType="org.jeecg.modules.playball.vo.PlayballScheduleInfoPage">
+		SELECT
+			pgs.id AS id,
+			pgs.stage AS stage,
+			pgs.team_id AS teamId,
+			pgs.opponent_id AS opponentId,
+			pgs.group_id AS groupId,
+			pgs.game_status AS gameStatus,
+			pgs.game_result AS gameResult,
+			pgs.enter_ball AS enterBall,
+			pgs.lost_ball AS lostBall,
+			pgs.match_time AS matchTime,
+			pg.games_name AS gamesName,
+			ptt.t_name AS teamName,
+			pto.t_name AS opponentName
+			FROM playball_game_schedule pgs
+			LEFT JOIN playball_games pg ON pg.id = pgs.games_id
+			LEFT JOIN playball_team ptt ON ptt.team_id = pgs.team_id
+			LEFT JOIN playball_team pto ON pto.team_id = pgs.opponent_id
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getAllScheduleTotal" resultType="java.lang.Integer">
+		SELECT COUNT(1) 
+		FROM playball_game_schedule pgs
+		LEFT JOIN playball_games pg ON pg.id = pgs.games_id
+		LEFT JOIN playball_team ptt ON ptt.team_id = pgs.team_id
+		LEFT JOIN playball_team pto ON pto.team_id = pgs.opponent_id
+	</select>
+	
+</mapper>

@@ -39,5 +39,8 @@ public interface ISysRoleService extends IService<SysRole> {
      * @return
      */
     public boolean deleteBatchRole(String[] roleids);
+    
+    /**/
+    public SysRole getByUserId(String userid);
 
 }

@@ -1,4 +1,4 @@
-package org.jeecg.modules.system.entity;
+package org.jeecg.modules.business.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -6,18 +6,16 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.jeecg.common.aspect.annotation.Dict;
-import org.jeecg.modules.system.model.SysDepartTreeModel;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * <p>
- * 部门表
+ * 
  * <p>
  * 
  * @Author Steve
@@ -25,7 +23,7 @@ import java.util.Objects;
  */
 @Data
 @TableName("sys_depart")
-public class SysDepart implements Serializable {
+public class BusinessInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     
 	/**ID*/
@@ -115,7 +113,7 @@ public class SysDepart implements Serializable {
         if (!super.equals(o)) {
 			return false;
 		}
-        SysDepart depart = (SysDepart) o;
+        BusinessInfo depart = (BusinessInfo) o;
         return Objects.equals(id, depart.id) &&
                 Objects.equals(parentId, depart.parentId) &&
                 Objects.equals(departName, depart.departName) &&

@@ -17,12 +17,15 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSONObject;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,8 +101,16 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new AuthenticationException("token为空!");
 		}
 		// 校验token有效性
-		LoginUser loginUser = this.checkUserTokenIsEffect(token);
-		return new SimpleAuthenticationInfo(loginUser, token, getName());
+		String loginType = JwtUtil.getLoginType(token);
+		if(loginType.equals("CMS")) {
+			//表示后台登陆
+			LoginUser loginUser = this.checkUserTokenIsEffect(token);
+			return new SimpleAuthenticationInfo(loginUser, token, getName());
+		}else {
+			AppUsers appUsers = this.checkUserTokenIsEffectApp(token);
+	        return new SimpleAuthenticationInfo(appUsers, token, getName());
+		}
+		
 	}
 
 	/**
@@ -109,6 +120,8 @@ public class ShiroRealm extends AuthorizingRealm {
 	 */
 	public LoginUser checkUserTokenIsEffect(String token) throws AuthenticationException {
 		// 解密获得username，用于和数据库进行对比
+		String loginType = JwtUtil.getLoginType(token);
+
 		String username = JwtUtil.getUsername(token);
 		if (username == null) {
 			throw new AuthenticationException("token非法无效!");
@@ -125,13 +138,36 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
         }
 		// 校验token是否超时失效 & 或者账号密码是否错误
-		if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
+		if (!jwtTokenRefresh(token, username, loginUser.getPassword(), loginType)) {
 			throw new AuthenticationException("Token失效，请重新登录!");
 		}
 
 		return loginUser;
 	}
+	
+	  public AppUsers checkUserTokenIsEffectApp(String token) throws AuthenticationException {
+	        // 解密获得username，用于和数据库进行对比
+	    	String loginType = JwtUtil.getLoginType(token);
+	    	
+	        String userinfo = JwtUtil.getUserInfo(token);
+	        if (userinfo == null) {
+	            throw new AuthenticationException("token非法无效!");
+	        }
+	        JSONObject jsonObject = JSONObject.parseObject(userinfo);
+	        AppUsers appUsers=jsonObject.toJavaObject(AppUsers.class);
 
+	        // 查询用户信息
+	        log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
+	        if (appUsers == null) {
+	            throw new AuthenticationException("用户不存在!");
+	        }
+	        // 校验token是否超时失效 & 或者账号密码是否错误
+	        if (!jwtTokenRefresh(token, userinfo, Integer.toString(appUsers.getU_id()),loginType)) {
+	            throw new AuthenticationException("Token失效，请重新登录!");
+	        }
+
+	        return appUsers;
+	    }
 	/**
 	 * JWTToken刷新生命周期 （实现： 用户在线操作不掉线功能）
 	 * 1、登录成功后将用户的JWT生成的Token作为k、v存储到cache缓存里面(这时候k、v值一样)，缓存有效期设置为Jwt有效时间的2倍
@@ -145,12 +181,12 @@ public class ShiroRealm extends AuthorizingRealm {
 	 * @param passWord
 	 * @return
 	 */
-	public boolean jwtTokenRefresh(String token, String userName, String passWord) {
+	public boolean jwtTokenRefresh(String token, String userName, String passWord, String loginType) {
 		String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
 		if (oConvertUtils.isNotEmpty(cacheToken)) {
 			// 校验token有效性
 			if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-				String newAuthorization = JwtUtil.sign(userName, passWord);
+				String newAuthorization = JwtUtil.sign(userName, passWord,loginType);
 				// 设置超时时间
 				redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
 				redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);

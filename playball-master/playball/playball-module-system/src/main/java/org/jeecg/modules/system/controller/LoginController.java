@@ -337,7 +337,9 @@ public class LoginController {
 		String syspassword = sysUser.getPassword();
 		String username = sysUser.getUsername();
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword);
+		//先这样分，后面用常量代替，表示登陆是后台登陆，与前端分开
+		String loginType="CMS";
+		String token = JwtUtil.sign(username, syspassword,loginType);
         // 设置token缓存有效时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
@@ -444,7 +446,7 @@ public class LoginController {
 		obj.put("userInfo", sysUser);
 		
 		// 生成token
-		String token = JwtUtil.sign(username, syspassword);
+		String token = JwtUtil.sign(username, syspassword,"CMS");
 		// 设置超时时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);

@@ -154,8 +154,7 @@ public class ShiroConfig {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
 		securityManager.setRealm(myRealm);
-
-		securityManager.setRealm(appShiroRealm);
+		//securityManager.setRealm(appShiroRealm);
 		/*
 		 * 关闭shiro自带的session，详情见文档
 		 * http://shiro.apache.org/session-management.html#SessionManagement-

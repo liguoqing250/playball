@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.mapper.BusinessFieldManagerMapper">
+		
+	<!-- 获取场地信息 -->
+	<select id="getAllFieldInfoByUserId" resultType="org.jeecg.modules.business.model.BusinessFieldInfoPage">
+		SELECT
+			pfi.id AS id,
+			pfi.field_name AS fieldName,
+			pfi.sports_id AS sportsId,
+			pfi.business_id AS businessId,
+			pfi.field_price AS fieldPrice,
+			pfi.image_url AS imageUrl,
+			pfi.del_flag AS delFlag,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName
+			from playball_field_info pfi, playball_sports_type pst, sys_depart sd, sys_user_depart sud 
+			where pfi.sports_id = pst.id and sud.dep_id = sd.id and pfi.business_id =sud.dep_id and sud.user_id = #{userId}
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getAllFieldInfoTotalByUserId" resultType="java.lang.Integer">
+		SELECT COUNT(1) 
+		from playball_field_info pfi, playball_sports_type pst, sys_depart sd, sys_user_depart sud 
+		where pfi.sports_id = pst.id and sud.dep_id = sd.id and pfi.business_id =sud.dep_id and sud.user_id = #{userId}
+	</select>
+	
+	<!-- 获取场地信息 -->
+	<select id="getAllFieldInfoBySportsId" resultType="org.jeecg.modules.business.model.BusinessFieldInfoPage">
+		SELECT
+			pfi.id AS id,
+			pfi.field_name AS fieldName,
+			pfi.sports_id AS sportsId,
+			pfi.business_id AS businessId,
+			pfi.field_price AS fieldPrice,
+			pfi.image_url AS imageUrl,
+			pfi.del_flag AS delFlag,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName
+			from playball_field_info pfi, playball_sports_type pst, sys_depart sd
+			where pfi.sports_id = pst.id and sd.id = pfi.business_id and pst.id = #{sportsId}
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getAllFieldInfoTotalBySportsId" resultType="java.lang.Integer">
+		SELECT COUNT(1) 
+		from playball_field_info pfi, playball_sports_type pst, sys_depart sd
+		where pfi.sports_id = pst.id and sd.id = pfi.business_id and pst.id = #{sportsId}
+	</select>
+</mapper>

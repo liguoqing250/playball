@@ -44,6 +44,11 @@ public class TokenUtils {
         }
 
         // 解密获得username，用于和数据库进行对比
+        String loginType = JwtUtil.getLoginType(token);
+        if (loginType == null) {
+            throw new AuthenticationException("非法来源!");
+        }
+        
         String username = JwtUtil.getUsername(token);
         if (username == null) {
             throw new AuthenticationException("token非法无效!");
@@ -59,7 +64,7 @@ public class TokenUtils {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
+        if (!jwtTokenRefresh(token, username, user.getPassword(),loginType, redisUtil)) {
             throw new AuthenticationException("Token失效，请重新登录!");
         }
         return true;
@@ -73,12 +78,12 @@ public class TokenUtils {
      * @param redisUtil
      * @return
      */
-    private static boolean jwtTokenRefresh(String token, String userName, String passWord, RedisUtil redisUtil) {
+    private static boolean jwtTokenRefresh(String token, String userName, String passWord, String loginType, RedisUtil redisUtil) {
         String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
         if (oConvertUtils.isNotEmpty(cacheToken)) {
             // 校验token有效性
             if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord);
+                String newAuthorization = JwtUtil.sign(userName, passWord,loginType);
                 // 设置Toekn缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);

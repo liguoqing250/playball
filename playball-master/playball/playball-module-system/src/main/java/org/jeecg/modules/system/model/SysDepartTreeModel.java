@@ -72,6 +72,16 @@ public class SysDepartTreeModel implements Serializable{
     private String updateBy;
 
     private Date updateTime;
+    
+    private Date closeTime;
+    
+    private Date openTime;
+    
+    private String bankCard;
+    
+    private String imageUrl;
+    
+    
 
     private List<SysDepartTreeModel> children = new ArrayList<>();
 
@@ -104,6 +114,10 @@ public class SysDepartTreeModel implements Serializable{
         this.createTime = sysDepart.getCreateTime();
         this.updateBy = sysDepart.getUpdateBy();
         this.updateTime = sysDepart.getUpdateTime();
+        this.openTime = sysDepart.getOpenTime();
+        this.closeTime = sysDepart.getCloseTime();
+        this.bankCard = sysDepart.getBankCard();
+        this.imageUrl = sysDepart.getImageUrl();
     }
 
     public boolean getIsLeaf() {
@@ -318,7 +332,39 @@ public class SysDepartTreeModel implements Serializable{
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+    
+    public Date getCloseTime() {
+        return closeTime;
+    }
 
+    public void setCloseTime(Date closeTime) {
+        this.closeTime = closeTime;
+    }
+    
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
+    }
+    
+    public String getBankCard() {
+        return bankCard;
+    }
+
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
     public SysDepartTreeModel() { }
 
     /**
@@ -353,6 +399,10 @@ public class SysDepartTreeModel implements Serializable{
                 Objects.equals(createTime, model.createTime) &&
                 Objects.equals(updateBy, model.updateBy) &&
                 Objects.equals(updateTime, model.updateTime) &&
+                Objects.equals(closeTime, model.closeTime) &&
+                Objects.equals(openTime, model.openTime) &&
+                Objects.equals(bankCard, model.bankCard) &&
+                Objects.equals(imageUrl, model.imageUrl) &&
                 Objects.equals(children, model.children);
     }
     
@@ -364,7 +414,7 @@ public class SysDepartTreeModel implements Serializable{
 
         return Objects.hash(id, parentId, departName, departNameEn, departNameAbbr,
         		departOrder, description, orgCategory, orgType, orgCode, mobile, fax, address, 
-        		memo, status, delFlag, createBy, createTime, updateBy, updateTime, 
+        		memo, status, delFlag, createBy, createTime, updateBy, updateTime, closeTime, openTime, bankCard,imageUrl,
         		children);
     }
 

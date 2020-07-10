@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.mapper.BusinessCommonMapper">
+		
+	
+	<select id="getBusinessInfo" resultType="org.jeecg.modules.business.entity.BusinessInfo">
+		SELECT * FROM sys_depart
+	</select>
+	
+	<select id="getSportsTypeList" resultType="org.jeecg.modules.business.entity.BusinessSportsType">
+		SELECT * FROM playball_sports_type
+	</select>
+	
+	<select id="getBusinessIdByUserId" resultType="java.lang.String">
+		SELECT dep_id FROM sys_user_depart where user_id = #{userId}
+	</select>
+	
+</mapper>

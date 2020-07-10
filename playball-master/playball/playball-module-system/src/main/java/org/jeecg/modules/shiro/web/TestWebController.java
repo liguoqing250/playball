@@ -36,11 +36,11 @@ public class TestWebController {
                               @RequestParam("password") String password) {
     	SysUser user = userService.getUserByName(username);
     	if(user==null) {
-    		return new ResponseBean(200, "用户不存在！", JwtUtil.sign(username, user.getPassword()));
+    		return new ResponseBean(200, "用户不存在！", JwtUtil.sign(username, user.getPassword(),"CMS"));
     	}
     	String passwordEncode = PasswordUtil.encrypt(username, password, user.getSalt());
         if (passwordEncode.equals(user.getPassword())) {
-            return new ResponseBean(200, "Login success", JwtUtil.sign(username, user.getPassword()));
+            return new ResponseBean(200, "Login success", JwtUtil.sign(username, user.getPassword(),"CMS"));
         } else {
             throw new UnauthorizedException();
         }

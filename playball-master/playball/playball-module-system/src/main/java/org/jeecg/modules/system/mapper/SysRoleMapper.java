@@ -1,6 +1,7 @@
 package org.jeecg.modules.system.mapper;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import org.jeecg.modules.system.entity.SysRole;
@@ -33,5 +34,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      */
     @Delete("delete from sys_role_permission where role_id = #{roleId}")
     void deleteRolePermissionRelation(@Param("roleId") String roleId);
-
+    
+    @Select("SELECT * FROM sys_role sr,sys_user_role sur where sr.id = sur.role_id and sur.user_id= #{userId}")
+    public SysRole getByUserId(String userId);
 }

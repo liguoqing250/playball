@@ -195,6 +195,24 @@ public class SysRoleController {
 		return result;
 	}
 	
+	/**
+	  * 通过userid查询
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/queryByUserId", method = RequestMethod.GET)
+	public Result<SysRole> queryByUserId(@RequestParam(name="userid",required=true) String userid) {
+		Result<SysRole> result = new Result<SysRole>();
+		SysRole sysrole = sysRoleService.getByUserId(userid);
+		if(sysrole==null) {
+			result.error500("未找到对应实体");
+		}else {
+			result.setResult(sysrole);
+			result.setSuccess(true);
+		}
+		return result;
+	}
+	
 	@RequestMapping(value = "/queryall", method = RequestMethod.GET)
 	public Result<List<SysRole>> queryall() {
 		Result<List<SysRole>> result = new Result<>();
