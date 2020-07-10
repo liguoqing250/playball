@@ -60,12 +60,6 @@
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
-      <template slot="avatarslot" slot-scope="text, record, index">
-        <div class="anty-img-wrap">
-          <a-avatar shape="square" :src="getAvatarView(record.imageUrl)" icon="user"/>
-        </div>
-      </template>
-
       <a-table
         ref="table"
         size="middle"
@@ -77,6 +71,13 @@
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
+
+
+        <template slot="avatarslot" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <a-avatar shape="square" :src="getAvatarView(record.imageUrl)" icon="user"/>
+          </div>
+        </template>
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
