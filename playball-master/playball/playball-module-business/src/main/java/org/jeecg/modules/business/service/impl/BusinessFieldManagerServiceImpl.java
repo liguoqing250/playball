@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import org.jeecg.modules.business.entity.BusinessFieldInfo;
 import org.jeecg.modules.business.mapper.BusinessFieldManagerMapper;
@@ -12,6 +13,7 @@ import org.jeecg.modules.business.mapper.BusinessFieldManagerMapper;
 
 import org.jeecg.modules.business.service.IBusinessFieldManagerService;
 import org.jeecg.modules.business.model.BusinessFieldInfoPage;
+import org.jeecg.modules.business.model.BusinessFieldOrderPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,5 +78,15 @@ public class BusinessFieldManagerServiceImpl extends ServiceImpl<BusinessFieldMa
 			return false;
 		}
 
+	}
+	
+	public IPage<BusinessFieldOrderPage> getFieldOrderByBusinessId(IPage page, String businessId){
+		
+		List<BusinessFieldOrderPage> list = fieldrMapper.getFieldOrderByBusinessId(page, businessId);
+		Integer total = fieldrMapper.getFieldOrderByBusinessIdTotal(page, businessId);
+		IPage<BusinessFieldOrderPage> result = new Page<>(page.getCurrent(), page.getSize(), total);
+		
+		result.setRecords(list);
+		return result;
 	}
 }
