@@ -12,7 +12,6 @@ import { ACCESS_TOKEN } from "@/store/mutation-types"
  * @type {*|string}
  */
 let apiBaseUrl = window._CONFIG['domianURL'] || "/playball";
-console.log("apiBaseUrl= ",apiBaseUrl)
 // 创建 axios 实例
 const service = axios.create({
   //baseURL: '/playball',

@@ -47,8 +47,8 @@
           </a-row>
         </a-tab-pane>
 
-
-        /*<a-tab-pane key="tab2" tab="手机号登陆">
+        <!--
+        <a-tab-pane key="tab2" tab="手机号登陆">
           <a-form-item>
             <a-input
               v-decorator="['mobile',validatorRules.mobile]"
@@ -81,7 +81,7 @@
             </a-col>
           </a-row>
         </a-tab-pane>
-        */
+      -->
       </a-tabs>
 
       <!--
@@ -125,6 +125,7 @@
       @success="stepCaptchaSuccess"
       @cancel="stepCaptchaCancel"></two-step-captcha>
 
+    <!--
     <a-modal
       title="登录部门选择"
       :width="450"
@@ -163,6 +164,7 @@
 
 
     </a-modal>
+    -->
 
   </div>
 </template>
@@ -287,7 +289,13 @@
               loginParams.checkKey = that.currdatetime
               console.log("登录参数",loginParams)
               that.Login(loginParams).then((res) => {
-                this.departConfirm(res)
+                //this.departConfirm(res)
+                if(res.success){
+                  this.loginSuccess()
+                }else{
+                  this.requestFailed(res)
+                  this.Logout();
+                }
               }).catch((err) => {
                 that.requestFailed(err);
               });
@@ -430,11 +438,11 @@
           //0:无部门 1:一个部门 2:多个部门
           if(multi_depart==0){
             this.loginSuccess()
-            /*this.$notification.warn({
+            this.$notification.warn({
               message: '提示',
               description: `您尚未归属部门,请确认账号信息`,
               duration:3
-            });*/
+            });
           }else if(multi_depart==2){
             this.departVisible=true
             this.currentUsername=this.form.getFieldValue("username")

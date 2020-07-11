@@ -77,6 +77,7 @@ public class AppShiroRealm extends AuthorizingRealm {
      */
     public AppUsers checkUserTokenIsEffect(String token) throws AuthenticationException {
         // 解密获得username，用于和数据库进行对比
+    	String loginType = JwtUtil.getLoginType(token);
         String userinfo = JwtUtil.getUserInfo(token);
         if (userinfo == null) {
             throw new AuthenticationException("token非法无效!");
