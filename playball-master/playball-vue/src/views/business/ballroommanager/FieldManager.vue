@@ -109,7 +109,7 @@
   import FieldManagerModal from './modules/FieldManagerModal'
 
   export default {
-    name: "fieldManager",
+    name: "FieldManager",
     mixins: [JeecgListMixin],
     components: {
       JDate,
