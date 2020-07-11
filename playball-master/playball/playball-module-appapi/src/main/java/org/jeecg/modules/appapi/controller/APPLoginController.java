@@ -43,8 +43,16 @@ public class APPLoginController {
 
             if((boolean)map.get("success")){
                 appUsers= (AppUsers) map.get("appUsers");
+                String value="";
+                if(appUsers.getU_registerWay()==3){
+                	value=appUsers.getWx_openid();
+                }else if(appUsers.getU_registerWay()==2){
+                	value=appUsers.getQq_openid();
+                }else if(appUsers.getU_registerWay()==1){
+                	value=appUsers.getU_phoneNumber();
+                }
                 // 生成token
-                String token =JwtUtil.appSign(JSONObject.toJSONString(appUsers),Integer.toString(appUsers.getU_id()));
+                String token =JwtUtil.appSign(JSONObject.toJSONString(appUsers),value);
                 // 设置token缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
