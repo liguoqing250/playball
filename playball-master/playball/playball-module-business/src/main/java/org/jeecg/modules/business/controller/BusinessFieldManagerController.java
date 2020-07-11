@@ -31,6 +31,7 @@ import org.jeecg.modules.business.entity.BusinessFieldInfo;
 import org.jeecg.modules.business.service.IBusinessFieldManagerService;
 import org.jeecg.modules.business.service.IBusinessCommonService;
 import org.jeecg.modules.business.model.BusinessFieldInfoPage;
+import org.jeecg.modules.business.model.BusinessFieldOrderPage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,6 +87,28 @@ public class BusinessFieldManagerController extends JeecgController<BusinessFiel
     	log.info("获取sportsid="+req.getParameter("sportsId"));
     			
     	IPage<BusinessFieldInfoPage> pageList = businessFieldManagerService.getAllFieldInfoBySportsId(new Page(pageNo, pageSize),sportsId);
+        return Result.ok(pageList);
+
+    }
+    
+    /**
+     * 分页列表查询
+     *
+     * @param 获取场馆订单信息的分页列表通过商户id
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @GetMapping(value = "/orderlist")
+    public Result<?> getFieldOrderByBusinessId(BusinessFieldOrderPage businessFieldOrderPage, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
+    	//获取当前用户
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        //获取用户id后获取用户属于的商家id
+        String businessId = sysUser.getDepartIds();
+        log.info("商户id = "+ businessId);
+    			
+    	IPage<BusinessFieldOrderPage> pageList = businessFieldManagerService.getFieldOrderByBusinessId(new Page(pageNo, pageSize),businessId);
         return Result.ok(pageList);
 
     }
