@@ -34,7 +34,7 @@ public class AppUploadImage {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             MultipartFile file = multipartRequest.getFile("file");// 获取上传文件对象
             String orgName = file.getOriginalFilename();// 获取文件名
-            String filename = UploadImageUtiles.uploadImages(file,request.getParameter("imageName"));
+            String filename = "AppImages/"+UploadImageUtiles.uploadImages(file,request.getParameter("imageName"));
             obj.put("filename",filename);
             result.setResult(obj);
             result.success("请求成功");

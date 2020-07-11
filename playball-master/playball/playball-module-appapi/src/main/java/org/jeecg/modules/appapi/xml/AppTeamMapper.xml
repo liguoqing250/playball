@@ -71,6 +71,25 @@
         </foreach>
     </select>
 
+
+    <!--queryTeamByEnroll-->
+    <select id="queryTeamByEnroll" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        select
+        pt.*
+        FROM playball_team pt LEFT JOIN playball_enroll pe ON pe.team_id=pt.team_id WHERE pe.games_id=#{id,jdbcType=INTEGER}
+    </select>
+    <!--queryTeamByGameid-->
+    <select id="queryTeamByGameid" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        select
+        pt.*
+        FROM playball_team pt LEFT JOIN playball_game_schedule pgs ON pgs.team_id=pt.team_id WHERE pgs.games_id=#{id,jdbcType=INTEGER}
+    </select>
+    <!--isCaptain-->
+    <select id="isCaptain" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        select
+        <include refid="AppTeam_Column_List" />
+        from playball_team where t_captain = #{u_id,jdbcType=INTEGER}
+    </select>
     <!--根据ID查询-->
     <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
         select

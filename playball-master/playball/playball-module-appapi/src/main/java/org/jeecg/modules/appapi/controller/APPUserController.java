@@ -38,6 +38,22 @@ public class APPUserController {
 
         return result;
     }
+    //根据id查询
+    @PostMapping(value = "/getUserInfoById")
+    public Result<JSONObject> getMyUserInfo(int id) {
+        Result<JSONObject> result = new Result<JSONObject>();
+
+        try{
+            JSONObject obj = new JSONObject();
+            obj.put("data", appUsersService.selectById(id));
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+
+        return result;
+    }
     //获取我的个人信息
     @PostMapping(value = "/getMyUserInfo")
     public Result<JSONObject> getMyUserInfo(HttpServletRequest request) {

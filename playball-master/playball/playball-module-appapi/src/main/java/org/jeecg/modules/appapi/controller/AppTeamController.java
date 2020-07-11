@@ -15,6 +15,7 @@ import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,6 +30,38 @@ public class AppTeamController {
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
 
+    //根据比赛查赛程
+    @PostMapping(value = "/queryTeamByGame")
+    public Result<JSONObject> queryTeamByGameid(Integer id) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            List<AppTeam> list=appTeamService.queryTeamByGameid(id);
+            JSONObject obj = new JSONObject();
+            obj.put("data",list);
+            result.success("查询成功");
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("查询失败");
+        }
+        return result;
+    }
+    //根据比赛查报名
+    @PostMapping(value = "/queryTeamByEnroll")
+    public Result<JSONObject> queryTeamByEnroll(Integer id) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            List<AppTeam> list=appTeamService.queryTeamByEnroll(id);
+            JSONObject obj = new JSONObject();
+            obj.put("data",list);
+            result.success("查询成功");
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("查询失败");
+        }
+        return result;
+    }
     //申请加入球队
     @PostMapping(value = "/joinTeamApply")
     public Result<JSONObject> joinTeamApply(@RequestBody JoinQuitTeamApply joinQuitTeamApply) {
@@ -72,6 +105,21 @@ public class AppTeamController {
         }catch (Exception e){
             e.printStackTrace();
             result.error500("创建失败");
+        }
+        return result;
+    }
+    //判断是否队长
+    @PostMapping(value = "/isCaptain")
+    public Result<JSONObject> isCaptain() {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            JSONObject obj = new JSONObject();
+            obj.put("isCaptain",appTeamService.isCaptain());
+            result.setResult(obj);
+            result.success("请求成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
         }
         return result;
     }

@@ -1,5 +1,7 @@
 package org.jeecg.modules.appapi.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  **/
 public class AppUsers {
 
-    //
+    @TableId(value = "u_id")
     private Integer u_id;
     //用户名
     private String u_name;

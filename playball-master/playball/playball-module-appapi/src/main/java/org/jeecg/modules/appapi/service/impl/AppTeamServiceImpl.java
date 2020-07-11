@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
@@ -116,6 +117,29 @@ public class AppTeamServiceImpl  implements AppTeamService {
         page.setTotal(totalPages);
 
         return page;
+    }
+
+    @Override
+    public boolean isCaptain() {
+        //获取当前用户信息
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token=request.getHeader("X-Access-Token");
+        AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+        AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
+        if(appTeam!=null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<AppTeam> queryTeamByGameid(Integer id) {
+        return appTeamMapper.queryTeamByGameid(id);
+    }
+
+    @Override
+    public List<AppTeam> queryTeamByEnroll(Integer id) {
+        return appTeamMapper.queryTeamByEnroll(id);
     }
 
 }

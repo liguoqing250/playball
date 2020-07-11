@@ -1,5 +1,6 @@
 package org.jeecg.modules.appapi.mapper;
 
+import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -24,5 +25,6 @@ public interface JoinQuitTeamApplyMapper {
     List<JoinQuitTeamApply> selectByPage(@Param("params") Map<String,Object> params);
     //获取总条数
     Integer getCount(@Param("params") Map<String,Object> params);
+
 
 }

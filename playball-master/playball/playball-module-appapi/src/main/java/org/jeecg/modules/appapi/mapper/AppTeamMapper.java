@@ -25,4 +25,10 @@ public interface AppTeamMapper {
     List<AppTeam> selectByKey(@Param("params") Map<String, Object> params);
     //获取总条数
     int getCount(@Param("params") Map<String, Object> params);
+
+    AppTeam isCaptain(Integer u_id);
+
+    List<AppTeam> queryTeamByEnroll(Integer id);
+
+    List<AppTeam> queryTeamByGameid(Integer id);
 }

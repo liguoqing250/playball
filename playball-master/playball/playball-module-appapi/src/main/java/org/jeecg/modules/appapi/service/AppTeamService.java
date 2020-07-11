@@ -30,4 +30,10 @@ public interface AppTeamService  {
     AppTeam selectMyTeamInfo();
 
     Page<AppTeam> selectByPage(Map<String ,Object> params);
+
+    boolean isCaptain();
+
+    List<AppTeam> queryTeamByGameid(Integer id);
+
+    List<AppTeam> queryTeamByEnroll(Integer id);
 }

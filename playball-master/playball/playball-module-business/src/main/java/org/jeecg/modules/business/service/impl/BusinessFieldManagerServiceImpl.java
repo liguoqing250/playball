@@ -11,6 +11,7 @@ import org.jeecg.modules.business.entity.BusinessFieldInfo;
 import org.jeecg.modules.business.mapper.BusinessFieldManagerMapper;
 
 
+import org.jeecg.modules.business.model.BusinessFieldOrderPage;
 import org.jeecg.modules.business.service.IBusinessFieldManagerService;
 import org.jeecg.modules.business.model.BusinessFieldInfoPage;
 import org.jeecg.modules.business.model.BusinessFieldOrderPage;
@@ -79,6 +80,8 @@ public class BusinessFieldManagerServiceImpl extends ServiceImpl<BusinessFieldMa
 		}
 
 	}
+
+
 	
 	public IPage<BusinessFieldOrderPage> getFieldOrderByBusinessId(IPage page, String businessId){
 		

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.SportsTypeMapper">
+
+    <select id="getSportsType"  resultType="org.jeecg.modules.appapi.entity.SportsType">
+        select * from playball_sports_type
+    </select>
+
+    <select id="querySportsTypeByBusinessId" parameterType="java.lang.String"  resultType="org.jeecg.modules.appapi.entity.SportsType">
+        SELECT pst.* FROM playball_sports_type as pst LEFT JOIN playball_field_info pfi ON pfi.sports_id=pst.id WHERE pfi.business_id=#{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

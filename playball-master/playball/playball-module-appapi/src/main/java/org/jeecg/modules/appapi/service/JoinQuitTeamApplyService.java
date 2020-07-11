@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 
 import java.util.List;
