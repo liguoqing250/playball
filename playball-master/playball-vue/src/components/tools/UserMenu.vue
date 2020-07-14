@@ -31,7 +31,7 @@
         <a-icon type="question-circle-o"></a-icon>
       </a>
     </span>
-    <header-notice class="action"/>
+    <!--<header-notice class="action"/>-->
     <a-dropdown>
       <span class="action action-full ant-dropdown-link user-dropdown-menu">
         <a-avatar class="avatar" size="small" :src="getAvatar()"/>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-  import HeaderNotice from './HeaderNotice'
+  //import HeaderNotice from './HeaderNotice'
   import UserPassword from './UserPassword'
   import SettingDrawer from "@/components/setting/SettingDrawer";
   import DepartSelect from './DepartSelect'
@@ -109,7 +109,7 @@
       }
     },
     components: {
-      HeaderNotice,
+      //HeaderNotice,
       UserPassword,
       DepartSelect,
       SettingDrawer

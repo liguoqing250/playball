@@ -249,65 +249,6 @@
     {
       title: '机构名称',
       dataIndex: 'departName'
-    },
-    {
-      title: '机构类型',
-      align: 'center',
-      dataIndex: 'orgType'
-    },
-    {
-      title: '机构编码',
-      dataIndex: 'orgCode',
-    },
-    {
-      title: '营业时间',
-      dataIndex: 'openTime',
-      customRender(text) {
-        return moment(text);
-      }
-    },
-    {
-      title: '打烊时间',
-      dataIndex: 'closeTime',
-      customRender(text) {
-        console.log("closetime",text)
-        return moment(text);
-      }
-    },
-    {
-      title: '手机号',
-      dataIndex: 'mobile'
-    },
-    {
-      title: '银行卡号',
-      dataIndex: 'bankCard'
-    },
-    {
-      title: '传真',
-      dataIndex: 'fax'
-    },
-    {
-      title: '地址',
-      dataIndex: '',
-      customRender(text) {
-        console.log("text=",text)
-        return text.province+text.city+text.district;
-      }
-    },
-    {
-      title: '详细地址地址',
-      dataIndex: 'address'
-    },
-    {
-      title: '排序',
-      align: 'center',
-      dataIndex: 'departOrder'
-    },
-    {
-      title: '操作',
-      align: 'center',
-      dataIndex: 'action',
-      scopedSlots: {customRender: 'action'}
     }
   ]
   export default {
@@ -366,8 +307,8 @@
         },
 
         dataTime:{
-          defaultStartTime: null,
-          defaultCloseTime: null
+          defaultStartTime: moment('00:00', 'HH:mm'),
+          defaultCloseTime: moment('00:00', 'HH:mm')
         },
         openTime:'',
         closeTime:'',
@@ -549,9 +490,13 @@
         this.setValuesToForm(record)
         this.$refs.departAuth.show(record.id);
 
-        this.dataTime.defaultStartTime = moment(record.openTime,'HH:mm')
-        this.dataTime.defaultCloseTime = moment(record.closeTime,'HH:mm')
-        this.areaLinkage = record.province+record.city+record.district
+        this.dataTime.defaultStartTime = record.openTime?moment(record.openTime,'HH:mm'):moment('00:00','HH:mm')
+        this.dataTime.defaultCloseTime = record.closeTime?moment(record.closeTime,'HH:mm'):moment('00:00','HH:mm')
+        if(record.province!=null && record.city && record.district){
+          this.areaLinkage = record.province+record.city+record.district
+        }else{
+          this.areaLinkage=''
+        }
 
           setTimeout(() => {
             this.fileList = record.imageUrl;
@@ -566,8 +511,7 @@
           this.orgCategoryDisabled = false;
         }
         this.$nextTick(() => {
-          this.form.getFieldDecorator('fax', {initialValue: ''})
-          this.form.setFieldsValue(pick(record, 'departName','orgCategory', 'orgCode','openTime','closeTime', 'departOrder', 'mobile','bankCard', 'fax', 'address', 'memo'))
+          this.form.setFieldsValue(pick(record, 'departName'))
         })
       },
       getCurrSelectedTitle() {
