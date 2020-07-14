@@ -7,7 +7,7 @@
     </select>
 
     <select id="querySportsTypeByBusinessId" parameterType="java.lang.String"  resultType="org.jeecg.modules.appapi.entity.SportsType">
-        SELECT pst.* FROM playball_sports_type as pst LEFT JOIN playball_field_info pfi ON pfi.sports_id=pst.id WHERE pfi.business_id=#{id,jdbcType=VARCHAR}
+        SELECT pst.* FROM playball_sports_type as pst LEFT JOIN playball_field_info pfi ON pfi.sports_id=pst.id WHERE pfi.business_id=#{id,jdbcType=VARCHAR} GROUP BY pst.id
     </select>
 
 </mapper>

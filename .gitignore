@@ -25,3 +25,4 @@ playball-master/playball/playball-module-appapi/.classpath
 playball-master/playball/playball-module-business/.classpath
 playball-master/playball/playball-module-system/.classpath
 playball-master/playball/playball-module-system/src/main/resources/application-dev.yml
+/playball-master/playball/playball-module-system/src/main/resources/static/dist

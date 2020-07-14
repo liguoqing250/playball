@@ -1,5 +1,8 @@
 package org.jeecg.modules.appapi.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.modules.appapi.entity.Arena;
 import org.jeecg.modules.appapi.entity.FieldBookable;
 import org.jeecg.modules.appapi.entity.FieldInfo;
@@ -41,24 +44,63 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
 
         Arena arene=arenaMapper.selectById(fieldInfoMapper.selectById(fieldReserveInfo.getfId()).getBusinessId());
         List<FieldBookable> list=new ArrayList<>();
-        Map<String,Object> map=new HashMap<>();
-        List<FieldReserveInfo> dataList= fieldReserveInfoMapper.selectByMap(map);
-        Date time=new Date();
+
+
         for (int i = 0; i < 7; i++) {
 
             try {
+                Map<String,Object> map=new HashMap<>();
+
+                map.put("bId",arene.getId());
+                map.put("stId",fieldReserveInfo.getStId());
+
                 FieldBookable fieldBookable=new FieldBookable();
-                SimpleDateFormat dayFormat = new SimpleDateFormat("dd");//注意月份是MM
-                Calendar  calendar = new GregorianCalendar();
-                calendar.setTime(time);
-                calendar.add(calendar.DATE,i); //把日期往后增加一天,整数  往后推,负数往前移动
-                time=calendar.getTime();
-                fieldBookable.setWeekDay(getWeekOfDate(time)+"("+time.getMonth()+"/"+dayFormat.format(time)+")");
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");//注意月份是MM
-                Date OpenTime = simpleDateFormat.parse(arene.getOpenTime());
-                fieldBookable.setBookableTime(OpenTime.getHours()+":"+OpenTime.getMinutes());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar  calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+
+                calendar.add(calendar.DATE,+i); //把日期往后增加一天,整数  往后推,负数往前移动
+                map.put("reserveTime",calendar.getTime());
+                List<FieldReserveInfo> dataList= fieldReserveInfoMapper.queryFieldBookable(map);
+                fieldBookable.setWeekDay(getWeekOfDate(calendar.getTime())+"("+(calendar.get(Calendar.MONTH)+1)+"/"+calendar.get(Calendar.DATE)+")");
+
+                int minHours=Integer.valueOf(arene.getOpenTime().split(":")[0]);
+                int maxHours=Integer.valueOf(arene.getCloseTime().split(":")[0]);
+                List<Integer> mintime=new ArrayList();
+                for (int j = minHours; j < maxHours; j++) {
+                    mintime.add(j);
+                }
+                Iterator<Integer> mintimeit = mintime.iterator();
+                    for (int k = 0; k <dataList.size() ; k++) {
+
+                        List<String> jsonList= JSONObject.parseArray(dataList.get(k).getFriTiemRanges(),String.class);
+
+                        for (int l = 0; l <jsonList.size() ; l++) {
+                            JSONObject obj= JSONObject.parseObject(jsonList.get(l));
+
+                            int hours= Integer.parseInt(  obj.get("startTime").toString().split(" ")[1].split(":")[0]);
+                            while (mintimeit.hasNext()) {
+                            if(hours==mintimeit.next()){
+                                mintimeit.remove();
+                                break;
+                            }
+                        }
+                    }
+                }
+                List<Integer> newTimeList=new ArrayList<>();
+                while(mintimeit.hasNext()){
+                    newTimeList.add(mintimeit.next());
+                }
+                if(newTimeList.size()>0){
+                    fieldBookable.setAvailable(true);
+                    fieldBookable.setBookableTime(newTimeList.get(0)+":"+Integer.valueOf(arene.getOpenTime().split(":")[1]));
+                }else{
+                    fieldBookable.setBookableTime("无");
+                    fieldBookable.setAvailable(false);
+                }
+
                 list.add(fieldBookable);
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -66,6 +108,16 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
 
         return list;
     }
+    public List<FieldReserveInfo> queryFieldReserveInfo(String bid,Date reserveTime,Integer stId){
+        Map<String,Object> map=new HashedMap();
+        map.put("bid",bid);
+        map.put("stId",stId);
+        if(reserveTime!=null){
+            map.put("reserveTime",reserveTime);
+        }
+        return fieldReserveInfoMapper.queryFieldReserveInfo(map);
+    }
+
     public String getWeekOfDate(Date date) {
         String[] weekDays = { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
         Calendar cal = Calendar.getInstance();

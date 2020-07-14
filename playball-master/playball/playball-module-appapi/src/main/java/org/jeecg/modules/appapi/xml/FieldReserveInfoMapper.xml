@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper">
 
+    <select id="queryFieldReserveInfo" parameterType="java.util.HashMap" resultType="org.jeecg.modules.appapi.entity.FieldReserveInfo">
+        SELECT pfri.* FROM playball_field_reserve_info pfri LEFT JOIN playball_field_info pfi ON pfi.id= pfri.f_id WHERE pfi.business_id=#{bid}
+        and date_format(pfri.fri_fieldDay,'%Y-%m-%d')=date_format(#{reserveTime},'%Y-%m-%d') AND pfri.st_id=#{stId}
+    </select>
+
+    <select id="queryFieldBookable" parameterType="java.util.HashMap" resultType="org.jeecg.modules.appapi.entity.FieldReserveInfo">
+        SELECT pfri.* FROM playball_field_reserve_info pfri LEFT JOIN playball_field_info pfi ON pfi.id= pfri.f_id WHERE pfi.business_id=#{bId}
+        and date_format(pfri.fri_fieldDay,'%Y-%m-%d')=date_format(#{reserveTime},'%Y-%m-%d') AND pfi.sports_id=#{stId}
+    </select>
+
 </mapper>
