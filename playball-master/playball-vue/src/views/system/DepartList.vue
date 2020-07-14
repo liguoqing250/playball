@@ -111,6 +111,7 @@
               -->
 
               <!--  JDate -->
+              <!--
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
@@ -124,7 +125,7 @@
                 label="打烊时间">
                 <j-date v-model="jdate.value" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" v-decorator="['closeTime', {} ]"/>
               </a-form-item>
-              <!--
+
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
@@ -161,6 +162,23 @@
               <a-form-item
                 :labelCol="labelCol"
                 :wrapperCol="wrapperCol"
+                label="营业时间">
+                <a-time-picker v-model="dataTime.defaultStartTime" @change="startOnChange"
+                               :default-value="moment('00:00', 'HH:mm')" format="HH:mm"/>
+              </a-form-item>
+
+
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="打烊时间">
+                <a-time-picker v-model="dataTime.defaultCloseTime" @change="closeOnChange"
+                               :default-value="moment('00:00', 'HH:mm')" format="HH:mm" />
+              </a-form-item>
+
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
                 label="手机号">
                 <a-input placeholder="请输入手机号" v-decorator="['mobile', {'initialValue':''}]"/>
               </a-form-item>
@@ -170,6 +188,13 @@
                 :wrapperCol="wrapperCol"
                 label="银行卡号">
                 <a-input placeholder="请输入银行卡号" v-decorator="['bankCard', {'initialValue':''}]"/>
+              </a-form-item>
+
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="选择地址">
+                <j-area-linkage v-model="areaLinkage" type="cascader"/>
               </a-form-item>
 
               <a-form-item
@@ -207,6 +232,8 @@
   </a-row>
 </template>
 <script>
+  import moment from 'moment'
+  import Area from '@/components/_util/Area'
   import DepartModal from './modules/DepartModal'
   import pick from 'lodash.pick'
   import {queryDepartTreeList, searchByKeywords, deleteByDepartId} from '@/api/api'
@@ -215,6 +242,7 @@
   import DepartAuthModal from './modules/DepartAuthModal'
   import JDate from '@/components/jeecg/JDate'
   import JImageUpload from '@/components/jeecg/JImageUpload'
+  import JAreaLinkage from '@comp/jeecg/JAreaLinkage'
 
   // 表头
   const columns = [
@@ -234,10 +262,17 @@
     {
       title: '营业时间',
       dataIndex: 'openTime',
+      customRender(text) {
+        return moment(text);
+      }
     },
     {
       title: '打烊时间',
       dataIndex: 'closeTime',
+      customRender(text) {
+        console.log("closetime",text)
+        return moment(text);
+      }
     },
     {
       title: '手机号',
@@ -253,6 +288,14 @@
     },
     {
       title: '地址',
+      dataIndex: '',
+      customRender(text) {
+        console.log("text=",text)
+        return text.province+text.city+text.district;
+      }
+    },
+    {
+      title: '详细地址地址',
       dataIndex: 'address'
     },
     {
@@ -271,10 +314,13 @@
     name: 'DepartList',
     mixins: [JeecgListMixin],
     components: {
+      moment,
       DepartAuthModal,
       DepartModal,
       JDate,
-      JImageUpload
+      JImageUpload,
+      JAreaLinkage,
+      Area
     },
     data() {
       return {
@@ -301,8 +347,7 @@
         currSelected: {},
         fileList:[],
 
-        jdate: {},
-
+        areaLinkage:'',
         allTreeKeys:[],
         checkStrictly: true,
 
@@ -319,6 +364,14 @@
           nodes: [],
           edges: []
         },
+
+        dataTime:{
+          defaultStartTime: null,
+          defaultCloseTime: null
+        },
+        openTime:'',
+        closeTime:'',
+
         validatorRules: {
           departName: {rules: [{required: true, message: '请输入机构/部门名称!'}]},
           orgCode: {rules: [{required: true, message: '请输入机构编码!'}]},
@@ -341,6 +394,17 @@
       }
     },
     methods: {
+      moment,
+      startOnChange(time, timeString){
+        this.dataTime.defaultStartTime = time
+        this.openTime = timeString;
+      },
+
+      closeOnChange(time, timeString){
+        this.dataTime.defaultCloseTime = time
+        this.closeTime = timeString;
+      },
+
       loadData() {
         this.refresh();
       },
@@ -485,6 +549,10 @@
         this.setValuesToForm(record)
         this.$refs.departAuth.show(record.id);
 
+        this.dataTime.defaultStartTime = moment(record.openTime,'HH:mm')
+        this.dataTime.defaultCloseTime = moment(record.closeTime,'HH:mm')
+        this.areaLinkage = record.province+record.city+record.district
+
           setTimeout(() => {
             this.fileList = record.imageUrl;
           }, 5)
@@ -538,6 +606,11 @@
             }else{
               formData.imageUrl = null;
             }
+            formData.province = that.areaLinkage.substring(0,2)
+            formData.city = that.areaLinkage.substring(2,4)
+            formData.district = that.areaLinkage.substring(4,6)
+            formData.openTime = that.openTime
+            formData.closeTime = that.closeTime
 
             httpAction(this.url.edit, formData, 'put').then((res) => {
               if (res.success) {
