@@ -51,6 +51,10 @@ public class FieldReserveInfo {
 	@Excel(name = "关联订单表ID", width = 15)
     @ApiModelProperty(value = "关联订单表ID")
 	private Integer ormId;
+	/**场地分类*/
+	@Excel(name = "场地分类", width = 15)
+	@ApiModelProperty(value = "场地分类")
+	private Integer friFieldType;
 	/**场地类型*/
 	@Excel(name = "场地类型", width = 15)
     @ApiModelProperty(value = "场地类型")
@@ -83,10 +87,20 @@ public class FieldReserveInfo {
 	@Excel(name = "isDelete", width = 15)
     @ApiModelProperty(value = "isDelete")
 	private Integer isDelete;
+
 	/**version*/
 	@Excel(name = "version", width = 15)
     @ApiModelProperty(value = "version")
 	private Integer version;
+
+
+	public Integer getFriFieldType() {
+		return friFieldType;
+	}
+
+	public void setFriFieldType(Integer friFieldType) {
+		this.friFieldType = friFieldType;
+	}
 
 	public Integer getId() {
 		return id;
