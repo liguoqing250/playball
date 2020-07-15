@@ -92,6 +92,8 @@ const checkRuleByCode = (params) => getAction('/sys/checkRule/checkByCode', para
 //我的通告
 const getUserNoticeInfo= (params)=>getAction("/sys/sysAnnouncementSend/getMyAnnouncementSend",params);
 
+const getSportsTypeList = (params)=>getAction("/playball/playballSportType",params);
+
 export {
   addRole,
   editRole,
@@ -146,7 +148,8 @@ export {
   saveDeptRolePermission,
   queryMyDepartTreeList,
   getUserNoticeInfo,
-  getDictItemsFromCache
+  getDictItemsFromCache,
+  getSportsTypeList
 }
 
 
