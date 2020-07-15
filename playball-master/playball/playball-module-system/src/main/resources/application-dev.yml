@@ -128,10 +128,8 @@ spring:
       datasource:
         master:
           url: jdbc:mysql://47.108.52.77:3306/playball?useUnicode=true&characterEncoding=UTF-8
-#          url: jdbc:mysql://localhost:3306/playball?useUnicode=true&characterEncoding=UTF-8
           username: root
           password: yuzhi2018.
-#          password: root
           driver-class-name: com.mysql.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:

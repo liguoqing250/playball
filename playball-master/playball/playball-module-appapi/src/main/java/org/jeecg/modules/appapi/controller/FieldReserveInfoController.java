@@ -65,7 +65,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	  */
 	 @ApiOperation(value="查询已预订信息", notes="查询已预订信息")
 	 @PostMapping(value = "/queryFieldReserveInfo")
-	 public Result<?> queryFieldReserveInfo(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="reserveTime",required=true) Date reserveTime,@RequestParam(name="stId",required=true)Integer stId) {
+	 public Result<?> queryFieldReserveInfo(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="reserveTime",required=true) String reserveTime,@RequestParam(name="stId",required=true)Integer stId) {
 		 List<FieldReserveInfo> list = fieldReserveInfoService.queryFieldReserveInfo(bid,reserveTime,stId);
 		 return Result.ok(list);
 	 }

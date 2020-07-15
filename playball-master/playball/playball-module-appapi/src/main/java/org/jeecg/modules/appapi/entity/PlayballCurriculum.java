@@ -40,6 +40,9 @@ public class PlayballCurriculum implements Serializable {
 
     @ApiModelProperty(value = "教程详情")
     private String cInfo;
+    
+    @ApiModelProperty(value = "教程视频封面")
+    private String cCover;
 
     @ApiModelProperty(value = "教程视频")
     private String cVideo;
