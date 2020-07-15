@@ -22,7 +22,7 @@ public class WxPayment {
 	private String attach = "暂无附加数据";//附加数据
 	
 	private String spbill_create_ip="192.168.3.83";//终端ip
-	private String notify_url ="http://go23760150.qicp.vip:41526/callbackAction";//回调地址
+	private String notify_url ="http://32872ct980.qicp.vip:56389/callbackAction";//回调地址
 
 	/** 生成随机订单号。*/
 	private  String getOrderStr() {
