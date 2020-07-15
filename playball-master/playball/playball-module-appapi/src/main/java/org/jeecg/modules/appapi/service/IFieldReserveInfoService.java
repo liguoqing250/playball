@@ -16,5 +16,5 @@ import java.util.List;
 public interface IFieldReserveInfoService extends IService<FieldReserveInfo> {
     List<FieldBookable> queryFieldBookable(FieldReserveInfo fieldReserveInfo);
 
-    List<FieldReserveInfo> queryFieldReserveInfo(String bid, Date reserveTime,Integer stId);
+    List<FieldReserveInfo> queryFieldReserveInfo(String bid, String reserveTime,Integer stId);
 }

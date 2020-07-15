@@ -66,34 +66,41 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
 
                 int minHours=Integer.valueOf(arene.getOpenTime().split(":")[0]);
                 int maxHours=Integer.valueOf(arene.getCloseTime().split(":")[0]);
+                List<Integer> timeArray=new ArrayList();
                 List<Integer> mintime=new ArrayList();
                 for (int j = minHours; j < maxHours; j++) {
-                    mintime.add(j);
+
+                    timeArray.add(j);
                 }
-                Iterator<Integer> mintimeit = mintime.iterator();
+                System.out.println("--------------------------------");
+                for (int j = 0; j <timeArray.size() ; j++) {
+                    boolean flag=true;
                     for (int k = 0; k <dataList.size() ; k++) {
-
                         List<String> jsonList= JSONObject.parseArray(dataList.get(k).getFriTiemRanges(),String.class);
-
                         for (int l = 0; l <jsonList.size() ; l++) {
                             JSONObject obj= JSONObject.parseObject(jsonList.get(l));
-
                             int hours= Integer.parseInt(  obj.get("startTime").toString().split(" ")[1].split(":")[0]);
-                            while (mintimeit.hasNext()) {
-                            if(hours==mintimeit.next()){
-                                mintimeit.remove();
+                            if(hours==timeArray.get(j)){
+                                flag=false;
                                 break;
                             }
                         }
+                        if(!flag){
+                            break;
+                        }
+                    }
+                    if(flag){
+                        mintime.add(timeArray.get(j));
                     }
                 }
-                List<Integer> newTimeList=new ArrayList<>();
-                while(mintimeit.hasNext()){
-                    newTimeList.add(mintimeit.next());
+
+                for (int j = 0; j <mintime.size() ; j++) {
+                    System.out.println(mintime.get(j));
                 }
-                if(newTimeList.size()>0){
+                System.out.println("--------------------------------");
+                if(mintime.size()>0){
                     fieldBookable.setAvailable(true);
-                    fieldBookable.setBookableTime(newTimeList.get(0)+":"+Integer.valueOf(arene.getOpenTime().split(":")[1]));
+                    fieldBookable.setBookableTime(mintime.get(0)+":"+Integer.valueOf(arene.getOpenTime().split(":")[1]));
                 }else{
                     fieldBookable.setBookableTime("无");
                     fieldBookable.setAvailable(false);
@@ -108,7 +115,7 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
 
         return list;
     }
-    public List<FieldReserveInfo> queryFieldReserveInfo(String bid,Date reserveTime,Integer stId){
+    public List<FieldReserveInfo> queryFieldReserveInfo(String bid,String reserveTime,Integer stId){
         Map<String,Object> map=new HashedMap();
         map.put("bid",bid);
         map.put("stId",stId);
