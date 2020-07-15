@@ -116,7 +116,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 		FieldReserveInfo.setUserId(appUsers.getU_id());
 		fieldReserveInfoService.save(FieldReserveInfo);
-		return Result.ok("添加成功！");
+		return Result.ok(FieldReserveInfo);
 	}
 	
 	/**
