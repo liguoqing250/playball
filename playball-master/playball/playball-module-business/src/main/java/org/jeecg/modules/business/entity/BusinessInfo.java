@@ -75,15 +75,10 @@ public class BusinessInfo implements Serializable {
 	private String createBy;
 	
 	private String imageUrl;
-	/**日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Date openTime;
 	
-	/**日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Date closeTime;
+	private String openTime;
+	
+	private String closeTime;
 	
 	/**创建人*/
 	private String bankCard;
@@ -98,6 +93,12 @@ public class BusinessInfo implements Serializable {
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updateTime;
+	
+	private String province;
+	private String city;
+	private String district;
+	private String locationLon;//经度
+	private String locationLat;//纬度
 	
 	/**
 	 * 重写equals方法
@@ -137,7 +138,12 @@ public class BusinessInfo implements Serializable {
                 Objects.equals(openTime, depart.openTime)&&
                 Objects.equals(closeTime, depart.closeTime)&&
                 Objects.equals(bankCard, depart.bankCard)&&
-                Objects.equals(imageUrl, depart.imageUrl);
+                Objects.equals(imageUrl, depart.imageUrl)&&
+		        Objects.equals(province, depart.province)&&
+		        Objects.equals(city, depart.city)&&
+		        Objects.equals(district, depart.district)&&
+		        Objects.equals(locationLon, depart.locationLon)&&
+		        Objects.equals(locationLat, depart.locationLat);
     }
 
     /**
@@ -149,6 +155,6 @@ public class BusinessInfo implements Serializable {
         return Objects.hash(super.hashCode(), id, parentId, departName, 
         		departNameEn, departNameAbbr, departOrder, description,orgCategory, 
         		orgType, orgCode, mobile, fax, address, memo, status, 
-        		delFlag, createBy, imageUrl, openTime, closeTime, bankCard, createTime, updateBy, updateTime );
+        		delFlag, createBy, imageUrl, openTime, closeTime, bankCard, createTime, updateBy, updateTime,province,city,district,locationLon,locationLat );
     }
 }

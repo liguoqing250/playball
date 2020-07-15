@@ -62,7 +62,7 @@
       bizPath:{
         type:String,
         required:false,
-        default:"temp"
+        default:"image"
       },
       value:{
         type:[String,Array],

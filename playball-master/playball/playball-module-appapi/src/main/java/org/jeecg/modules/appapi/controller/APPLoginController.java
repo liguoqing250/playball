@@ -44,7 +44,7 @@ public class APPLoginController {
             if((boolean)map.get("success")){
                 appUsers= (AppUsers) map.get("appUsers");
                 // 生成token
-                String token =JwtUtil.appSign(JSONObject.toJSONString(appUsers),Integer.toString(appUsers.getU_id()));
+                String token =JwtUtil.appSign(JSONObject.toJSONString(appUsers),"1234");
                 // 设置token缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
                 redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);

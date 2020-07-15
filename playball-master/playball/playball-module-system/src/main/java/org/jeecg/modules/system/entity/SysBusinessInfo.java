@@ -38,20 +38,22 @@ public class SysBusinessInfo implements Serializable {
     @Excel(name = "场馆名", width = 15)
     private java.lang.String bName;
     
+    private String openTime;
+    private String closeTime;
     /**
      * 开始时间
      */
     //@Excel(name = "开始时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private java.util.Date openTime;
+   // @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+   // @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+   // private java.util.Date openTime;
     /**
      * 结束时间
      */
     //@Excel(name = "结束时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private java.util.Date closeTime;
+   // @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+   // @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    //private java.util.Date closeTime;
     
     /**
      * 商家账户

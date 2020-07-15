@@ -3,6 +3,9 @@ package org.jeecg.modules.appapi.service;
 import org.jeecg.modules.appapi.entity.FieldInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Description: 场馆详情
  * @Author: jeecg-boot
@@ -11,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFieldInfoService extends IService<FieldInfo> {
 
+    List<FieldInfo> listMaps(Map<String, Object> map);
 }

@@ -8,6 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -121,7 +124,7 @@ public class FieldInfoController extends JeecgController<FieldInfo, IFieldInfoSe
 		this.fieldInfoService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功！");
 	}
-	
+
 	/**
 	 * 通过id查询
 	 *
@@ -135,6 +138,21 @@ public class FieldInfoController extends JeecgController<FieldInfo, IFieldInfoSe
 		return Result.ok(fieldInfo);
 	}
 
+	 /**
+	  * 通过商家id查询
+	  *
+	  * @param bid
+	  * @return
+	  */
+	 @ApiOperation(value="场馆详情-通过id查询", notes="场馆详情-通过id查询")
+	 @PostMapping(value = "/queryBybId")
+	 public Result<?> queryBybId(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="stId",required=true) Integer stId) {
+		 Map<String,Object> map=new HashedMap();
+		 	map.put("business_id",bid);
+		 	map.put("sports_id",stId);
+		 List<FieldInfo> fieldInfo = fieldInfoService.listMaps(map);
+		 return Result.ok(fieldInfo);
+	 }
   /**
    * 导出excel
    *

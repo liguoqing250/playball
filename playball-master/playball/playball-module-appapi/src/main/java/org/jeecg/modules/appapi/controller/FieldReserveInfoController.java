@@ -8,10 +8,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.FieldBookable;
 import org.jeecg.modules.appapi.entity.FieldReserveInfo;
 import org.jeecg.modules.appapi.entity.Game;
@@ -51,6 +55,21 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	@Autowired
 	private IFieldReserveInfoService fieldReserveInfoService;
 
+	 @Autowired
+	 private HttpServletRequest request;
+	 /**
+	  * 查询已预订信息
+	  *
+	  * @param bid,reserveTime
+	  * @return
+	  */
+	 @ApiOperation(value="查询已预订信息", notes="查询已预订信息")
+	 @PostMapping(value = "/queryFieldReserveInfo")
+	 public Result<?> queryFieldReserveInfo(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="reserveTime",required=true) String reserveTime,@RequestParam(name="stId",required=true)Integer stId) {
+		 List<FieldReserveInfo> list = fieldReserveInfoService.queryFieldReserveInfo(bid,reserveTime,stId);
+		 return Result.ok(list);
+	 }
+
 	 /**
 	  * 查询可预订最早时间
 	  *
@@ -60,9 +79,6 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 @ApiOperation(value="运动类型，所属场地", notes="查询可预订最早时间")
 	 @PostMapping(value = "/queryFieldBookable")
 	 public Result<?> queryFieldBookable(FieldReserveInfo fieldReserveInfo) {
-	 	System.out.println("查询可预订最早时间");
-	 	System.out.println(fieldReserveInfo.getfId());
-	 	System.out.println(fieldReserveInfo.getStId());
 		 List<FieldBookable> list = fieldReserveInfoService.queryFieldBookable(fieldReserveInfo);
 		 return Result.ok(list);
 	 }
@@ -96,6 +112,9 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	@ApiOperation(value="场地预定-添加", notes="场地预定-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody FieldReserveInfo FieldReserveInfo) {
+		String token=request.getHeader("X-Access-Token");
+		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+		FieldReserveInfo.setUserId(appUsers.getU_id());
 		fieldReserveInfoService.save(FieldReserveInfo);
 		return Result.ok("添加成功！");
 	}

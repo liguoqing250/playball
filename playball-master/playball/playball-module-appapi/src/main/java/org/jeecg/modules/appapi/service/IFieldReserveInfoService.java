@@ -4,6 +4,7 @@ import org.jeecg.modules.appapi.entity.FieldBookable;
 import org.jeecg.modules.appapi.entity.FieldReserveInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface IFieldReserveInfoService extends IService<FieldReserveInfo> {
     List<FieldBookable> queryFieldBookable(FieldReserveInfo fieldReserveInfo);
+
+    List<FieldReserveInfo> queryFieldReserveInfo(String bid, String reserveTime,Integer stId);
 }

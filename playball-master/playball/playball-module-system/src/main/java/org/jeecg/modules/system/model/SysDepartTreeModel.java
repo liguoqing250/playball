@@ -73,13 +73,19 @@ public class SysDepartTreeModel implements Serializable{
 
     private Date updateTime;
     
-    private Date closeTime;
+    private String closeTime;
     
-    private Date openTime;
+    private String openTime;
     
     private String bankCard;
     
     private String imageUrl;
+    
+	private String province;
+	private String city;
+	private String district;
+	private String locationLon;//经度
+	private String locationLat;//纬度
     
     
 
@@ -114,10 +120,15 @@ public class SysDepartTreeModel implements Serializable{
         this.createTime = sysDepart.getCreateTime();
         this.updateBy = sysDepart.getUpdateBy();
         this.updateTime = sysDepart.getUpdateTime();
-        this.openTime = sysDepart.getOpenTime();
         this.closeTime = sysDepart.getCloseTime();
+        this.openTime = sysDepart.getOpenTime();
         this.bankCard = sysDepart.getBankCard();
         this.imageUrl = sysDepart.getImageUrl();
+        this.province = sysDepart.getProvince();
+    	this.city = sysDepart.getCity();
+    	this.district = sysDepart.getDistrict();
+    	this.locationLon = sysDepart.getLocationLon();
+    	this.locationLat = sysDepart.getLocationLat();
     }
 
     public boolean getIsLeaf() {
@@ -333,19 +344,19 @@ public class SysDepartTreeModel implements Serializable{
         this.updateTime = updateTime;
     }
     
-    public Date getCloseTime() {
+    public String getCloseTime() {
         return closeTime;
     }
 
-    public void setCloseTime(Date closeTime) {
+    public void setCloseTime(String closeTime) {
         this.closeTime = closeTime;
     }
     
-    public Date getOpenTime() {
+    public String getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(Date openTime) {
+    public void setOpenTime(String openTime) {
         this.openTime = openTime;
     }
     
@@ -363,6 +374,46 @@ public class SysDepartTreeModel implements Serializable{
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    
+    public String getProvince() {
+    	return province;
+    }
+    
+    public void setProvince(String province) {
+    	this.province = province;
+    }
+    
+    public String getCity() {
+    	return city;
+    }
+    
+    public void setCity(String city) {
+    	this.city = city;
+    }
+    
+    public String getDistrict() {
+    	return district;
+    }
+    
+    public void setDistrict(String district) {
+    	this.district = district;
+    }
+    
+    public String getLocationLon() {
+    	return locationLon;
+    }
+    
+    public void setLocationLon(String locationLon) {
+    	this.locationLon = locationLon;
+    }
+    
+    public String getLocationLat() {
+    	return locationLat;
+    }
+    
+    public void setLocationLat(String locationLat) {
+    	this.locationLat = locationLat;
     }
     
     public SysDepartTreeModel() { }
@@ -403,6 +454,11 @@ public class SysDepartTreeModel implements Serializable{
                 Objects.equals(openTime, model.openTime) &&
                 Objects.equals(bankCard, model.bankCard) &&
                 Objects.equals(imageUrl, model.imageUrl) &&
+                Objects.equals(province, model.province)&&
+                Objects.equals(city, model.city)&&
+                Objects.equals(district, model.district)&&
+                Objects.equals(locationLon, model.locationLon)&&
+                Objects.equals(locationLat, model.locationLat)&&
                 Objects.equals(children, model.children);
     }
     
@@ -414,7 +470,7 @@ public class SysDepartTreeModel implements Serializable{
 
         return Objects.hash(id, parentId, departName, departNameEn, departNameAbbr,
         		departOrder, description, orgCategory, orgType, orgCode, mobile, fax, address, 
-        		memo, status, delFlag, createBy, createTime, updateBy, updateTime, closeTime, openTime, bankCard,imageUrl,
+        		memo, status, delFlag, createBy, createTime, updateBy, updateTime, closeTime, openTime, bankCard,imageUrl,province,city,district,locationLon,locationLat,
         		children);
     }
 
