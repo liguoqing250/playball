@@ -76,6 +76,7 @@ public class ShiroConfig {
 		//APP 注册登录相关接口 排除
 		filterChainDefinitionMap.put("/appopen/**","anon");
 		// 配置不会被拦截的链接 顺序判断
+		filterChainDefinitionMap.put("/**/**", "anon"); //暂时全部放行
 		filterChainDefinitionMap.put("/callbackAction", "anon"); //测试接口排除
 		filterChainDefinitionMap.put("/test", "anon"); //测试接口排除
 		filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
