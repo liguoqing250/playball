@@ -126,7 +126,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 * @return
 	 */
 	@ApiOperation(value="场地预定-编辑", notes="场地预定-编辑")
-	@PutMapping(value = "/edit")
+	@PostMapping(value = "/edit")
 	public Result<?> edit(@RequestBody FieldReserveInfo FieldReserveInfo) {
 		fieldReserveInfoService.updateById(FieldReserveInfo);
 		return Result.ok("编辑成功!");
@@ -139,7 +139,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 * @return
 	 */
 	@ApiOperation(value="场地预定-通过id删除", notes="场地预定-通过id删除")
-	@DeleteMapping(value = "/delete")
+	@PostMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		fieldReserveInfoService.removeById(id);
 		return Result.ok("删除成功!");

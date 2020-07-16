@@ -33,10 +33,13 @@ public class PlayballOrdersController {
 	public Result<JSONObject> addPlayballOrders(@RequestBody PlayballOrders ord){
 		//返回对象
 		Result<JSONObject> result = new Result<JSONObject>();
-		System.err.println("添加订单数据" + ord);
+		JSONObject obj = new JSONObject();
 		int insert = mapper.insert(ord);
+		System.err.println("添加订单数据" + ord);
+		obj.put("data", ord);
 		if(insert>0){
 			result.setCode(200);
+			result.setResult(obj);
 		}else{
 			result.setCode(0);
 		}
