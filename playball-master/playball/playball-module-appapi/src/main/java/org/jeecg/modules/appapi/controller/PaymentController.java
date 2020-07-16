@@ -1,6 +1,7 @@
 package org.jeecg.modules.appapi.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,8 +18,10 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.modules.appapi.entity.FieldReserveInfo;
 import org.jeecg.modules.appapi.entity.WxPayment;
 import org.jeecg.modules.appapi.entity.vo.PaymentVo;
+import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
 import org.jeecg.modules.appapi.service.PaymentService;
 import org.jeecg.modules.appapi.utils.HttpUtils;
 import org.jeecg.modules.appapi.utils.MD5Data;
@@ -36,12 +39,19 @@ public class PaymentController {
 	@Autowired
 	private PaymentService payService;
 	
+	@Autowired
+	private FieldReserveInfoMapper f_mapper;
+	
 	/*响应预付单*/
 	@PostMapping(value="/getAdvancedOrder")
 	public Result<JSONObject> getAdvancedOrder(@RequestBody WxPayment wxPay) throws Exception {
 		Result<JSONObject> result = new Result<JSONObject>();
 		JSONObject obj = new JSONObject();
 		System.err.println("前端数据" + wxPay);
+		//后台查询数据相对前端安全,并赋值预下单对象
+		BigDecimal price = getGoodsPrice(wxPay);
+		wxPay.setTotal_fee(price);
+		
 		//1、调用微信支付接口
 		Map<String, String> prePay = payService.weixinPrePay(wxPay);
 		
@@ -67,6 +77,19 @@ public class PaymentController {
 	public String payMentCallBack(String attach  ) {
 		System.out.println("回调，支付成功！"+attach);
 		return "success";
+	}
+	
+	/**获取商品数据返回商品单价*/
+	public BigDecimal getGoodsPrice(WxPayment wxPay){
+		BigDecimal big =null;
+		//查询场地预定价格
+		if(wxPay.getGoods_type() == 1){
+			FieldReserveInfo info = f_mapper.selectById(wxPay.getGoods_id());
+			big = info.getFriPrice();
+		}else {
+			
+		}
+		return big;
 	}
 	
 }
