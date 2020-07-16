@@ -1,5 +1,6 @@
 package org.jeecg.modules.appapi.entity;
 
+import java.math.BigDecimal;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ public class WxPayment {
 	private String appId = "wx026beca713b85a9d";
 	private String mch_id = "1544138361";
 	
-	private String total_fee ="1" ; //支付金额
+	private BigDecimal total_fee ; //支付金额
 	private String body ="暂无描述" ;//商品描述
 	private String out_trade_no = getOrderStr();//商户订单号
 	private String attach = "暂无附加数据";//附加数据

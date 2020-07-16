@@ -19,26 +19,20 @@ public class PaymentService {
 	
 	
 	public Map<String, String> weixinPrePay (WxPayment wxPay){
-      Map<String,String> returnMap = new HashMap<>();
+		  Map<String,String> returnMap = new HashMap<>();
           //预支付
       	  String NONCE_STR=PayCommonUtil.getRandomString(32); //32位随机字符串
-          /*String APP_ID="wx026beca713b85a9d";
-          String MCH_ID="1544138361";
-          String body = "商品测试"; //商品描述
-          String out_trade_no =getOrderStr(); //商户订单号
-          String total_fee ="1"; //支付金额
-          String spbill_create_ip="192.168.3.83";//终端ip
-          String notify_url ="http://go23760150.qicp.vip:41526/callbackAction";//回调地址
-          String attach="附加数据";//附加数据
-*/          
-          SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();  
-         
+      	//订单金额转换为微信支付的分
+  		String total_fee = ProcessingAmount(String.format("%.2f", wxPay.getTotal_fee()));
+  		System.err.println("total_fee : " + total_fee);
+  		
+      	  SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();  
           parameterMap.put("appid", wxPay.getAppId());  
           parameterMap.put("mch_id", wxPay.getMch_id());  
           parameterMap.put("nonce_str", NONCE_STR);  
           parameterMap.put("body", wxPay.getBody());
           parameterMap.put("out_trade_no", wxPay.getOut_trade_no());
-          parameterMap.put("total_fee", wxPay.getTotal_fee()); 
+          parameterMap.put("total_fee", total_fee); 
           parameterMap.put("spbill_create_ip", wxPay.getSpbill_create_ip());  
           parameterMap.put("notify_url", wxPay.getNotify_url());
           parameterMap.put("trade_type", "APP");
@@ -102,10 +96,21 @@ public class PaymentService {
 		return System.currentTimeMillis() +""+ ThreadLocalRandom.current().nextInt(100,200);
 	}
 	
-	//回调方法
-	/*@RequestMapping(value = "/callbackAction")
-	public String wxpaySucc(){
-		System.err.println("成功回調！");
-		return null;
-	}*/
+	/*处理订单金额 BigDecimal 转换为 String 分*/
+	public String ProcessingAmount(String str){
+		String replace = str.replace(".", ""); //原来数据
+		String sub =replace; //新数据
+		int ix = 0; //下标
+		if( ix == replace.indexOf("0")){
+			for(int i = 0; i<replace.length();i++){
+				int index = sub.indexOf("0");
+				if(index == 0){
+					sub = replace.substring(i);
+				}
+			}
+			return sub;
+		}else{
+			return replace;
+		}
+	}
 }
