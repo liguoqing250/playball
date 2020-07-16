@@ -7,14 +7,19 @@
         <a-row :gutter="24">
 
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="教程标题">
-              <a-input placeholder="请输入教程标题" v-model="queryParam.cTitle"></a-input>
+            <a-form-item label="赛事名称">
+              <a-input placeholder="请输入赛事名称" v-model="queryParam.gamesName"></a-input>
             </a-form-item>
           </a-col>
 
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="运动类型">
-              <a-input placeholder="请输入运动类型" v-model="queryParam.sId"></a-input>
+              <!--<a-input placeholder="请输入运动类型" v-model="queryParam.sportsId"></a-input>-->
+              <a-select placeholder="请选择运动类别"  v-model="queryParam.sportsId">
+                <a-select-option :value="sports.id"  v-for="sports in sportsTypeList"  @change ="changeSportsList($event)">
+                  {{ sports.sportsName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
 
@@ -32,7 +37,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('cms教程')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('赛事信息')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -55,7 +60,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="cid"
+        rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -64,8 +69,12 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
-        <span slot="video" slot-scope="text, record">
-          <a @click="showVideo(record)">观看视频</a>
+        <span slot="actionGamesInfo" slot-scope="text, record">
+          <a @click="showGameInfo(record)">查看赛事信息</a>
+        </span>
+
+        <span slot="actionSchedule" slot-scope="text, record">
+          <a @click="handleEditSchedule(record)">编辑查看赛程</a>
         </span>
 
         <span slot="action" slot-scope="text, record">
@@ -76,7 +85,7 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.cid)">
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -87,42 +96,41 @@
       </a-table>
     </div>
     <!-- table区域-end -->
-
     <div>
       <j-modal
-        :visible.sync="videomodal.bShowVideo"
+        :visible.sync="infoModal.visible"
         :width="1200"
-        :title="videomodal.title"
+        :title="infoModal.title"
       >
         <template>
-          <div v-html="videomodal.cvideo">{{videomodal.cvideo}}</div>
-          <iframe :src="videomodal.cvideo" frameborder='0'
-                  allow='autoplay;encrypted-media' allowfullscreen style='width:100%;height:500px;'>
-          </iframe>
+          <div v-html="infoModal.gamesContent">{{infoModal.gamesContent}}</div>
         </template>
       </j-modal>
     </div>
 
     <!-- 表单区域 -->
-    <playballCourse-modal ref="modalForm" @ok="modalFormOk"></playballCourse-modal>
+    <playballGame-modal ref="modalForm" @ok="modalFormOk"></playballGame-modal>
+    <playball-schedule ref="schedule"></playball-schedule>
   </a-card>
 </template>
 
 <script>
   import '@/assets/less/TableExpand.less'
-  import PlayballCourseModal from './modules/PlayballCourseModal'
+  import PlayballGameModal from './modules/PlayballGameModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { getSportsTypeList } from '@/api/api'
+  import PlayballSchedule from './modules/PlayballSchedule'
 
   export default {
-    name: "PlayballCourseList",
+    name: "PlayballGameList",
     mixins:[JeecgListMixin],
     components: {
-      PlayballCourseModal
+      PlayballGameModal,
+      PlayballSchedule
     },
     data () {
       return {
-        description: 'cms教程管理页面',
+        description: '赛事信息管理页面',
         // 表头
         columns: [
           {
@@ -136,71 +144,52 @@
             }
            },
 		   {
-            title: '教程标题',
+            title: '赛事名称',
             align:"center",
-            dataIndex: 'ctitle'
+            dataIndex: 'gamesName'
            },
 		   {
-            title: '教程详情',
+            title: '赛事信息',
             align:"center",
-            dataIndex: 'cinfo'
+            dataIndex: 'actionGamesInfo',
+            scopedSlots: { customRender: 'actionGamesInfo' }
+           },
+       {
+            title: '赛程信息',
+            align:"center",
+            dataIndex: 'actionSchedule',
+            scopedSlots: { customRender: 'actionSchedule' }
+          },
+          {
+            title: '赛事规则',
+            align:"center",
+            dataIndex: 'gameRule'
+          },
+		   {
+            title: '报名时间',
+            align:"center",
+            dataIndex: 'enrollTime'
            },
 		   {
-            title: '教程视频',
+            title: '赛事开始时间',
             align:"center",
-            dataIndex: '',
-            scopedSlots: { customRender: 'video' }
+            dataIndex: 'startTime'
            },
 		   {
+            title: '赛事结束时间',
+            align:"center",
+            dataIndex: 'endTime'
+           },
+          {
             title: '运动类型',
             align:"center",
-            dataIndex: 'sid',
-            customRender: (text, record, index) => {
-              let re = "";
-              for (index in this.sportsTypeList){
-                 if(this.sportsTypeList[index].id==text){
-                   return this.sportsTypeList[index].sportsName
-                 }
-               }
-               return re;
-             }
-           },
-		   {
-            title: '适龄范围',
+            dataIndex: 'sportsName'
+          },
+          {
+            title: '比赛场地',
             align:"center",
-            dataIndex: 'cagerange'
-           },
-		   {
-            title: '是否付费',
-            align:"center",
-            dataIndex: 'cisFree',
-            customRender: (text, record, index) => {
-              let re = "";
-              if(text=='0') {
-                re="免费"
-              }else{
-                re="付费"
-              }
-             return re;
-           }
-
-           },
-		   {
-            title: '价格',
-            align:"center",
-            dataIndex: 'cprice'
-           },
-		   {
-            title: '点赞数',
-            align:"center",
-            dataIndex: 'cfabulous'
-           },
-		   {
-            title: '浏览数',
-            align:"center",
-            dataIndex: 'cbrowse'
-           },
-
+            dataIndex: 'fieldName'
+          },
           {
             title: '操作',
             dataIndex: 'action',
@@ -210,20 +199,19 @@
         ],
 
         sportsTypeList:{},
-        videomodal: {
-          title: '',
-          bShowVideo:false,
-          cvideo:'',
-        },
         typeName:'',
-
+        infoModal: {
+          title: '',
+          visible: false,
+          gamesContent:'',
+        },
 
 		url: {
-          list: "/playball/playballCourse/list",
-          delete: "/playball/playballCourse/delete",
-          deleteBatch: "/playball/playballCourse/deleteBatch",
-          exportXlsUrl: "playball/playballCourse/exportXls",
-          importExcelUrl: "playball/playballCourse/importExcel",
+          list: "/playball/playballGame/list",
+          delete: "/playball/playballGame/delete",
+          deleteBatch: "/playball/playballGame/deleteBatch",
+          exportXlsUrl: "playball/playballGame/exportXls",
+          importExcelUrl: "playball/playballGame/importExcel",
        },
     }
   },
@@ -236,16 +224,22 @@
       initDictConfig() {
         getSportsTypeList('').then((res)=>{
           if(res.success){
-            this.sportsTypeList = res.result;
+            this.sportsTypeList = res.result.records;
             this.typeName = this.sportsTypeList[0].sportsName
           }
         })
       },
-
-      showVideo(record){
-        this.videomodal.bShowVideo = true
-        this.videomodal.title = record.ctitle
-        this.videomodal.cvideo = record.cvideo
+      changeSportsList(id){
+        console.log("-----id=",id)
+        queryParam.sportsId = id;
+      },
+      showGameInfo(record){
+        this.infoModal.visible = true
+        this.infoModal.title = record.gamesName
+        this.infoModal.gamesContent = record.gamesInfo
+      },
+      handleEditSchedule(record){
+        this.$refs.schedule.show(record);
       },
     }
   }

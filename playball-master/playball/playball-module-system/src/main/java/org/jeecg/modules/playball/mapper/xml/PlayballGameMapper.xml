@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballGameMapper">
+	
+	<!-- 获取赛事信息 -->
+	<select id="getGameList" resultType="org.jeecg.modules.playball.vo.PlayballGamesPage">
+		SELECT
+			pg.id AS id,
+			pg.games_name AS gamesName,
+			pg.games_info AS gamesInfo,
+			pg.game_rule AS gameRule,
+			pg.enroll_time AS enrollTime,
+			pg.start_time AS startTime,
+			pg.end_time AS endTime,
+			pg.is_delete AS isDelete,
+			pg.sports_id AS sportsId,
+			pg.field_id AS fieldId,
+			pg.stage AS stage,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName,
+			pfi.field_name AS fieldName
+			from playball_games pg, playball_sports_type pst, playball_field_info pfi, sys_depart sd 
+			where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getAllGameListTotal" resultType="java.lang.Integer">
+		SELECT COUNT(1) 
+		from playball_games pg, playball_sports_type pst, playball_field_info pfi, sys_depart sd 
+		where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id
+	</select>
+</mapper>
