@@ -1,5 +1,6 @@
 package org.jeecg.modules.appapi.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,8 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.appapi.entity.AppUsers;
-import org.jeecg.modules.appapi.entity.FieldBookable;
-import org.jeecg.modules.appapi.entity.FieldReserveInfo;
-import org.jeecg.modules.appapi.entity.Game;
+import org.jeecg.modules.appapi.entity.*;
+import org.jeecg.modules.appapi.service.IFieldInfoService;
 import org.jeecg.modules.appapi.service.IFieldReserveInfoService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -56,6 +55,8 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	private IFieldReserveInfoService fieldReserveInfoService;
 
 	 @Autowired
+	 private IFieldInfoService iFieldInfoService;
+	 @Autowired
 	 private HttpServletRequest request;
 	 /**
 	  * 查询已预订信息
@@ -65,8 +66,8 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	  */
 	 @ApiOperation(value="查询已预订信息", notes="查询已预订信息")
 	 @PostMapping(value = "/queryFieldReserveInfo")
-	 public Result<?> queryFieldReserveInfo(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="reserveTime",required=true) String reserveTime,@RequestParam(name="stId",required=true)Integer stId) {
-		 List<FieldReserveInfo> list = fieldReserveInfoService.queryFieldReserveInfo(bid,reserveTime,stId);
+	 public Result<?> queryFieldReserveInfo(@RequestParam(name="bid",required=true) String bid,@RequestParam(name="reserveTime",required=true) String reserveTime,@RequestParam(name="stId",required=true)Integer stId,@RequestParam(name="fieldType",required=true)Integer fieldType) {
+		 List<FieldReserveInfo> list = fieldReserveInfoService.queryFieldReserveInfo(bid,reserveTime,stId,fieldType);
 		 return Result.ok(list);
 	 }
 
@@ -115,6 +116,9 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 		String token=request.getHeader("X-Access-Token");
 		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 		FieldReserveInfo.setUserId(appUsers.getU_id());
+		List<String> list=JSONObject.parseArray(FieldReserveInfo.getFriTiemRanges(),String.class);
+		FieldInfo fieldInfo=iFieldInfoService.getById(FieldReserveInfo.getfId());
+		FieldReserveInfo.setFriPrice(BigDecimal.valueOf(list.size()*fieldInfo.getFieldPrice()));
 		fieldReserveInfoService.save(FieldReserveInfo);
 		return Result.ok(FieldReserveInfo);
 	}
@@ -126,7 +130,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 * @return
 	 */
 	@ApiOperation(value="场地预定-编辑", notes="场地预定-编辑")
-	@PutMapping(value = "/edit")
+	@PostMapping(value = "/edit")
 	public Result<?> edit(@RequestBody FieldReserveInfo FieldReserveInfo) {
 		fieldReserveInfoService.updateById(FieldReserveInfo);
 		return Result.ok("编辑成功!");
@@ -139,7 +143,7 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 * @return
 	 */
 	@ApiOperation(value="场地预定-通过id删除", notes="场地预定-通过id删除")
-	@DeleteMapping(value = "/delete")
+	@PostMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		fieldReserveInfoService.removeById(id);
 		return Result.ok("删除成功!");

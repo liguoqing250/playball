@@ -11,6 +11,7 @@ import org.jeecg.modules.appapi.mapper.ArenaMapper;
 import org.jeecg.modules.appapi.mapper.FieldInfoMapper;
 import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
 import org.jeecg.modules.appapi.service.IFieldReserveInfoService;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,6 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
                 map.put("stId",fieldReserveInfo.getStId());
 
                 FieldBookable fieldBookable=new FieldBookable();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar  calendar = Calendar.getInstance();
                 calendar.setTime(new Date());
 
@@ -115,14 +115,52 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
 
         return list;
     }
-    public List<FieldReserveInfo> queryFieldReserveInfo(String bid,String reserveTime,Integer stId){
+    public List<FieldReserveInfo> queryFieldReserveInfo(String bid,String reserveTime,Integer stId,Integer fieldType){
         Map<String,Object> map=new HashedMap();
         map.put("bid",bid);
         map.put("stId",stId);
-        if(reserveTime!=null){
-            map.put("reserveTime",reserveTime);
+        map.put("reserveTime",reserveTime);
+
+        if(stId==2&&fieldType==2){
+            System.out.println("半场");
+            Arena arene=arenaMapper.selectById(bid);
+            int minHours=Integer.valueOf(arene.getOpenTime().split(":")[0]);
+            int maxHours=Integer.valueOf(arene.getCloseTime().split(":")[0]);
+            List<FieldReserveInfo> newlist=new ArrayList<>();
+
+
+            Map<String ,Object> map2=new HashedMap();
+            map2.put("business_id",bid);
+            map2.put("sports_id",2);
+            List<FieldInfo> fieldInfoList=fieldInfoMapper.selectByMap(map2);
+            for (int j = 0; j <fieldInfoList.size() ; j++) {
+                String value="[";
+                FieldReserveInfo fieldReserveInfo=new FieldReserveInfo();
+                fieldReserveInfo.setfId(fieldInfoList.get(j).getId());
+                map.put("fId",fieldInfoList.get(j).getId());
+                for (int i = minHours; i <maxHours ; i++) {
+                    map.put("timeValue",i+":"+arene.getOpenTime().split(":")[1]);
+
+                    List<FieldReserveInfo> listdata=fieldReserveInfoMapper.queryFieldReserveInfoHalf(map);
+                    if(listdata.size()>0){
+                        value+= "{\"startTime\":\"2020-1-1 "+i+":00:00\",\"endTime\":\""+"2020-1-1 "+i+":00:00"+"\"},";
+                    }
+                }
+                if(value.length()>1){
+                    value = value.substring(0, value.length() - 1);
+                }
+
+                value+="]";
+                fieldReserveInfo.setFriTiemRanges(value);
+                newlist.add(fieldReserveInfo);
+            }
+
+            return newlist;
+        }else{
+            List<FieldReserveInfo> list=fieldReserveInfoMapper.queryFieldReserveInfo(map);
+            return list;
         }
-        return fieldReserveInfoMapper.queryFieldReserveInfo(map);
+
     }
 
     public String getWeekOfDate(Date date) {

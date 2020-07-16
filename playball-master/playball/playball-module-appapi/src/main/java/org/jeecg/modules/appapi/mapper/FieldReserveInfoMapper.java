@@ -18,4 +18,6 @@ public interface FieldReserveInfoMapper extends BaseMapper<FieldReserveInfo> {
     List<FieldReserveInfo> queryFieldReserveInfo(@Param("params") Map<String, Object> map);
 
     List<FieldReserveInfo> queryFieldBookable(@Param("params") Map<String, Object> map);
+
+    List<FieldReserveInfo> queryFieldReserveInfoHalf(@Param("params") Map<String, Object> map);
 }
