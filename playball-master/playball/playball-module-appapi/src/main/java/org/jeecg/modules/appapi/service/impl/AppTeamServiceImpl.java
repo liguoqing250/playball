@@ -12,6 +12,7 @@ import org.jeecg.modules.appapi.mapper.AppTeamPlayersMapper;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -99,7 +100,7 @@ public class AppTeamServiceImpl  implements AppTeamService {
     }
 
     @Override
-    public Page<AppTeam> selectByPage(Map<String, Object> params) {
+    public Page<AppTeam> selectByPage( Map<String, Object> params) {
         Page<AppTeam> page=new Page<>();
         //int current=(int)params.get("current");
         int PageSize=(int)params.get("PageSize");

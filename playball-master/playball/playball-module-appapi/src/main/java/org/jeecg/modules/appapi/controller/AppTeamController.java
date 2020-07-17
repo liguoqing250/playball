@@ -93,7 +93,7 @@ public class AppTeamController {
     }
     //创建球队
     @PostMapping(value = "/createTeam")
-    public Result<JSONObject> register(@RequestBody AppTeam appTeam) {
+    public Result<JSONObject> createTeam(@RequestBody AppTeam appTeam) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             //appTeamService.insert(appTeam);
@@ -155,9 +155,10 @@ public class AppTeamController {
     }
     //分页获取球队信息
     @PostMapping(value = "/selectTeamByPage")
-    public Result<JSONObject> selectTeamByPage(@RequestBody Map<String,Object> params) {
+    public Result<JSONObject> selectTeamByPage(@RequestBody  Map<String,Object> params) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
+            System.out.println(params);
             JSONObject obj = new JSONObject();
             Page<AppTeam> page=appTeamService.selectByPage(params);
             obj.put("page",page);
