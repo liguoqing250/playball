@@ -23,9 +23,11 @@ import org.jeecg.modules.appapi.entity.WxPayment;
 import org.jeecg.modules.appapi.entity.vo.PaymentVo;
 import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
 import org.jeecg.modules.appapi.service.PaymentService;
+import org.jeecg.modules.appapi.service.impl.WxPayServiceImpl;
 import org.jeecg.modules.appapi.utils.HttpUtils;
 import org.jeecg.modules.appapi.utils.MD5Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +43,9 @@ public class PaymentController {
 	
 	@Autowired
 	private FieldReserveInfoMapper f_mapper;
+	
+	@Autowired
+	private WxPayServiceImpl wxPayService; //微信提现
 	
 	/*响应预付单*/
 	@PostMapping(value="/getAdvancedOrder")
@@ -90,6 +95,47 @@ public class PaymentController {
 			
 		}
 		return big;
+	}
+	
+	/*微信提现*/
+	/**String openid: 用户 openid 
+	 * String money: 付款金额
+	 * String ip: 付款服务器 IP 测试期间就是公司 IP 1.204.113.40
+	 * String desc 描述，例如 Playball 提现*/
+	@GetMapping("/wxWithdrawal")
+	public Result<JSONObject> wxWithdrawal() {
+		Result<JSONObject> result = new Result<JSONObject>();
+		JSONObject obj = new JSONObject();
+		//转账金额 真是开发转为实体类 指定字段例如
+		//String money = ProcessingAmount(String.format("%.2f", wxPay.getTotal_fee()));
+		String money = ProcessingAmount(String.format("%.2f", new BigDecimal(1)));
+		
+		HashMap<String, Object> hashMap = wxPayService.wxSendWallet("oG0U-uG-2HKAQxDfy1CIhIABsNGs", money,"1.204.113.40","提现测试");
+		Object object = hashMap.get("status");
+		System.err.println("object");
+		System.err.println(object);
+		obj.put("data", object);
+		result.setResult(obj);
+		return result;
+	}
+	
+	
+    //元转分
+    public String ProcessingAmount(String str){
+		String replace = str.replace(".", ""); //原来数据
+		String sub =replace; //新数据
+		int ix = 0; //下标
+		if( ix == replace.indexOf("0")){
+			for(int i = 0; i<replace.length();i++){
+				int index = sub.indexOf("0");
+				if(index == 0){
+					sub = replace.substring(i);
+				}
+			}
+			return sub;
+		}else{
+			return replace;
+		}
 	}
 	
 }
