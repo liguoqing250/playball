@@ -1,6 +1,11 @@
 package org.jeecg.modules.playball.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballGame;
+import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballGamesPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Version: V1.0
  */
 public interface IPlayballGameService extends IService<PlayballGame> {
-	public IPage<PlayballGamesPage> queryGameList(IPage page);
+	public IPage<PlayballGamesPage> queryGameList(IPage page, PlayballGame playballGame);
+	
+	public PlayballGamesPage getGameInfoById(Integer id);
 }

@@ -54,8 +54,11 @@ public class PlayballGame implements Serializable  {
 	private java.lang.Object gamesInfo;
 	/**gameRule*/
 	@Excel(name = "gameRule", width = 15)
-    @ApiModelProperty(value = "gameRule")
+    @ApiModelProperty(value = "比赛规则")
 	private java.lang.String gameRule;
+	@Excel(name = "gameType", width = 15)
+    @ApiModelProperty(value = "比赛类型(1小组赛+淘汰赛,2淘汰赛,3积分赛)")
+	private java.lang.String gameType;
 	/**报名时间*/
 	@Excel(name = "报名时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

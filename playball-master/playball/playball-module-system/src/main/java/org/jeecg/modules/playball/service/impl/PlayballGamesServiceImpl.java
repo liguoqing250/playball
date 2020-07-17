@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.modules.playball.entity.PlayballGame;
 import org.jeecg.modules.playball.entity.PlayballGames;
 import org.jeecg.modules.playball.service.IPlayballGamesService;
 import org.jeecg.modules.playball.vo.PlayballGamesPage;
@@ -11,6 +13,7 @@ import org.jeecg.modules.playball.mapper.PlayballGamesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

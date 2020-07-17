@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballScheduleMapper">
+	
+		
+	<!-- SQL片段：getGameList 的 FROM 和 WHERE 部分 -->
+	<sql id="getSchedulePageListSql">
+		FROM playball_game_schedule pgs
+		LEFT JOIN playball_games pg ON pg.id = pgs.games_id
+		LEFT JOIN playball_team ptt ON ptt.team_id = pgs.team_id
+		LEFT JOIN playball_team pto ON pto.team_id = pgs.opponent_id
+		WHERE
+		pg.is_delete = 0
+        <if test="scheduleInfo.gamesName != null">
+     		and pg.games_name LIKE concat(concat('%',#{scheduleInfo.gamesName}),'%')  
+        </if>
+        <if test="scheduleInfo.teamName != null">
+     		and ptt.t_name = #{scheduleInfo.teamName}
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getSchedulePageList"  resultType="org.jeecg.modules.playball.vo.PlayballScheduleInfoPage">
+		SELECT
+			pgs.id AS id,
+			pgs.stage AS stage,
+			pgs.team_id AS teamId,
+			pgs.opponent_id AS opponentId,
+			pgs.group_id AS groupId,
+			pgs.game_status AS gameStatus,
+			pgs.game_result AS gameResult,
+			pgs.enter_ball AS enterBall,
+			pgs.lost_ball AS lostBall,
+			pgs.match_time AS matchTime,
+			pg.games_name AS gamesName,
+			ptt.t_name AS teamName,
+			pto.t_name AS opponentName
+			<include refid="getSchedulePageListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getSchedulePageListTotle"  resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getSchedulePageListSql"/>
+	</select>
+	
+</mapper>

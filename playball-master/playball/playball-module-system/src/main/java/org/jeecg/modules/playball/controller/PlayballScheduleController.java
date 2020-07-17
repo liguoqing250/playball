@@ -12,12 +12,11 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.playball.entity.PlayballGame;
-import org.jeecg.modules.playball.vo.PlayballGamesPage;
-import org.jeecg.modules.playball.service.IPlayballGameService;
-import java.util.Date;
-import java.util.HashMap;
+import org.jeecg.modules.playball.entity.PlayballSchedule;
+import org.jeecg.modules.playball.service.IPlayballScheduleService;
+import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 
+import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -39,87 +38,69 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
  /**
- * @Description: 赛事信息
+ * @Description: 赛程表
  * @Author: jeecg-boot
- * @Date:   2020-07-15
+ * @Date:   2020-07-17
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="赛事信息")
+@Api(tags="赛程表")
 @RestController
-@RequestMapping("/playball/playballGame")
-public class PlayballGameController extends JeecgController<PlayballGame, IPlayballGameService> {
+@RequestMapping("/playball/playballSchedule")
+public class PlayballScheduleController extends JeecgController<PlayballSchedule, IPlayballScheduleService> {
 	@Autowired
-	private IPlayballGameService playballGameService;
+	private IPlayballScheduleService playballScheduleService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param playballGame
+	 * @param playballSchedule
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-分页列表查询")
-	@ApiOperation(value="赛事信息-分页列表查询", notes="赛事信息-分页列表查询")
+	@AutoLog(value = "赛程表-分页列表查询")
+	@ApiOperation(value="赛程表-分页列表查询", notes="赛程表-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(PlayballGame playballGame,
+	public Result<?> queryPageList(PlayballScheduleInfoPage playballScheduleInfo,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		/*QueryWrapper<PlayballGame> queryWrapper = QueryGenerator.initQueryWrapper(playballGame, req.getParameterMap());
-		Page<PlayballGame> page = new Page<PlayballGame>(pageNo, pageSize);
-		IPage<PlayballGame> pageList = playballGameService.page(page, queryWrapper);*/
+		/*QueryWrapper<PlayballSchedule> queryWrapper = QueryGenerator.initQueryWrapper(playballSchedule, req.getParameterMap());
+		Page<PlayballSchedule> page = new Page<PlayballSchedule>(pageNo, pageSize);
+		IPage<PlayballSchedule> pageList = playballScheduleService.page(page, queryWrapper);*/
 		
-		IPage<PlayballGamesPage> pageList = playballGameService.queryGameList(new Page(pageNo, pageSize), playballGame);
-		
+		IPage<PlayballScheduleInfoPage> pageList = playballScheduleService.querySchedulePageList(new Page(pageNo, pageSize), playballScheduleInfo);
+	       
 		return Result.ok(pageList);
 	}
 	
-	@GetMapping(value = "/getGameById")
-	public Result<?> getGamesInfoById(HttpServletRequest req) {
-		Integer id = Integer.valueOf(req.getParameter("gamesId"));
-		Result<PlayballGamesPage> result = new Result<>();
-		try {
-			PlayballGamesPage gamesInfo = playballGameService.getGameInfoById(id);
-			result.setSuccess(true);
-			result.setMessage("查找成功");
-			result.setResult(gamesInfo);
-			return result;
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			result.setSuccess(false);
-			result.setMessage("查找过程中出现了异常: " + e.getMessage());
-			return result;
-		}
-   }
-	  
 	/**
 	 * 添加
 	 *
-	 * @param playballGame
+	 * @param playballSchedule
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-添加")
-	@ApiOperation(value="赛事信息-添加", notes="赛事信息-添加")
+	@AutoLog(value = "赛程表-添加")
+	@ApiOperation(value="赛程表-添加", notes="赛程表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody PlayballGame playballGame) {
-		playballGameService.save(playballGame);
+	public Result<?> add(@RequestBody PlayballSchedule playballSchedule) {
+		//playballScheduleService.save(playballSchedule);
 		return Result.ok("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param playballGame
+	 * @param playballSchedule
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-编辑")
-	@ApiOperation(value="赛事信息-编辑", notes="赛事信息-编辑")
+	@AutoLog(value = "赛程表-编辑")
+	@ApiOperation(value="赛程表-编辑", notes="赛程表-编辑")
 	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody PlayballGame playballGame) {
-		playballGameService.updateById(playballGame);
+	public Result<?> edit(@RequestBody PlayballSchedule playballSchedule) {
+		//playballScheduleService.updateById(playballSchedule);
 		return Result.ok("编辑成功!");
 	}
 	
@@ -129,11 +110,11 @@ public class PlayballGameController extends JeecgController<PlayballGame, IPlayb
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-通过id删除")
-	@ApiOperation(value="赛事信息-通过id删除", notes="赛事信息-通过id删除")
+	@AutoLog(value = "赛程表-通过id删除")
+	@ApiOperation(value="赛程表-通过id删除", notes="赛程表-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		playballGameService.removeById(id);
+		//playballScheduleService.removeById(id);
 		return Result.ok("删除成功!");
 	}
 	
@@ -143,11 +124,11 @@ public class PlayballGameController extends JeecgController<PlayballGame, IPlayb
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-批量删除")
-	@ApiOperation(value="赛事信息-批量删除", notes="赛事信息-批量删除")
+	@AutoLog(value = "赛程表-批量删除")
+	@ApiOperation(value="赛程表-批量删除", notes="赛程表-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.playballGameService.removeByIds(Arrays.asList(ids.split(",")));
+		//this.playballScheduleService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功！");
 	}
 	
@@ -157,23 +138,23 @@ public class PlayballGameController extends JeecgController<PlayballGame, IPlayb
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "赛事信息-通过id查询")
-	@ApiOperation(value="赛事信息-通过id查询", notes="赛事信息-通过id查询")
+	@AutoLog(value = "赛程表-通过id查询")
+	@ApiOperation(value="赛程表-通过id查询", notes="赛程表-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		PlayballGame playballGame = playballGameService.getById(id);
-		return Result.ok(playballGame);
+		PlayballSchedule playballSchedule = playballScheduleService.getById(id);
+		return Result.ok(playballSchedule);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param playballGame
+   * @param playballSchedule
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, PlayballGame playballGame) {
-      return super.exportXls(request, playballGame, PlayballGame.class, "赛事信息");
+  public ModelAndView exportXls(HttpServletRequest request, PlayballSchedule playballSchedule) {
+      return super.exportXls(request, playballSchedule, PlayballSchedule.class, "赛程表");
   }
 
   /**
@@ -185,7 +166,7 @@ public class PlayballGameController extends JeecgController<PlayballGame, IPlayb
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, PlayballGame.class);
+      return super.importExcel(request, response, PlayballSchedule.class);
   }
 
 }

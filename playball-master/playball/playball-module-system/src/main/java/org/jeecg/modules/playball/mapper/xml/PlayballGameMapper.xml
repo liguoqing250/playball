@@ -2,13 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.playball.mapper.PlayballGameMapper">
 	
+	<!-- SQL片段：getGameList 的 FROM 和 WHERE 部分 -->
+	<sql id="getGameListSql">
+		from playball.playball_games pg
+		left join playball.playball_sports_type pst on pg.sports_id = pst.id
+		left join playball.playball_field_info  pfi on pg.field_id = pfi.id
+		left join playball.sys_depart sd on pfi.business_id = sd.id
+		WHERE
+		pg.is_delete = 0
+        <if test="game.gamesName != null">
+     		and pg.games_name LIKE concat(concat('%',#{game.gamesName}),'%')  
+        </if>
+        <if test="game.sportsId != null">
+     		and pg.sports_id = #{game.sportsId}
+        </if>
+	</sql>
+	
 	<!-- 获取赛事信息 -->
-	<select id="getGameList" resultType="org.jeecg.modules.playball.vo.PlayballGamesPage">
+	<select id="getGameList" parameterType="java.util.Map" resultType="org.jeecg.modules.playball.vo.PlayballGamesPage">
 		SELECT
 			pg.id AS id,
 			pg.games_name AS gamesName,
 			pg.games_info AS gamesInfo,
 			pg.game_rule AS gameRule,
+			pg.game_type AS gameType,
+			pg.enroll_time AS enrollTime,
+			pg.start_time AS startTime,
+			pg.end_time AS endTime,
+			pg.is_delete AS isDelete,
+			pg.sports_id AS sportsId,
+			pg.field_id AS fieldId,
+			pg.stage AS stage,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName,
+			pfi.field_name AS fieldName
+			<include refid="getGameListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getAllGameListTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getGameListSql"/>
+	</select>
+	
+	<!-- 获取场地信息 -->
+	<select id="getGameInfoById" resultType="org.jeecg.modules.playball.vo.PlayballGamesPage">
+		SELECT
+			pg.id AS id,
+			pg.games_name AS gamesName,
+			pg.games_info AS gamesInfo,
+			pg.game_rule AS gameRule,
+			pg.game_type AS gameType,
 			pg.enroll_time AS enrollTime,
 			pg.start_time AS startTime,
 			pg.end_time AS endTime,
@@ -20,13 +63,7 @@
 			sd.depart_name AS businessName,
 			pfi.field_name AS fieldName
 			from playball_games pg, playball_sports_type pst, playball_field_info pfi, sys_depart sd 
-			where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id
+			where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id and pg.id=#{id}
 	</select>
 	
-	<!-- 查询 getUserByOrgCode 的总数-->
-	<select id="getAllGameListTotal" resultType="java.lang.Integer">
-		SELECT COUNT(1) 
-		from playball_games pg, playball_sports_type pst, playball_field_info pfi, sys_depart sd 
-		where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id
-	</select>
 </mapper>

@@ -1,8 +1,10 @@
 package org.jeecg.modules.playball.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jeecg.modules.playball.entity.PlayballGame;
+import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.mapper.PlayballGameMapper;
 import org.jeecg.modules.playball.service.IPlayballGameService;
 import org.jeecg.modules.playball.vo.PlayballGamesPage;
@@ -28,14 +30,19 @@ public class PlayballGameServiceImpl extends ServiceImpl<PlayballGameMapper, Pla
 	private PlayballGameMapper gameMapper;
 	
 	@Override
-	public IPage<PlayballGamesPage> queryGameList(IPage page){
+	public IPage<PlayballGamesPage> queryGameList(IPage page, PlayballGame playballGame){
 		
-		List<PlayballGamesPage> list = gameMapper.getGameList(page);
-		Integer total = baseMapper.getAllGameListTotal();
+		List<PlayballGamesPage> list = gameMapper.getGameList(page,playballGame);
+		Integer total = gameMapper.getAllGameListTotal(playballGame);
 	       
 		IPage<PlayballGamesPage> result = new Page<>(page.getCurrent(), page.getSize(), total);
 		result.setRecords(list);
 
 		return result;
+	}
+	
+	@Override
+	public PlayballGamesPage getGameInfoById(Integer id) {
+		return gameMapper.getGameInfoById(id);
 	}
 }

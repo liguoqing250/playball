@@ -85,6 +85,17 @@
           </a-select>
         </a-form-item>
 
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="赛事类型">
+          <a-select placeholder="请选择赛事类型"  v-model="model.gameType">
+            <a-select-option :value="sports.id"  v-for="sports in typeModal.gameTypeList" >
+              {{ sports.value }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
         <a-tabs defaultActiveKey="1" >
           <a-tab-pane tab="请选择要举办赛事的球馆" key="2" forceRender>
             <div >
@@ -155,6 +166,16 @@
 
         typeModal:{
           sportsTypeList:{},
+          gameTypeList:[{
+            id:"1",
+            value:"小组赛+淘汰赛"
+          },{
+            id:"2",
+            value:"淘汰赛"
+          },{
+            id:"3",
+            value:"积分赛(联赛制)"
+          }],
           typeName:''
         },
 

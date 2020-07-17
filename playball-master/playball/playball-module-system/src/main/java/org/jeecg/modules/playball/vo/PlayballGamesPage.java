@@ -25,6 +25,8 @@ public class PlayballGamesPage {
     
     private String gameRule;
     
+    private String gameType;
+    
     private Date enrollTime;
     
     private Date startTime;

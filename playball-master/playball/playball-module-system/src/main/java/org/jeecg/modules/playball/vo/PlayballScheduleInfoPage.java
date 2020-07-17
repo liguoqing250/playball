@@ -29,9 +29,7 @@ import lombok.experimental.Accessors;
  * @since 
  */
 @Data
-public class PlayballScheduleInfoPage implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
+public class PlayballScheduleInfoPage {
 	//赛程id主建
     private Integer id;
     //赛事阶段用来做循环
