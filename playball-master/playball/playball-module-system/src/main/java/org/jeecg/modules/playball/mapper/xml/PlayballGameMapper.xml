@@ -33,6 +33,7 @@
 			pg.sports_id AS sportsId,
 			pg.field_id AS fieldId,
 			pg.stage AS stage,
+			pg.finished AS finished,
 			pst.sports_name AS sportsName,
 			sd.depart_name AS businessName,
 			pfi.field_name AS fieldName
@@ -44,7 +45,7 @@
 		SELECT COUNT(1) <include refid="getGameListSql"/>
 	</select>
 	
-	<!-- 获取场地信息 -->
+	<!-- 获取信息 -->
 	<select id="getGameInfoById" resultType="org.jeecg.modules.playball.vo.PlayballGamesPage">
 		SELECT
 			pg.id AS id,
@@ -59,6 +60,7 @@
 			pg.sports_id AS sportsId,
 			pg.field_id AS fieldId,
 			pg.stage AS stage,
+			pg.finished AS finished,
 			pst.sports_name AS sportsName,
 			sd.depart_name AS businessName,
 			pfi.field_name AS fieldName

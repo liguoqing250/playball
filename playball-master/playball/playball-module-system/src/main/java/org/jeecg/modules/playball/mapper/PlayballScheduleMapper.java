@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
+import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,4 +22,7 @@ public interface PlayballScheduleMapper extends BaseMapper<PlayballSchedule> {
 	
 	public Integer getSchedulePageListTotle(@Param("scheduleInfo")PlayballScheduleInfoPage scheduleInfo);
 	
+	public List<PlayballSchedule> getScheduleListByStage(@Param("gamesId")Integer gamesId, @Param("stage")Integer stage);
+	
+	public List<PlayballSchedule> getScheduleListByGameId(@Param("gameId")Integer gameId);
 }

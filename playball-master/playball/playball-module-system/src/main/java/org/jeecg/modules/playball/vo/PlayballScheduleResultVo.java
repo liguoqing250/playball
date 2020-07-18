@@ -3,8 +3,7 @@ package org.jeecg.modules.playball.vo;
 
 import java.util.List;
 import org.jeecg.modules.playball.entity.PlayballTeam;
-import org.jeecg.modules.playball.entity.PlayballGames;
-import org.jeecg.modules.playball.entity.PlayballGameSchedule;
+import org.jeecg.modules.playball.entity.PlayballSchedule;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -17,10 +16,9 @@ import lombok.Data;
  * @since 
  */
 @Data
-public class PlayballScheduleResultVo implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private PlayballGameSchedule  gameSchedule;
+public class PlayballScheduleResultVo {
+		
+	private PlayballSchedule  gameSchedule;
     
 	private PlayballTeam team;
     //对手

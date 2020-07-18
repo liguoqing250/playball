@@ -43,4 +43,13 @@
 		SELECT COUNT(1) <include refid="getSchedulePageListSql"/>
 	</select>
 	
+	<select id="getScheduleListByStage" resultType="org.jeecg.modules.playball.entity.PlayballSchedule">
+		SELECT * FROM playball_game_schedule where games_id=#{gamesId} and stage=#{stage}
+	</select>
+	
+	<select id="getScheduleListByGameId" resultType="org.jeecg.modules.playball.entity.PlayballSchedule">
+		SELECT * FROM playball_game_schedule pgs, playball_games pg 
+		where pgs.games_id=#{gameId} and pg.stage=pgs.stage and pg.id = pgs.games_id
+	</select>
+	
 </mapper>

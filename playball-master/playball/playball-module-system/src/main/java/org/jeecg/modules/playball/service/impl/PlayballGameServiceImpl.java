@@ -45,4 +45,11 @@ public class PlayballGameServiceImpl extends ServiceImpl<PlayballGameMapper, Pla
 	public PlayballGamesPage getGameInfoById(Integer id) {
 		return gameMapper.getGameInfoById(id);
 	}
+	
+	@Override
+	public Integer getStateByGameId(Integer id) {
+		PlayballGame game = this.getById(id);
+		
+		return game.getStage();
+	}
 }

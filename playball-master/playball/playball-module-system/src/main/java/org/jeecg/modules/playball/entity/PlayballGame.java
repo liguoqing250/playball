@@ -36,6 +36,8 @@ public class PlayballGame implements Serializable  {
 	@Excel(name = "用整形来表示赛事的阶段，初始值0", width = 15)
     @ApiModelProperty(value = "用整形来表示赛事的阶段，初始值0")
 	private java.lang.Integer stage;
+	/*0表示赛事有比赛进行中，1表示所有比赛完毕*/
+	private java.lang.Integer finished;
 	/**运动类型*/
 	@Excel(name = "运动类型", width = 15)
     @ApiModelProperty(value = "运动类型")

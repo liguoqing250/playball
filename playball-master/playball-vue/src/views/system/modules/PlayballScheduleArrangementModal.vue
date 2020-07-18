@@ -40,6 +40,10 @@
       </template>
     </div>
 
+    <loop :games-id="gamesInfo.id" v-if="gameTypeShow.bLoop"/>
+    <out ref="out" :games-id="gamesInfo.id" v-if="gameTypeShow.bOut"/>
+    <group :games-id="gamesInfo.id" v-if="gameTypeShow.bGroup"/>
+
   </a-modal>
 </template>
 
@@ -51,13 +55,19 @@
   import moment from "moment"
   import ARow from 'ant-design-vue/es/grid/Row'
   import '@/assets/less/TableExpand.less'
+  import Out from './type/out'
+  import Loop from './type/loop'
+  import Group from './type/group'
 
   export default {
     name: "PlayballScheduleArrangementModal",
     components: {
       ARow,
       JDate,
-      JEditor
+      JEditor,
+      Out,
+      Loop,
+      Group
     },
     data () {
       return {
@@ -81,6 +91,11 @@
         enrollTeamList:{},
         gamesType:"",
         bCreate:false,
+        gameTypeShow:{
+          bGroup:false,
+          bLoop:false,
+          bOut:false,
+        },
 
         url: {
           enrollTeamList: "/playball/playballEnroll/listByGameId",
@@ -97,12 +112,32 @@
       close () {
         this.$emit('close');
         this.visible = false;
+
+        this.gameTypeShow.bGroup = false
+        this.gameTypeShow.bLoop = false
+        this.gameTypeShow.bOut = false
+
       },
       handleOk () {
-        this.visible = false
-        this.close()
+        let that = this
+        this.$refs.out.getSuccess(function (bOk) {
+          if(bOk){
+            that.gameTypeShow.bGroup = false
+            that.gameTypeShow.bLoop = false
+            that.gameTypeShow.bOut = false
+            that.visible = false
+            that.close()
+          }else{
+            that.$message.warning("请确认时间都设置完成！");
+          }
+
+        })
       },
       handleCancel () {
+        this.gameTypeShow.bGroup = false
+        this.gameTypeShow.bLoop = false
+        this.gameTypeShow.bOut = false
+
         this.visible = false
         this.close()
       },
@@ -118,9 +153,30 @@
             this.enrollTeamList = res.result
           }
         })
+        //判读，球队人数>8人，且大于报名截止日期方可生成后续比赛
+        if(this.gamesInfo.gameType == 1){
+          console.log("按小组赛+淘汰赛生成比赛")
+          this.gameTypeShow.bGroup = true
+          this.gameTypeShow.bLoop = false
+          this.gameTypeShow.bOut = false
+
+        }else if(this.gamesInfo.gameType == 2){
+          console.log("按淘汰赛方式生成比赛")
+          this.gameTypeShow.bGroup = false
+          this.gameTypeShow.bLoop = false
+          this.gameTypeShow.bOut = true
+
+        }else if(this.gamesInfo.gameType == 3){
+          console.log("按循环赛方式生成比赛！")
+          this.gameTypeShow.bGroup = false
+          this.gameTypeShow.bLoop = true
+          this.gameTypeShow.bOut = false
+        }else{
+          console.log("创建赛事存在问题，无法生成比赛！")
+        }
 
         //获取比赛阶段，是否生成比赛
-        getAction(this.url.getGameInfoById, params).then((re)=> {
+        /*getAction(this.url.getGameInfoById, params).then((re)=> {
           if (re.success) {
             this.gamesInfo = re.result
             console.log("重新获取",this.gamesInfo)
@@ -129,9 +185,8 @@
             }else{
               this.bCreate = false
             }
-
           }
-        })
+        })*/
 
 
       },

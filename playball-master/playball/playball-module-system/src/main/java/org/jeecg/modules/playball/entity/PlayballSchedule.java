@@ -29,7 +29,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 public class PlayballSchedule {
     
 	/**id*/
-	@TableId(type = IdType.ID_WORKER_STR)
+	@TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "id")
 	private java.lang.Integer id;
 	/**比赛阶段，用来表示该比赛处于赛事的阶段，便于后面对比赛管控*/
