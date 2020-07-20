@@ -110,7 +110,7 @@ public class PaymentController {
 		//String money = ProcessingAmount(String.format("%.2f", wxPay.getTotal_fee()));
 		String money = ProcessingAmount(String.format("%.2f", new BigDecimal(1)));
 		
-		HashMap<String, Object> hashMap = wxPayService.wxSendWallet("oG0U-uG-2HKAQxDfy1CIhIABsNGs", money,"1.204.113.40","提现测试");
+		HashMap<String, Object> hashMap = wxPayService.wxSendWallet("oG0U-uG-2HKAQxDfy1CIhIABsNGs", money,"111.121.76.46","提现测试");
 		Object object = hashMap.get("status");
 		System.err.println("object");
 		System.err.println(object);
