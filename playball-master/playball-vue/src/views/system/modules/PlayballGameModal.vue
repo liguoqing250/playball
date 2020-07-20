@@ -18,7 +18,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="赛事名称">
-              <a-input placeholder="请输入赛事名称" v-decorator="['gamesName', {rules: [{ required: true, message: '请输入赛事名称!' }]}]" />
+              <a-input style="width:240px;" placeholder="请输入赛事名称" v-decorator="['gamesName', {rules: [{ required: true, message: '请输入赛事名称!' }]}]" />
             </a-form-item>
           </a-col>
 
@@ -27,7 +27,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="报名时间">
-              <a-date-picker showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'enrollTime',{}]"/>
+              <a-date-picker style="width:240px;" showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'enrollTime',{}]"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -38,7 +38,7 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="开始时间">
-              <a-date-picker showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'startTime',{}]"/>
+              <a-date-picker style="width:240px;" showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'startTime',{}]"/>
             </a-form-item>
           </a-col>
 
@@ -47,7 +47,18 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="结束时间">
-              <a-date-picker showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'endTime',{}]"/>
+              <a-date-picker style="width:240px;" showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="[ 'endTime',{}]"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <a-row class="form-row" :gutter="32">
+          <a-col :lg="12">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="封面图片">
+              <j-image-upload class="avatar-uploader" text="上传" v-model="gameImage" ></j-image-upload>
             </a-form-item>
           </a-col>
         </a-row>
@@ -58,43 +69,49 @@
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="赛事规则">
-              <a-textarea placeholder="请输入赛事规则" v-decorator="['gameRule', {}]"/>
+              <a-textarea style="width:800px;" placeholder="请输入赛事规则" v-decorator="['gameRule', {}]"/>
             </a-form-item>
           </a-col>
         </a-row>
 
         <a-row class="form-row" :gutter="32">
-          <a-col>
+          <a-col :lg="12">
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               label="赛事详细信息">
-              <j-editor v-model="model.gamesInfo"/>
+              <j-editor style="width:800px;" v-model="model.gamesInfo"/>
             </a-form-item>
           </a-col>
         </a-row>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="运动类型">
-          <a-select placeholder="请选择运动类别"  v-model="model.sportsId"  @change ="changeSportsList($event)">
-            <a-select-option :value="sports.id"  v-for="sports in typeModal.sportsTypeList" >
-              {{ sports.sportsName }}
-            </a-select-option>
-          </a-select>
-        </a-form-item>
+        <a-row class="form-row" :gutter="32">
+          <a-col :lg="12">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="运动类型">
+              <a-select placeholder="请选择运动类别" style="width:240px;" v-model="model.sportsId"  @change ="changeSportsList($event)">
+                <a-select-option :value="sports.id"  v-for="sports in typeModal.sportsTypeList" >
+                  {{ sports.sportsName }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="赛事类型">
-          <a-select placeholder="请选择赛事类型"  v-model="model.gameType">
-            <a-select-option :value="sports.id"  v-for="sports in typeModal.gameTypeList" >
-              {{ sports.value }}
-            </a-select-option>
-          </a-select>
-        </a-form-item>
+          <a-col :lg="12">
+          <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="赛事类型">
+              <a-select placeholder="请选择赛事类型" style="width:240px;" v-model="model.gameType">
+                <a-select-option :value="sports.id"  v-for="sports in typeModal.gameTypeList" >
+                  {{ sports.value }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+            </a-col>
+        </a-row>
 
         <a-tabs defaultActiveKey="1" >
           <a-tab-pane tab="请选择要举办赛事的球馆" key="2" forceRender>
@@ -141,12 +158,14 @@
   import { getSportsTypeList } from '@/api/api'
   import JEditor from '@/components/jeecg/JEditor'
   import JDate from '@/components/jeecg/JDate'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
 
   export default {
     name: "PlayballGameModal",
     components: {
       JDate,
-      JEditor
+      JEditor,
+      JImageUpload
     },
     data () {
       return {
@@ -181,6 +200,7 @@
 
         fieldInfoList:{},
         fieldSelectInfo:{},
+        gameImage:'',
 
         confirmLoading: false,
         form: this.$form.createForm(this),
@@ -214,6 +234,12 @@
         if(record){
           console.log("-----record",record)
           this.changeSportsList(record.sportsId)
+
+          if(this.model.id){
+            setTimeout(() => {
+              this.gameImage = record.gameImage;
+            }, 5)
+          }
         }
 
         this.$nextTick(() => {
@@ -253,6 +279,9 @@
             formData.endTime = formData.endTime?formData.endTime.format('YYYY-MM-DD HH:mm:ss'):null;
             if(this.fieldSelectInfo.id != null){
               formData.fieldId = this.fieldSelectInfo.id
+            }
+            if(this.gameImage != null){
+              formData.gameImage = this.gameImage
             }
 
             console.log("---------",formData)
@@ -328,6 +357,7 @@
   }
   img{
     width:100%;
+    height:250px;
   }
   .imgbox:after{
     position:absolute;
