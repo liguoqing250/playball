@@ -50,6 +50,8 @@ public class PlayballGame implements Serializable  {
 	@Excel(name = "赛事名称", width = 15)
     @ApiModelProperty(value = "赛事名称")
 	private java.lang.String gamesName;
+    @ApiModelProperty(value = "封面图片")
+	private java.lang.String gameImage;
 	/**赛事信息*/
 	@Excel(name = "赛事信息", width = 15)
     @ApiModelProperty(value = "赛事信息")

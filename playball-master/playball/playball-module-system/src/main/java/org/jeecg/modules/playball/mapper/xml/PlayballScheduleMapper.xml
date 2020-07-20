@@ -56,4 +56,31 @@
 		SELECT * FROM playball_game_schedule where  games_id = #{gameId}
 	</select>
 	
+	<!-- 获取赛事信息 -->
+	<select id="getMacthListByGameId"  resultType="org.jeecg.modules.playball.vo.PlayballScheduleInfoPage">
+		SELECT
+			pgs.id AS id,
+			pgs.stage AS stage,
+			pgs.team_id AS teamId,
+			pgs.games_id AS gamesId,
+			pgs.opponent_id AS opponentId,
+			pgs.group_id AS groupId,
+			pgs.game_status AS gameStatus,
+			pgs.game_result AS gameResult,
+			pgs.enter_ball AS enterBall,
+			pgs.lost_ball AS lostBall,
+			pgs.match_time AS matchTime,
+			pg.games_name AS gamesName,
+			ptt.t_name AS teamName,
+			ptt.t_image AS teamImage,
+			pto.t_name AS opponentName,
+			pto.t_image AS opponentImage
+			FROM playball_game_schedule pgs
+			LEFT JOIN playball_games pg ON pg.id = pgs.games_id
+			LEFT JOIN playball_team ptt ON ptt.team_id = pgs.team_id
+			LEFT JOIN playball_team pto ON pto.team_id = pgs.opponent_id
+			WHERE
+			pg.is_delete = 0 and pgs.games_id = #{gameId}
+	</select>
+	
 </mapper>

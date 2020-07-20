@@ -40,7 +40,7 @@ public class PlayballScheduleInfoPage {
     //对手id
     private Integer opponentId;
     //分组id
-    private Integer groupId;
+    private String groupId;
     //比赛结果
     private Integer gameStatus;
     //比赛状态
@@ -57,5 +57,9 @@ public class PlayballScheduleInfoPage {
     private String opponentName;
     //比赛时间
     private Date matchTime;
+    //球队图片
+    private String teamImage;
+    //球队图片
+    private String opponentImage;
     
 }

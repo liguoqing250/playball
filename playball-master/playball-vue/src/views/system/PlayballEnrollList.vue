@@ -30,7 +30,9 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
+      <!--
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+
       <a-button type="primary" icon="download" @click="handleExportXls('报名球队管理')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -41,6 +43,7 @@
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
+      -->
     </div>
 
     <!-- table区域-begin -->
@@ -129,12 +132,12 @@
             align:"center",
             dataIndex: 'createTime'
            },
-          {
+          /*{
             title: '操作',
             dataIndex: 'action',
             align:"center",
             scopedSlots: { customRender: 'action' },
-          }
+          }*/
         ],
 		url: {
           list: "/playball/playballEnroll/list",

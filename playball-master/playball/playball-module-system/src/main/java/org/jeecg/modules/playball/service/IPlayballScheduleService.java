@@ -6,6 +6,7 @@ import org.jeecg.modules.playball.entity.PlayballSchedule;
 import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 import org.jeecg.modules.playball.vo.PlayballScheduleResultVo;
+import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,4 +29,6 @@ public interface IPlayballScheduleService extends IService<PlayballSchedule> {
 	
 	public List<PlayballSchedule> getScheduleListByGameId(Integer gameId);
 	public List<PlayballSchedule> getAllScheduleListByGameId(Integer gameId);
+	
+	public List<PlayballScheduleInfoPage> getMacthListByGameId(Integer gameId);
 }

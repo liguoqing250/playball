@@ -2,6 +2,7 @@ package org.jeecg.modules.playball.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -35,7 +36,7 @@ import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -355,6 +356,152 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
 	}
   
    /**循环赛end*/
+   
+   /**
+    * 
+    * 小组赛+淘汰赛
+    * */
+   @GetMapping(value = "/createGroupMacth")
+   public Result<?> getCreateGroupMacth(HttpServletRequest req) {
+	   Integer gameId = Integer.valueOf(req.getParameter("gamesId"));
+	   Integer groupNum = Integer.valueOf(req.getParameter("groupNum"));
+	   
+	   List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
+	   
+	   teamList = GameUtils.disorganizeList(teamList);
+	   Result<List<List<PlayballTeam>>> result = new Result<List<List<PlayballTeam>>>();
+	   List<List<PlayballTeam>> matchList = GameUtils.grouping(teamList,groupNum);
+	   try{
+		   result.setResult(matchList);
+           result.success("OK");
+       }catch (Exception e){
+           e.printStackTrace();
+           result.error500("请求失败");
+       }
+	   return result;
+   }
+   
+   /**
+    * 添加小组赛内循环赛赛程
+    * */
+   @RequestMapping(value = "/addGroupMacth", method = RequestMethod.POST)
+   public Result<?> addGroupMacth(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
+	   log.info("addLoopMacth-------获取addLoopMacth="+jsonObject);
+	   Integer gamesId = jsonObject.getIntValue("gamesId");
+	   PlayballGame gameInfo = gameService.getById(gamesId);
+	   Integer stage = gameInfo.getStage()+1;
+	   gameInfo.setStage(stage);
+		
+	   Result<JSONObject> result = new Result<JSONObject>();
+	   JSONObject jsonObjResult = new JSONObject();
+	   jsonObjResult.put("gameInfo", gameInfo);
+	   
+	   List<List<PlayballTeam>> groupList = (List<List<PlayballTeam>>)jsonObject.get("groupList");
+	   List<List<PlayballScheduleInfoPage>> groupMatchList = new ArrayList<>();
+	   for(int i=0; i<groupList.size();i++) {
+		   List<PlayballTeam> teamList = JSON.parseArray(JSON.toJSONString(groupList.get(i)), PlayballTeam.class);
+		   //打乱顺序
+		   teamList=GameUtils.disorganizeList(teamList);
+		   if(teamList.size()%2 == 1) {
+			   //循环设置的时候为偶数，所以
+			   PlayballTeam team = new PlayballTeam();
+			   team.setTName("yuzhi");
+			   teamList.add(team);
+		   }
+		   //获取赛程
+		   List<Map<String, PlayballTeam>> matchList = GameUtils.createGroupEx(teamList);
+		   List<PlayballScheduleInfoPage> tempList = new ArrayList<PlayballScheduleInfoPage>();
+		   for(int j=0; j<matchList.size(); j++) {
+			   PlayballScheduleInfoPage  scheduleInfo = new PlayballScheduleInfoPage();
+			   if(matchList.get(j).get("team").getTeamId()!=null && matchList.get(j).get("opponent").getTeamId()!=null) {
+				   scheduleInfo.setGamesId(gamesId);
+				   scheduleInfo.setGamesName(gameInfo.getGamesName());
+				   scheduleInfo.setOpponentId(matchList.get(j).get("team").getTeamId());
+				   scheduleInfo.setTeamId(matchList.get(j).get("opponent").getTeamId());
+				   scheduleInfo.setOpponentName(matchList.get(j).get("opponent").getTName());
+				   scheduleInfo.setTeamName(matchList.get(j).get("team").getTName());
+				   scheduleInfo.setOpponentImage(matchList.get(i).get("opponent").getTImage());
+				   scheduleInfo.setTeamImage(matchList.get(i).get("team").getTImage());
+				   scheduleInfo.setGameStatus(2);//2表示未赛
+				   scheduleInfo.setGroupId(String.valueOf(i+1));//设置小组标识
+				   scheduleInfo.setStage(stage);
+				   
+				   PlayballSchedule schedule = new PlayballSchedule();
+				   BeanUtils.copyProperties(scheduleInfo, schedule);
+				   tempList.add(scheduleInfo);
+				   scheduleService.save(schedule);
+			   }
+			   
+		   }
+		   groupMatchList.add(tempList);
+	   }
+	   gameService.updateById(gameInfo);
+	   jsonObjResult.put("groupMatchList", groupMatchList);
+	   result.setResult(jsonObjResult);
+       result.success("OK");
+       
+       return result;
+   }
+   
+   @GetMapping(value="/getGroupMatchList")
+	public Result<?> getGroupMatchList(HttpServletRequest req) {
+		Integer gamesId = Integer.valueOf(req.getParameter("gamesId"));
+		PlayballGame gameInfo = gameService.getById(gamesId);
+		Integer stage = gameInfo.getStage();
+		
+		Result<JSONObject> result = new Result<JSONObject>();
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("gameInfo", gameInfo);
+		List<List<PlayballScheduleResultVo>> resultList = new ArrayList<List<PlayballScheduleResultVo>>();
+		try {
+			List<PlayballScheduleInfoPage> scheduleInfoList = playballScheduleService.getMacthListByGameId(gamesId);
+			List<List<PlayballScheduleInfoPage>> matchList = new ArrayList<List<PlayballScheduleInfoPage>>();
+			List<List<PlayballScheduleInfoPage>> groupMatchList = new ArrayList<List<PlayballScheduleInfoPage>>();
+			for(int j=1; j<=stage; j++) {
+				List<PlayballScheduleInfoPage> infoList = new ArrayList<PlayballScheduleInfoPage>();
+				if(j==1) {//1表示小组赛阶段（第一阶段）
+					for(int i=0; i<scheduleInfoList.size(); i++) {
+						if(scheduleInfoList.get(i).getStage()==1) {
+							infoList.add(scheduleInfoList.get(i));
+						}
+					}
+					groupMatchList = GameUtils.groupDataByCondition(infoList, new Comparator<PlayballScheduleInfoPage>() {
+					     @Override
+					     public int compare(PlayballScheduleInfoPage o1, PlayballScheduleInfoPage o2) {
+					         return o1.getGroupId().equals(o2.getGroupId()) ? 0 : -1;
+					     }
+					 });
+					//matchList.add(infoList);
+				}else {
+					for(int i=0; i<scheduleInfoList.size(); i++) {
+						if(scheduleInfoList.get(i).getStage()==j) {
+							infoList.add(scheduleInfoList.get(i));
+						}
+					}
+					matchList.add(infoList);
+				}
+				
+			}
+			
+			jsonObj.put("scheduleList", matchList);
+			jsonObj.put("groupMatchList", groupMatchList);
+			result.setSuccess(true);
+			result.setMessage("查找成功");
+        	result.setResult(jsonObj);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("查找过程中出现了异常: " + e.getMessage());
+			return result;
+		}
+	}
+   
+   /**
+    * 
+    * 小组赛+淘汰赛end
+    * */
+   
    
 	/**
 	 * 添加

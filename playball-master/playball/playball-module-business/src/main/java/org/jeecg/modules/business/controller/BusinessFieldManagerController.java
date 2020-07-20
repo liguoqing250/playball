@@ -66,6 +66,7 @@ public class BusinessFieldManagerController extends JeecgController<BusinessFiel
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //获取用户id后获取用户属于的商家id
         String userId = sysUser.getId();
+        log.info("----获取场馆信息----"+userId);
         
     	IPage<BusinessFieldInfoPage> pageList = businessFieldManagerService.getAllFieldInfoByUserId(new Page(pageNo, pageSize),userId);
         return Result.ok(pageList);

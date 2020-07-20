@@ -105,4 +105,7 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 		return scheduleMapper.getAllScheduleListByGameId(gameId);
 	}
 	
+	public List<PlayballScheduleInfoPage> getMacthListByGameId(Integer gameId){
+		return scheduleMapper.getMacthListByGameId(gameId);
+	}
 }
