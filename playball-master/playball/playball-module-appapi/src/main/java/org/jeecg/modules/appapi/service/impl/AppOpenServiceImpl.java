@@ -39,6 +39,7 @@ public class AppOpenServiceImpl implements AppOpenService {
                 }else{
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
                     appUsersMapper.insert(appUsers);
+                    out.put("appUsers",appUsers);
                     out.put("msg","注册成功");
                 }
 
@@ -66,6 +67,7 @@ public class AppOpenServiceImpl implements AppOpenService {
                         //密码加密
                         appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
                         appUsersMapper.insert(appUsers);
+                        out.put("appUsers",appUsers);
                         out.put("msg","注册成功");
                     }
                 }

@@ -39,6 +39,11 @@ public class APPUserController {
         return result;
     }
     //根据id查询
+    @PostMapping(value = "/CheckLoginStatus")
+    public boolean CheckLoginStatus() {
+        return true;
+    }
+    //根据id查询
     @PostMapping(value = "/getUserInfoById")
     public Result<JSONObject> getMyUserInfo(int id) {
         Result<JSONObject> result = new Result<JSONObject>();
