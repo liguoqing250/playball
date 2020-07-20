@@ -22,4 +22,6 @@ public interface PlayballGameMapper extends BaseMapper<PlayballGame> {
 	public Integer getAllGameListTotal(@Param("game")PlayballGame game);
 	
 	public PlayballGamesPage getGameInfoById(@Param("id") Integer id);
+	
+	public void updateStageById(@Param("stage")Integer stage, @Param("gameId")Integer gameId);
 }

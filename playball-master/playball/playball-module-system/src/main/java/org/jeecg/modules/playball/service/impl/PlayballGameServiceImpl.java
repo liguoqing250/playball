@@ -52,4 +52,9 @@ public class PlayballGameServiceImpl extends ServiceImpl<PlayballGameMapper, Pla
 		
 		return game.getStage();
 	}
+	
+	@Override
+	public void updateStageById(Integer stage, Integer gameId) {
+		gameMapper.updateStageById(stage, gameId);
+	}
 }

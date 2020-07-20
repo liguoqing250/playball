@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
 import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.mapper.PlayballScheduleMapper;
@@ -100,5 +101,8 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 		return scheduleMapper.getScheduleListByGameId(gameId);
 	}
 	
+	public List<PlayballSchedule> getAllScheduleListByGameId(Integer gameId){
+		return scheduleMapper.getAllScheduleListByGameId(gameId);
+	}
 	
 }

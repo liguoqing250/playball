@@ -25,4 +25,6 @@ public interface IPlayballGameService extends IService<PlayballGame> {
 	public PlayballGamesPage getGameInfoById(Integer id);
 	
 	public Integer getStateByGameId(Integer id);
+	
+	public void updateStageById(Integer stage, Integer gameId);
 }

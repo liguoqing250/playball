@@ -40,9 +40,9 @@
       </template>
     </div>
 
-    <loop :games-id="gamesInfo.id" v-if="gameTypeShow.bLoop"/>
+    <loop ref="loop" :games-id="gamesInfo.id" v-if="gameTypeShow.bLoop"/>
     <out ref="out" :games-id="gamesInfo.id" v-if="gameTypeShow.bOut"/>
-    <group :games-id="gamesInfo.id" v-if="gameTypeShow.bGroup"/>
+    <group ref="group" :games-id="gamesInfo.id" v-if="gameTypeShow.bGroup"/>
 
   </a-modal>
 </template>
@@ -120,18 +120,26 @@
       },
       handleOk () {
         let that = this
-        this.$refs.out.getSuccess(function (bOk) {
-          if(bOk){
-            that.gameTypeShow.bGroup = false
-            that.gameTypeShow.bLoop = false
-            that.gameTypeShow.bOut = false
-            that.visible = false
-            that.close()
-          }else{
-            that.$message.warning("请确认时间都设置完成！");
-          }
 
-        })
+        if(this.$refs.out){
+          this.$refs.out.getSuccess(function (bOk) {
+            if(bOk){
+              that.gameTypeShow.bGroup = false
+              that.gameTypeShow.bLoop = false
+              that.gameTypeShow.bOut = false
+              that.visible = false
+              that.close()
+            }else{
+              that.$message.warning("请确认时间都设置完成！");
+            }
+          })
+        }else{
+          that.gameTypeShow.bGroup = false
+          that.gameTypeShow.bLoop = false
+          that.gameTypeShow.bOut = false
+          that.visible = false
+          that.close()
+        }
       },
       handleCancel () {
         this.gameTypeShow.bGroup = false

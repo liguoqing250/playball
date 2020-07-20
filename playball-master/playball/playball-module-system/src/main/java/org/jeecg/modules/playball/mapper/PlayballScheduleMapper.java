@@ -25,4 +25,6 @@ public interface PlayballScheduleMapper extends BaseMapper<PlayballSchedule> {
 	public List<PlayballSchedule> getScheduleListByStage(@Param("gamesId")Integer gamesId, @Param("stage")Integer stage);
 	
 	public List<PlayballSchedule> getScheduleListByGameId(@Param("gameId")Integer gameId);
+	
+	public List<PlayballSchedule> getAllScheduleListByGameId(@Param("gameId")Integer gameId);
 }

@@ -3,6 +3,7 @@
     :disabled="disabled || readOnly"
     :placeholder="placeholder"
     @change="handleDateChange"
+    @ok="handOk"
     :value="momVal"
     :showTime="showTime"
     :format="dateFormat"
@@ -74,6 +75,9 @@
       moment,
       handleDateChange(mom,dateStr){
         this.$emit('change', dateStr);
+      },
+      handOk(mom,dateStr){
+        this.$emit('ok', mom,dateStr);
       }
     },
     //2.2新增 在组件内定义 指定父组件调用时候的传值属性和事件类型 这个牛逼

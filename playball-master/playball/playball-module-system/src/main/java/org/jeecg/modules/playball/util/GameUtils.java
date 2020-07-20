@@ -1,11 +1,37 @@
 package org.jeecg.modules.playball.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.jeecg.modules.playball.entity.PlayballTeam;
 
 public class GameUtils {
+	
+	public static <T> List<T> change(List<T> list) {
+		T str = list.get(list.size()-1);
+		list.remove(list.size()-1);
+		list.add(1, str);
+		return list;
+	}
+	
+	public static <T> List<List<Map<String, T>>> createGroup(List<T> teamList){
+		List<List<Map<String, T>>> macthList = new ArrayList<List<Map<String, T>>>();
+		
+		for(int index=1; index < teamList.size(); index++) {
+			//System.out.println("第"+index+"次比赛阵容:");
+			List<Map<String, T>> tempList = new ArrayList<Map<String, T>>();
+			for(int i=0;i<teamList.size()/2;i++) {
+			//System.out.print(team.get(i)+" vs "+team.get(team.size()-1-i));
+				Map<String, T> map = new HashMap<String,T>();       //数据采用的哈希表结构
+		        //给map中添加元素
+		        map.put("team", teamList.get(i));
+		        map.put("opponent", teamList.get(teamList.size()-1-i));
+		        tempList.add(map);
+			}
+			teamList = change(teamList);
+			macthList.add(tempList);
+		}
+		return macthList;
+	}
 	
 	public static <T> List<T> disorganizeList(List<T> sourceList){
 		//创建一个新集合

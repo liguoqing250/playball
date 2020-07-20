@@ -68,4 +68,9 @@
 			where pg.sports_id = pst.id and pg.field_id = pfi.id and pfi.business_id = sd.id and pg.id=#{id}
 	</select>
 	
+	<!-- 更新空字符串为null -->
+    <update id="updateStageById">
+        UPDATE playball_games SET stage = #{stage} WHERE id = #{gameId}
+    </update>
+	
 </mapper>

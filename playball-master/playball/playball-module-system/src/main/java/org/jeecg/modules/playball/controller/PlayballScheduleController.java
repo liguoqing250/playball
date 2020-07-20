@@ -216,13 +216,13 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
       } catch (Exception e) {
       	log.error(e.getMessage(), e);
           result.setSuccess(false);
-          result.setMessage("查找过程中出现了异常: " + e.getMessage());
+          result.setMessage(e.getMessage());
           return result;
       }
    }
    
    /**
-    * 
+    * 添加淘汰赛程
     * */
    @RequestMapping(value = "/addOutMacth", method = RequestMethod.POST)
    public Result<?> addMatchInfo(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
@@ -260,6 +260,101 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
 	   
 	   return Result.ok("添加成功！");
    }
+   
+   /**循环赛-------------*/
+   /**
+    * 
+    * 创建循环赛
+    * */
+   @GetMapping(value = "/createLoopMacth")
+   public Result<?> getCreateLoopMacth(HttpServletRequest req) {
+	   Integer gameId = Integer.valueOf(req.getParameter("gamesId"));
+	   
+	   List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
+	   
+	   teamList = GameUtils.disorganizeList(teamList);
+	   Result<List<List<Map<String, PlayballTeam>>>> result = new Result<List<List<Map<String, PlayballTeam>>>>();
+	   List<List<Map<String, PlayballTeam>>> matchList = GameUtils.createGroup(teamList);
+	   try{
+		   result.setResult(matchList);
+           result.success("OK");
+       }catch (Exception e){
+           e.printStackTrace();
+           result.error500("请求失败");
+       }
+	   return result;
+   }
+   
+   /**
+    * 添加循环赛赛程
+    * */
+   @RequestMapping(value = "/addLoopMacth", method = RequestMethod.POST)
+   public Result<?> addLoopMacth(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
+	   log.info("addLoopMacth-------获取addLoopMacth="+jsonObject);
+	   Integer gamesId = jsonObject.getIntValue("gamesId");
+	   Integer finished = jsonObject.getIntValue("finished");
+	   
+	   Integer stage = 0;
+	   List<List<Map<String, PlayballTeam>>> matchList = (List<List<Map<String, PlayballTeam>>>)jsonObject.get("matchList");
+	   for(int i=0; i<matchList.size(); i++ ) {
+		   stage = i+1;
+		   PlayballSchedule schedule = new PlayballSchedule();
+		   for(int j=0; j<matchList.get(i).size(); j++) {
+			   PlayballTeam team = JSON.parseObject(JSON.toJSONString(matchList.get(i).get(j).get("team")),PlayballTeam.class);
+			   PlayballTeam opponent = JSON.parseObject(JSON.toJSONString(matchList.get(i).get(j).get("opponent")),PlayballTeam.class);
+			   schedule.setGamesId(gamesId);
+			   schedule.setStage(stage);
+			   schedule.setTeamId(team.getTeamId());
+			   schedule.setOpponentId(opponent.getTeamId());
+			   log.info("-------PlayballSchedule="+schedule);
+			   scheduleService.save(schedule);
+		   }
+	   }
+	   gameService.updateStageById(stage,gamesId);
+	   
+	   return Result.ok("添加成功！");
+   }
+   
+   @GetMapping(value="/getLoopMatchList")
+	public Result<?> getLoopMatchList(HttpServletRequest req) {
+		Integer gamesId = Integer.valueOf(req.getParameter("gamesId"));
+		PlayballGame gameInfo = gameService.getById(gamesId);
+		Integer stage = gameInfo.getStage();
+		
+		Result<JSONObject> result = new Result<JSONObject>();
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("gameInfo", gameInfo);
+		List<List<PlayballScheduleResultVo>> resultList = new ArrayList<List<PlayballScheduleResultVo>>();
+		try {
+			List<PlayballSchedule> scheduleList  = playballScheduleService.getAllScheduleListByGameId(gamesId);
+			for(int j=1; j<=stage; j++) {
+				List<PlayballScheduleResultVo> macthList = new ArrayList<PlayballScheduleResultVo>();
+				for(int i=0; i < scheduleList.size();i++) {
+					if(scheduleList.get(i).getStage() == j) {
+						PlayballScheduleResultVo scheduelVo = new PlayballScheduleResultVo();
+						scheduelVo.setGameSchedule(scheduleList.get(i));
+						scheduelVo.setTeam(teamService.getById(scheduleList.get(i).getTeamId()));
+						scheduelVo.setTopponent(teamService.getById(scheduleList.get(i).getOpponentId()));
+						macthList.add(scheduelVo);
+					}
+				}
+				resultList.add(macthList);
+			}
+			
+			jsonObj.put("scheduleList", resultList);
+			result.setSuccess(true);
+			result.setMessage("查找成功");
+        	result.setResult(jsonObj);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("查找过程中出现了异常: " + e.getMessage());
+			return result;
+		}
+	}
+  
+   /**循环赛end*/
    
 	/**
 	 * 添加

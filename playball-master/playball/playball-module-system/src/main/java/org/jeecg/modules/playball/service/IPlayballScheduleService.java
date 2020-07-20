@@ -27,4 +27,5 @@ public interface IPlayballScheduleService extends IService<PlayballSchedule> {
 	public List<PlayballTeam> getWinTeamByGameId(Integer gameId);
 	
 	public List<PlayballSchedule> getScheduleListByGameId(Integer gameId);
+	public List<PlayballSchedule> getAllScheduleListByGameId(Integer gameId);
 }
