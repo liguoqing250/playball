@@ -89,8 +89,21 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 	@ApiOperation(value="比赛报名表-添加", notes="比赛报名表-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody Enroll enroll) {
-		AppTeam appTeam=appTeamService.selectMyTeamInfo();
-		enroll.setTeamId(appTeam.getTeam_id());
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		String token=request.getHeader("X-Access-Token");
+		AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+		if(appTeamService.isJoinTeam()){
+			AppTeam appTeam=appTeamService.selectMyTeamInfo();
+			if(appTeam.getT_captain()==appUsers.getU_id()){
+				enroll.setTeamId(appTeam.getTeam_id());
+			}else{
+				return Result.error("只有队长能报名比赛");
+
+			}
+
+		}else{
+			return Result.error("个人不能参与比赛");
+		}
 		enrollService.save(enroll);
 		return Result.ok("报名成功！");
 	}

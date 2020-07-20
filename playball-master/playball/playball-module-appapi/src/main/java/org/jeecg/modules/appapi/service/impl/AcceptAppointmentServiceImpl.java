@@ -43,7 +43,7 @@ public class AcceptAppointmentServiceImpl extends ServiceImpl<AcceptAppointmentM
         AppointmentGames appointmentGames= appointmentGamesService.getById(id);
         Map<String,Object> map=new HashMap<>();
         map.put("ag_id",id);
-        if(appointmentGames.getTpId()!=null){
+        if(appointmentGames.getTpId()!=null && appTeamService.isJoinTeam()){
             //球队
             map.put("aa_accept_subject_id",appTeamService.selectMyTeamInfo().getTeam_id());
         }else{

@@ -79,7 +79,6 @@ public class AppTeamServiceImpl  implements AppTeamService {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=request.getHeader("X-Access-Token");
         AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
-
        AppTeamPlayers appTeamPlayers= appTeamPlayersMapper.selectByUserId(appUsers.getU_id());
        if(appTeamPlayers!=null){
            return true;
@@ -93,7 +92,6 @@ public class AppTeamServiceImpl  implements AppTeamService {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=request.getHeader("X-Access-Token");
         AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
-
         AppTeamPlayers appTeamPlayers= appTeamPlayersMapper.selectByUserId(appUsers.getU_id());
         AppTeam appTeam= appTeamMapper.selectById(appTeamPlayers.getTeam_id());
         return appTeam;
