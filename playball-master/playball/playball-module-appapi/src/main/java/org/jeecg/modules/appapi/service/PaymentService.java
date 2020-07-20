@@ -1,17 +1,13 @@
 package org.jeecg.modules.appapi.service;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ThreadLocalRandom;
-
 import org.jeecg.modules.appapi.entity.WxPayment;
 import org.jeecg.modules.appapi.utils.PayCommonUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /*支付统一下单接口*/
 @Service

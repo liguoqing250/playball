@@ -23,7 +23,7 @@ public class WxPayment {
 	private String attach = "暂无附加数据";//附加数据
 	
 	private String spbill_create_ip="192.168.3.83";//终端ip
-	private String notify_url ="http://32872ct980.qicp.vip:56389/callbackAction";//回调地址
+	private String notify_url ="https://playball.yuzhiculture.com/callbackAction";//回调地址
 
 	private String goods_id ; //商品id
 	private Integer goods_type ; //商品交易类型
