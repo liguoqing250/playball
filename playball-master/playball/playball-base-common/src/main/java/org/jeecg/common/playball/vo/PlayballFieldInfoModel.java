@@ -1,4 +1,4 @@
-package org.jeecg.modules.business.model;
+package org.jeecg.common.playball.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,7 +7,7 @@ import lombok.Data;
 
 
 @Data
-public class BusinessFieldInfoPage {
+public class PlayballFieldInfoModel {
 	
 	/**主键*/
     @TableId(type = IdType.AUTO)
@@ -27,8 +27,6 @@ public class BusinessFieldInfoPage {
 	
 	/**图片地址*/
 	private java.lang.String imageUrl;
-	
-	private java.lang.String delFlag;
 	
 	private java.lang.String sportsName;
 	

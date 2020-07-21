@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.mapper.PlayballFieldInfoMapper">
+	
+	<sql id="getFieldInfoListByUserIdSql">
+		FROM playball.playball_field_info pfi
+		LEFT JOIN playball.playball_sports_type pst ON pfi.sports_id = pst.id
+		LEFT JOIN playball.sys_depart sd ON pfi.business_id = sd.id
+		LEFT JOIN playball.sys_user_depart sud  ON pfi.business_id =sud.dep_id
+		where sud.user_id = #{userId}
+        <if test="fieldInfo.fieldName != null">
+     		and pfi.field_name LIKE concat(concat('%',#{fieldInfo.fieldName}),'%')  
+        </if>
+        <if test="fieldInfo.sportsId != null">
+     		and pfi.sports_id = #{fieldInfo.sportsId}
+        </if>
+	</sql>
+	
+	<!-- 获取场地信息 -->
+	<select id="getFieldInfoListByUserId" resultType="org.jeecg.common.playball.vo.PlayballFieldInfoModel">
+		SELECT
+			pfi.id AS id,
+			pfi.field_name AS fieldName,
+			pfi.sports_id AS sportsId,
+			pfi.business_id AS businessId,
+			pfi.field_price AS fieldPrice,
+			pfi.image_url AS imageUrl,
+			pfi.del_flag AS delFlag,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName
+			<include refid="getFieldInfoListByUserIdSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getFieldInfoListByUserIdTotal" resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getFieldInfoListByUserIdSql"/>
+	</select>
+	
+	<!-- 获取场地信息 -->
+	<select id="getFieldInfoBySportsId" resultType="org.jeecg.common.playball.vo.PlayballFieldInfoModel">
+		SELECT
+			pfi.id AS id,
+			pfi.field_name AS fieldName,
+			pfi.sports_id AS sportsId,
+			pfi.business_id AS businessId,
+			pfi.field_price AS fieldPrice,
+			pfi.image_url AS imageUrl,
+			pst.sports_name AS sportsName,
+			sd.depart_name AS businessName
+			from playball_field_info pfi, playball_sports_type pst, sys_depart sd
+			where pfi.sports_id = pst.id and sd.id = pfi.business_id and pst.id = #{sportsId}
+	</select>
+	
+	<select id="getBusinessIdByUserId" resultType="java.lang.String">
+		SELECT dep_id FROM sys_user_depart where user_id = #{userId}
+	</select>
+	
+</mapper>

@@ -3,30 +3,23 @@
 
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
-      <a-form layout="inline">
+      <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :md="6" :sm="24">
-            <a-form-item label="场地名称">
-              <a-input placeholder="请输入场地名称" v-model="queryParam.fieldName"></a-input>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="场地名">
+              <a-input placeholder="请输入场地名" v-model="queryParam.fieldName"></a-input>
             </a-form-item>
           </a-col>
-
-          <a-col :lg="8">
-            <a-form-item
-              :labelCol="labelCol"
-              :wrapperCol="wrapperCol"
-              label="场地类型">
-              <select name="public-choice" v-model ="formData.sportsId" style="width: 200px;" autocomplete="off" @change ="changeSportsList($event)">
-                <option value="" >请选择</option>
-                <option :value="sports.id"  v-for="sports in this.gamesModel.sportsTypeList"  >
-                  {{ sports.sportsName }}
-                </option>
-              </select>
-            </a-form-item>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-select placeholder="请输入运动类型"  v-model="queryParam.sportsId">
+              <a-select-option :value="sports.id"  v-for="sports in sportsTypeList" >
+                {{ sports.sportsName }}
+              </a-select-option>
+            </a-select>
           </a-col>
 
-          <a-col :md="6" :sm="24" >
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
@@ -40,11 +33,10 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('场地列表')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('场地信息')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
-
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
@@ -69,9 +61,9 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
+        class="j-table-force-nowrap"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
-
 
         <template slot="avatarslot" slot-scope="text, record, index">
           <div class="anty-img-wrap">
@@ -98,27 +90,28 @@
       </a-table>
     </div>
     <!-- table区域-end -->
-    <FieldManager-modal ref="modalForm" @ok="modalFormOk"></FieldManager-modal>
+
+    <!-- 表单区域 -->
+    <playballFieldInfo-modal ref="modalForm" @ok="modalFormOk"></playballFieldInfo-modal>
   </a-card>
 </template>
 
 <script>
-  import JDate from '@/components/jeecg/JDate'
+  import '@/assets/less/TableExpand.less'
+  import PlayballFieldInfoModal from './modules/PlayballFieldInfoModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { getSportsTypeList } from '@/api/api'
   import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
-  import FieldManagerModal from './modules/FieldManagerModal'
 
   export default {
-    name: "FieldManager",
-    mixins: [JeecgListMixin],
+    name: "PlayballFieldInfoList",
+    mixins:[JeecgListMixin],
     components: {
-      JDate,
-      FieldManagerModal
+      PlayballFieldInfoModal
     },
     data () {
       return {
-        description: '赛程信息页面',
-        importExcelUrl:`${window._CONFIG['domianURL']}/test/jeecgOrderMain/importExcel`,
+        description: '场地信息管理页面',
         // 表头
         columns: [
           {
@@ -130,35 +123,28 @@
             customRender:function (t,r,index) {
               return parseInt(index)+1;
             }
-          },
-          {
-            title: '场地名称',
+           },
+		   {
+            title: '场地名',
             align:"center",
             dataIndex: 'fieldName'
-          },
-          {
-            title: '场地图片',
-            align: "center",
-            width: 120,
-            dataIndex: '',
-            scopedSlots: {customRender: "avatarslot"}
-          },
-
-          {
-            title: '所属球馆',
+           },
+		   {
+            title: '运动类型',
             align:"center",
-            dataIndex: 'businessName'
-          },
-          {
-            title: '场地类型',
-            align:"center",
-            dataIndex: 'sportsName',
-          },
-          {
-            title: '预定价格',
+            dataIndex: 'sportsName'
+           },
+		   {
+            title: '场地价格',
             align:"center",
             dataIndex: 'fieldPrice'
-          },
+           },
+		   {
+            title: '场地图片',
+            align:"center",
+            dataIndex: '',
+            scopedSlots: {customRender: "avatarslot"}
+           },
           {
             title: '操作',
             dataIndex: 'action',
@@ -166,64 +152,37 @@
             scopedSlots: { customRender: 'action' },
           }
         ],
-        formData: {},
-        gamesModel: { sportsTypeList:[{}]},
-        labelCol: {
-        },
-        wrapperCol: {
-        },
-        modal: {
-          title: '',
-          visible: false,
-          gamesContent:'',
-        },
 
-        url: {
-          list: "/businessinfo/field/list",
-          //delete: "/test/jeecgOrderMain/delete",
-          //deleteBatch: "/test/jeecgOrderMain/deleteBatch",
-          // exportXlsUrl: "/test/jeecgOrderMain/exportXls",
-          sportsTypeList: "/bm/common/sportslist",
-        }
-      }
-    },
+    sportsTypeList:{},
+		url: {
+          list: "/business/playballFieldInfo/list",
+          delete: "/business/playballFieldInfo/delete",
+          deleteBatch: "/business/playballFieldInfo/deleteBatch",
+          exportXlsUrl: "business/playballFieldInfo/exportXls",
+          importExcelUrl: "business/playballFieldInfo/importExcel",
+       },
+    }
+  },
+  computed: {
+    importExcelUrl: function(){
+      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
+    }
+  },
     methods: {
       initDictConfig() {
-        //获取运动类型
-        getAction(this.url.sportsTypeList).then((res)=>{
+        getSportsTypeList('').then((res)=>{
           if(res.success){
-            this.gamesModel.sportsTypeList= res.result;
-            this.$forceUpdate()
+            this.sportsTypeList = res.result.records;
           }
         })
       },
+
       getAvatarView: function (avatar) {
         return getFileAccessHttpUrl(avatar)
       },
-
-      handleEditSchedule(record){
-        this.$refs.schedule.show(record);
-      }
-
     }
   }
 </script>
 <style scoped>
-  /** Button按钮间距 */
-  .ant-btn {
-    margin-left: 3px
-  }
-  .ant-card-body .table-operator{
-    margin-bottom: 18px;
-  }
-  .ant-table-tbody .ant-table-row td{
-    padding-top:15px;
-    padding-bottom:15px;
-  }
-  .anty-row-operator button{margin: 0 5px}
-  .ant-btn-danger{background-color: #ffffff}
-
-  .ant-modal-cust-warp{height: 100%}
-  .ant-modal-cust-warp .ant-modal-body{height:calc(100% - 110px) !important;overflow-y: auto}
-  .ant-modal-cust-warp .ant-modal-content{height:90% !important;overflow-y: hidden}
+  @import '~@assets/less/common.less';
 </style>

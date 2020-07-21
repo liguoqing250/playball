@@ -98,7 +98,7 @@
         url: {
           add: "/cms/news/add",
           edit: "/cms/news/edit",
-          sportsTypeList: "/bm/common/sportslist",
+          sportsTypeList: "/playball/playballSportType/list",
         },
       }
     },

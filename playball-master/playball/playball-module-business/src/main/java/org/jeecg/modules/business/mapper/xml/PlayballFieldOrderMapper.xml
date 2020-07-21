@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.business.mapper.PlayballFieldOrderMapper">
+<!-- SQL片段：getGameList 的 FROM 和 WHERE 部分 -->
+	<sql id="getFieldOrderListSql">
+		FROM playball.playball_orders po
+		left join playball.playball_users pu on pu.u_id = po.ord_user_id
+		left join playball.playball_field_info pfi on pfi.id=po.ord_goods_id
+		left join playball.sys_depart sd on sd.id = pfi.business_id
+		left join playball.sys_user_depart sud on sud.dep_id = pfi.business_id
+		where po.cpr_type = 1 and sud.user_id = #{userId}
+        <if test="playballOrderModel.ordGoodsName != null">
+     		and po.ord_goods_name LIKE concat(concat('%',#{playballOrderModel.ordGoodsName}),'%')  
+        </if>
+        <if test="playballOrderModel.cprState!= null">
+     		and po.cpr_state = #{playballOrderModel.cprState}
+        </if>
+        <if test="playballOrderModel.cprNumber!= null">
+     		and po.cpr_number = #{playballOrderModel.cprNumber}
+        </if>
+        <if test="playballOrderModel.userName= null">
+     		and pu.u_nickName LIKE concat(concat('%',#{playballOrderModel.userName}),'%')  
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getFieldOrderList" parameterType="java.util.Map" resultType="org.jeecg.common.playball.vo.PlayballOrderModel">
+		SELECT
+			po.ord_id AS ordId,
+			po.ord_user_id AS ordUserid,
+			po.ord_goods_name AS ordGoodsName,
+			po.cpr_number AS cprNumber,
+			po.ord_goods_id AS ordGoodsId,
+			po.cpr_price AS cprPrice,
+			po.cpr_state AS cprState,
+			pu.u_nickName AS userName,
+			pfi.business_id AS businessId,
+			sd.depart_name AS businessName
+			<include refid="getFieldOrderListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getFieldOrderListTotal"  resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getFieldOrderListSql"/>
+	</select>
+</mapper>

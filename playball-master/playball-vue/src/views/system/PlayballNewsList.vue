@@ -203,7 +203,7 @@
           delete: "/cms/news/delete",
           deleteBatch: "/cms/news/deleteBatch",
           exportXlsUrl: "/cms/news/exportXls",
-          sportsTypeList: "/bm/common/sportslist",
+          sportsTypeList: "/playball/playballSportType/list",
         }
       }
     },

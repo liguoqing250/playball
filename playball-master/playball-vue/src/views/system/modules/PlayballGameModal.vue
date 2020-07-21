@@ -209,7 +209,7 @@
         url: {
           add: "/playball/playballGame/add",
           edit: "/playball/playballGame/edit",
-          fieldInfoList:"/businessinfo/field/listbsi"
+          fieldInfoList:"/business/playballFieldInfo/listBySportsId"
         },
       }
     },
@@ -307,12 +307,10 @@
         this.fieldInfoList = {}
         this.$forceUpdate()
         //记得后面来调整分页，现在先走着
-        console.log("获取运动类型sportid=",id)
-
         let params = {sportsId:id}
         getAction(this.url.fieldInfoList, params).then((res)=>{
           if(res.success){
-            this.fieldInfoList= res.result.records;
+            this.fieldInfoList= res.result;
             for(let index in this.fieldInfoList){
               this.fieldInfoList[index].bselect = true
             }
