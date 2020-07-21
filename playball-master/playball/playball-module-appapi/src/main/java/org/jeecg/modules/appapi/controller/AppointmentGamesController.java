@@ -87,6 +87,12 @@ public class AppointmentGamesController extends JeecgController<AppointmentGames
 			pageList.getRecords().get(i).setUserInfo(appUsersService.selectById(pageList.getRecords().get(i).getAgUserId()));
 			if(iAcceptAppointmentService.isJoinAppointment(pageList.getRecords().get(i).getId())){
 				pageList.getRecords().get(i).setAgStatus(3);
+			}else{
+				if(pageList.getRecords().get(i).getAgAppointmentTime().getTime()<new Date().getTime() ){
+					pageList.getRecords().get(i).setAgStatus(2);
+				}else if(pageList.getRecords().get(i).getAgAppointmentTime().getTime()>new Date().getTime() ){
+					pageList.getRecords().get(i).setAgStatus(1);
+				}
 			}
 		}
 		return Result.ok(pageList);

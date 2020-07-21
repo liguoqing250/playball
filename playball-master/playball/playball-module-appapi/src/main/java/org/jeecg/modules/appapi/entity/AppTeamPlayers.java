@@ -20,7 +20,7 @@ public class AppTeamPlayers {
     //球衣号码
     private Integer tp_clothes_number;
     //位置
-    private String tp_position;
+    private Integer tp_position;
     //纪录创建时间
     private Date createTime;
     //纪录修改时间
@@ -79,11 +79,11 @@ public class AppTeamPlayers {
         this.tp_clothes_number = tp_clothes_number;
     }
 
-    public String getTp_position() {
+    public Integer getTp_position() {
         return tp_position;
     }
 
-    public void setTp_position(String tp_position) {
+    public void setTp_position(Integer tp_position) {
         this.tp_position = tp_position;
     }
 

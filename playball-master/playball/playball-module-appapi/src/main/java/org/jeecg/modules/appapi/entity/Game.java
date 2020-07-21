@@ -90,4 +90,6 @@ public class Game {
 	@Excel(name = "version", width = 15)
     @ApiModelProperty(value = "version")
 	private Integer version;
+
+	private String gameImage;
 }

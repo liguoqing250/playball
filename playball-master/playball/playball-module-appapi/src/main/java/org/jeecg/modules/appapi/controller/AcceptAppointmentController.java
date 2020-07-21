@@ -95,12 +95,13 @@ public class AcceptAppointmentController extends JeecgController<AcceptAppointme
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		String token=request.getHeader("X-Access-Token");
 		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
-		AppTeam appTeam= appTeamService.selectMyTeamInfo();
+
 		AppointmentGames appointmentGames=iAppointmentGamesService.getById(acceptAppointment.getAgId());
 		if(!acceptAppointmentService.isJoinAppointment(acceptAppointment.getAgId())){
 			if(appointmentGames.getTpId()!=null){
 				//球队约球
-				if(appTeam!=null){
+				if(appTeamService.isJoinTeam()){
+					AppTeam appTeam= appTeamService.selectMyTeamInfo();
 					if(appTeamService.isCaptain()){
 						acceptAppointment.setAaAcceptSubjectId(appTeam.getTeam_id().toString());
 						acceptAppointmentService.save(acceptAppointment);

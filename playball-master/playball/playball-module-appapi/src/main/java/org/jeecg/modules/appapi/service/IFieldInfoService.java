@@ -15,4 +15,6 @@ import java.util.Map;
 public interface IFieldInfoService extends IService<FieldInfo> {
 
     List<FieldInfo> listMaps(Map<String, Object> map);
+
+    List<FieldInfo> queryByMyOrders();
 }

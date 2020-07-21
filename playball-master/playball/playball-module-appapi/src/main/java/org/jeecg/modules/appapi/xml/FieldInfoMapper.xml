@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.appapi.mapper.FieldInfoMapper">
 
+    <!--根据ID查询-->
+    <select id="queryByMyOrders" parameterType="java.lang.Integer" resultType="org.jeecg.modules.appapi.entity.FieldInfo">
+        SELECT pfi.* FROM playball_field_info pfi LEFT JOIN playball_field_reserve_info pfri ON pfri.f_id=pfi.id LEFT JOIN playball_orders po ON po.ord_goods_id=pfi.id and po.ord_id=pfri.orm_id
+        WHERE po.cpr_type=1 and po.cpr_state=1 AND pfri.fri_fieldDay>NOW() AND po.ord_user_id= #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

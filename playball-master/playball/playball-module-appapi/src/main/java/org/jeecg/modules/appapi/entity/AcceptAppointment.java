@@ -59,6 +59,7 @@ public class AcceptAppointment {
 	/**version*/
 	@Excel(name = "version", width = 15)
     @ApiModelProperty(value = "version")
+
 	private Integer version;
 
 	public Integer getId() {

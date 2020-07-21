@@ -126,18 +126,29 @@ public class FieldInfoController extends JeecgController<FieldInfo, IFieldInfoSe
 	}
 
 	/**
-	 * 通过id查询
+	 * 通过用户订单查询
 	 *
-	 * @param id
+	 *
 	 * @return
 	 */
-	@ApiOperation(value="场馆详情-通过id查询", notes="场馆详情-通过id查询")
-	@PostMapping(value = "/queryById")
-	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		FieldInfo fieldInfo = fieldInfoService.getById(id);
+	@ApiOperation(value="场馆详情-通过用户订单查询", notes="场馆详情-通过用户订单查询")
+	@PostMapping(value = "/queryByMyOrders")
+	public Result<?> queryByMyOrders() {
+		List<FieldInfo> fieldInfo = fieldInfoService.queryByMyOrders();
 		return Result.ok(fieldInfo);
 	}
-
+	 /**
+	  * 通过id查询
+	  *
+	  * @param id
+	  * @return
+	  */
+	 @ApiOperation(value="场馆详情-通过id查询", notes="场馆详情-通过id查询")
+	 @PostMapping(value = "/queryById")
+	 public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
+		 FieldInfo fieldInfo = fieldInfoService.getById(id);
+		 return Result.ok(fieldInfo);
+	 }
 	 /**
 	  * 通过商家id查询
 	  *

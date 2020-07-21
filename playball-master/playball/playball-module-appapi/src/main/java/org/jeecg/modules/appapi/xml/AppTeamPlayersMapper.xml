@@ -8,7 +8,7 @@
          <result column="tp_quitTime" jdbcType="TIMESTAMP" property="tp_quitTime" />
          <result column="team_id" jdbcType="INTEGER" property="team_id" />
          <result column="tp_clothes_number" jdbcType="INTEGER" property="tp_clothes_number" />
-         <result column="tp_position" jdbcType="VARCHAR" property="tp_position" />
+         <result column="tp_position" jdbcType="INTEGER" property="tp_position" />
          <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
          <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
          <result column="is_delete" jdbcType="VARCHAR" property="is_delete" />
@@ -131,7 +131,7 @@
                 #{tp_clothes_number,jdbcType=INTEGER},
             </if>
             <if test="tp_position != null">
-                #{tp_position,jdbcType=VARCHAR},
+                #{tp_position,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -167,7 +167,7 @@
                 tp_clothes_number=#{tp_clothes_number,jdbcType=INTEGER},
             </if>
             <if test="tp_position != null">
-                tp_position=#{tp_position,jdbcType=VARCHAR},
+                tp_position=#{tp_position,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 createTime=#{createTime,jdbcType=TIMESTAMP},
