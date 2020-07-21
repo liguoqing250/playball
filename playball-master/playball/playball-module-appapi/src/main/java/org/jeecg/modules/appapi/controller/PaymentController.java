@@ -37,9 +37,11 @@ public class PaymentController {
 		Result<JSONObject> result = new Result<JSONObject>();
 		JSONObject obj = new JSONObject();
 		System.err.println("前端数据" + wxPay);
-		//后台查询数据相对前端安全,并赋值预下单对象
-		BigDecimal price = getGoodsPrice(wxPay);
-		wxPay.setTotal_fee(price);
+		//后台查询数据相对前端安全,并赋值预下单对象 充值时跳过步骤
+		if(wxPay.getGoods_id()!=null){
+			BigDecimal price = getGoodsPrice(wxPay);
+			wxPay.setTotal_fee(price);
+		}
 		
 		//1、调用微信支付接口
 		Map<String, String> prePay = payService.weixinPrePay(wxPay);
