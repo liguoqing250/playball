@@ -185,16 +185,20 @@
 
         typeModal:{
           sportsTypeList:{},
-          gameTypeList:[{
+          gameTypeList:[
+            /*{
             id:"1",
             value:"小组赛+淘汰赛"
-          },{
+          },*/{
             id:"2",
             value:"淘汰赛"
           },{
             id:"3",
             value:"积分赛(联赛制)"
-          }],
+          },{
+            id:"4",
+            value:"自定义比赛"
+            }],
           typeName:''
         },
 

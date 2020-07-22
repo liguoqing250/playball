@@ -102,6 +102,7 @@ public class ShiroRealm extends AuthorizingRealm {
 		}
 		// 校验token有效性
 		String loginType = JwtUtil.getLoginType(token);
+		log.info("--------------doGetAuthenticationInfo-------------loginType="+loginType);
 		if("CMS".equals(loginType)) {
 			//表示后台登陆
 			LoginUser loginUser = this.checkUserTokenIsEffect(token);

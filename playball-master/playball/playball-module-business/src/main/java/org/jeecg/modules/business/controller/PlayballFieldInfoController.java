@@ -12,12 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.common.playball.entity.PlayballFieldInfo;
 import org.jeecg.common.playball.vo.PlayballFieldInfoModel;
 import org.jeecg.modules.business.service.IPlayballFieldInfoService;
+import org.jeecg.common.system.api.ISysBaseAPI;
+import org.jeecg.common.system.util.JwtUtil;
+
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -52,7 +56,8 @@ import io.swagger.annotations.ApiOperation;
 public class PlayballFieldInfoController extends JeecgController<PlayballFieldInfo, IPlayballFieldInfoService> {
 	@Autowired
 	private IPlayballFieldInfoService playballFieldInfoService;
-	
+	@Autowired
+	private ISysBaseAPI sysBaseAPI;
 	/**
 	 * 分页列表查询
 	 *
@@ -75,7 +80,21 @@ public class PlayballFieldInfoController extends JeecgController<PlayballFieldIn
 		//获取当前用户
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         //获取用户id后获取用户属于的商家id
-        String userId = sysUser.getId();
+        String userId=""; //= sysUser.getId();
+        
+        String token = req.getHeader("X-Access-Token");
+        String username = JwtUtil.getUsername(token);
+		LoginUser sysUserN = sysBaseAPI.getUserByName(username);
+
+		if(sysUser != null) {
+			log.info("-------sysUser------"+sysUser);
+			userId = sysUser.getId();
+		}else if(sysUserN != null) {
+			log.info("-------sysUserN------"+sysUserN);
+			userId = sysUserN.getId();
+		}else {
+			log.info("-------------------都为空，why?-------------------------");
+		}
         
     	IPage<PlayballFieldInfoModel> pageList = playballFieldInfoService.queryFieldInfoByUserId(new Page(pageNo, pageSize),playballFieldInfo,userId);
     	

@@ -43,6 +43,7 @@
     <loop ref="loop" :games-id="gamesInfo.id" v-if="gameTypeShow.bLoop"/>
     <out ref="out" :games-id="gamesInfo.id" v-if="gameTypeShow.bOut"/>
     <group ref="group" :games-id="gamesInfo.id" v-if="gameTypeShow.bGroup"/>
+    <custom ref="custom" :enrollTeamList="enrollTeamList" :games-id="gamesInfo.id" v-if="gameTypeShow.bCustom"/>
 
   </a-modal>
 </template>
@@ -58,6 +59,7 @@
   import Out from './type/out'
   import Loop from './type/loop'
   import Group from './type/group'
+  import Custom from './type/custom'
 
   export default {
     name: "PlayballScheduleArrangementModal",
@@ -67,7 +69,8 @@
       JEditor,
       Out,
       Loop,
-      Group
+      Group,
+      Custom
     },
     data () {
       return {
@@ -95,6 +98,7 @@
           bGroup:false,
           bLoop:false,
           bOut:false,
+          bCustom:false
         },
 
         url: {
@@ -116,6 +120,7 @@
         this.gameTypeShow.bGroup = false
         this.gameTypeShow.bLoop = false
         this.gameTypeShow.bOut = false
+        this.gameTypeShow.bCustom = false
 
       },
       handleOk () {
@@ -127,6 +132,7 @@
               that.gameTypeShow.bGroup = false
               that.gameTypeShow.bLoop = false
               that.gameTypeShow.bOut = false
+              this.gameTypeShow.bCustom = false
               that.visible = false
               that.close()
             }else{
@@ -137,6 +143,7 @@
           that.gameTypeShow.bGroup = false
           that.gameTypeShow.bLoop = false
           that.gameTypeShow.bOut = false
+          this.gameTypeShow.bCustom = false
           that.visible = false
           that.close()
         }
@@ -145,6 +152,7 @@
         this.gameTypeShow.bGroup = false
         this.gameTypeShow.bLoop = false
         this.gameTypeShow.bOut = false
+        this.gameTypeShow.bCustom = false
 
         this.visible = false
         this.close()
@@ -159,29 +167,37 @@
         getAction(this.url.enrollTeamList, params).then((res)=>{
           if(res.success){
             this.enrollTeamList = res.result
+
+            //判读，球队人数>8人，且大于报名截止日期方可生成后续比赛
+            if(this.gamesInfo.gameType == 1){
+              console.log("按小组赛+淘汰赛生成比赛")
+              this.gameTypeShow.bGroup = true
+              this.gameTypeShow.bLoop = false
+              this.gameTypeShow.bOut = false
+
+            }else if(this.gamesInfo.gameType == 2){
+              console.log("按淘汰赛方式生成比赛")
+              this.gameTypeShow.bGroup = false
+              this.gameTypeShow.bLoop = false
+              this.gameTypeShow.bOut = true
+
+            }else if(this.gamesInfo.gameType == 3){
+              console.log("按循环赛方式生成比赛！")
+              this.gameTypeShow.bGroup = false
+              this.gameTypeShow.bLoop = true
+              this.gameTypeShow.bOut = false
+
+            }else if(this.gamesInfo.gameType == 4){
+              this.gameTypeShow.bCustom = true
+              this.gameTypeShow.bGroup = false
+              this.gameTypeShow.bLoop = false
+              this.gameTypeShow.bOut = false
+            } else{
+
+              console.log("创建赛事存在问题，无法生成比赛！")
+            }
           }
         })
-        //判读，球队人数>8人，且大于报名截止日期方可生成后续比赛
-        if(this.gamesInfo.gameType == 1){
-          console.log("按小组赛+淘汰赛生成比赛")
-          this.gameTypeShow.bGroup = true
-          this.gameTypeShow.bLoop = false
-          this.gameTypeShow.bOut = false
-
-        }else if(this.gamesInfo.gameType == 2){
-          console.log("按淘汰赛方式生成比赛")
-          this.gameTypeShow.bGroup = false
-          this.gameTypeShow.bLoop = false
-          this.gameTypeShow.bOut = true
-
-        }else if(this.gamesInfo.gameType == 3){
-          console.log("按循环赛方式生成比赛！")
-          this.gameTypeShow.bGroup = false
-          this.gameTypeShow.bLoop = true
-          this.gameTypeShow.bOut = false
-        }else{
-          console.log("创建赛事存在问题，无法生成比赛！")
-        }
 
         //获取比赛阶段，是否生成比赛
         /*getAction(this.url.getGameInfoById, params).then((re)=> {

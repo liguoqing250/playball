@@ -2,7 +2,7 @@
   <a-modal
     :width="modalWidth"
     :visible="visible"
-    title="部门搜索"
+    title="场馆选择"
     :confirmLoading="confirmLoading"
     @ok="handleSubmit"
     @cancel="handleCancel"
@@ -12,7 +12,7 @@
     <!--部门树-->
     <template>
       <a-form :form="form">
-      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="上级部门">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="场馆选择">
       <a-tree
         multiple
         treeCheckable="tree"
@@ -25,7 +25,8 @@
         @check="onCheck"
         :dropdownStyle="{maxHeight:'200px',overflow:'auto'}"
         :treeData="departTree"
-        placeholder="请选择上级部门"
+        placeholder="请选择场馆"
+        @click="onClick"
         >
       </a-tree>
       </a-form-item>
@@ -135,6 +136,7 @@
         this.departList = [];
         this.checkedKeys = checkedKeys.checked;
         let checkedNodes = info.checkedNodes;
+
         for (let i = 0; i < checkedNodes.length; i++) {
           let de = checkedNodes[i].data.props;
           let depart = {key:"",value:"",title:""};

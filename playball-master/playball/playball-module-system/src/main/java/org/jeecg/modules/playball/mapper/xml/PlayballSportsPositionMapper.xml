@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballSportsPositionMapper">
+
+<!-- SQL片段：getPositionListSql 的 FROM 和 WHERE 部分 -->
+	<sql id="getPositionListSql">
+		from playball.playball_sports_position psp
+		left join playball.playball_sports_type pst on psp.st_id = pst.id
+		WHERE
+		1=1
+        <if test="positionModel.text != null">
+     		and psp.text LIKE concat(concat('%',#{positionModel.text}),'%')  
+        </if>
+        <if test="positionModel.sportsName != null">
+        and pst.sports_name LIKE concat(concat('%',#{positionModel.sportsName}),'%') 
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getPositionList" parameterType="java.util.Map" resultType="org.jeecg.common.playball.vo.PlayballSportsPositionModel">
+		SELECT
+			psp.id AS id,
+			psp.text AS text,
+			psp.st_id AS stId,
+			pst.sports_name AS sportsName
+			<include refid="getPositionListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getPositionListTotal"  resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getPositionListSql"/>
+	</select>
+	
+	<select id="getPositionListBySportsId"  resultType="org.jeecg.common.playball.vo.PlayballSportsPositionModel">
+		SELECT
+			psp.id AS id,
+			psp.text AS text,
+			psp.st_id AS stId,
+			pst.sports_name AS sportsName
+			from playball.playball_sports_position psp
+			left join playball.playball_sports_type pst on psp.st_id = pst.id
+			WHERE
+			psp.st_id = #{sportsId}
+	</select>
+
+</mapper>

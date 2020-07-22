@@ -19,5 +19,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface IPlayballBaseAPI {
 	
+	public List<PlayballSportsPositionModel> getPositionListBySportsId(Integer sportsId);
 	
 }
