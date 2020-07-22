@@ -1,7 +1,7 @@
 package org.jeecg.modules.appapi.service.impl;
 
 import org.apache.commons.collections.map.HashedMap;
-import org.jeecg.modules.appapi.entity.SoortsPosition;
+import org.jeecg.modules.appapi.entity.SportsPosition;
 import org.jeecg.modules.appapi.mapper.SoortsPositionMapper;
 import org.jeecg.modules.appapi.service.ISoortsPositionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import java.util.Map;
  * @Version: V1.0
  */
 @Service
-public class SoortsPositionServiceImpl extends ServiceImpl<SoortsPositionMapper, SoortsPosition> implements ISoortsPositionService {
+public class SoortsPositionServiceImpl extends ServiceImpl<SoortsPositionMapper, SportsPosition> implements ISoortsPositionService {
     @Autowired
     SoortsPositionMapper soortsPositionMapper;
     @Override
-    public List<SoortsPosition> queryByStId(Integer stId) {
+    public List<SportsPosition> queryByStId(Integer stId) {
         Map<String,Object> map =new HashedMap();
         map.put("st_id",stId);
         return soortsPositionMapper.selectByMap(map);

@@ -22,11 +22,11 @@ import org.jeecgframework.poi.excel.annotation.Excel;
  * @Version: V1.0
  */
 @Data
-@TableName("playball_soorts_position")
+@TableName("playball_sports_position")
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="playball_soorts_position对象", description="运动员位置")
-public class SoortsPosition {
+@ApiModel(value="playball_sports_position对象", description="运动员位置")
+public class SportsPosition {
     
 	/**id*/
 	@TableId(type = IdType.AUTO)

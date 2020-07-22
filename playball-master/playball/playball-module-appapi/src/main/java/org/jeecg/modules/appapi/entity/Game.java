@@ -92,4 +92,5 @@ public class Game {
 	private Integer version;
 
 	private String gameImage;
+	private String gameRule;
 }

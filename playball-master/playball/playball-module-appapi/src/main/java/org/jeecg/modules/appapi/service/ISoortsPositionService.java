@@ -1,6 +1,6 @@
 package org.jeecg.modules.appapi.service;
 
-import org.jeecg.modules.appapi.entity.SoortsPosition;
+import org.jeecg.modules.appapi.entity.SportsPosition;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -11,6 +11,6 @@ import java.util.List;
  * @Date:   2020-07-21
  * @Version: V1.0
  */
-public interface ISoortsPositionService extends IService<SoortsPosition> {
-    List<SoortsPosition> queryByStId(Integer stId);
+public interface ISoortsPositionService extends IService<SportsPosition> {
+    List<SportsPosition> queryByStId(Integer stId);
 }

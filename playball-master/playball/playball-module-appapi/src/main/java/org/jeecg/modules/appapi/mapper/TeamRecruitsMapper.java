@@ -1,8 +1,10 @@
 package org.jeecg.modules.appapi.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.TeamRecruits;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -14,4 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TeamRecruitsMapper extends BaseMapper<TeamRecruits> {
 
+    List<TeamRecruits> selectByPage(@Param("params")Map<String, Object> params);
+
+    int getCount(@Param("params") Map<String, Object> params);
 }

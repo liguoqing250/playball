@@ -2,36 +2,21 @@ package org.jeecg.modules.appapi.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.aspect.annotation.AutoLog;
-import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.appapi.entity.SoortsPosition;
+import org.jeecg.modules.appapi.entity.SportsPosition;
 import org.jeecg.modules.appapi.service.ISoortsPositionService;
-import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.def.NormalExcelConstants;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -45,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags="运动员位置")
 @RestController
 @RequestMapping("/SoortsPosition")
-public class SoortsPositionController extends JeecgController<SoortsPosition, ISoortsPositionService> {
+public class SportsPositionController extends JeecgController<SportsPosition, ISoortsPositionService> {
 	@Autowired
 	private ISoortsPositionService soortsPositionService;
 
@@ -58,13 +43,13 @@ public class SoortsPositionController extends JeecgController<SoortsPosition, IS
 	 @ApiOperation(value="运动员位置-通过stId查询", notes="运动员位置-通过id查询")
 	 @PostMapping(value = "/queryBystId")
 	 public Result<?> queryByStId(@RequestParam(name="stId",required=true) Integer stId) {
-		 List<SoortsPosition> soortsPosition = soortsPositionService.queryByStId(stId);
-		 return Result.ok(soortsPosition);
+		 List<SportsPosition> sportsPosition = soortsPositionService.queryByStId(stId);
+		 return Result.ok(sportsPosition);
 	 }
 	/**
 	 * 分页列表查询
 	 *
-	 * @param soortsPosition
+	 * @param sportsPosition
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
@@ -72,39 +57,39 @@ public class SoortsPositionController extends JeecgController<SoortsPosition, IS
 	 */
 	@ApiOperation(value="运动员位置-分页列表查询", notes="运动员位置-分页列表查询")
 	@PostMapping(value = "/list")
-	public Result<?> queryPageList(SoortsPosition soortsPosition,
+	public Result<?> queryPageList(SportsPosition sportsPosition,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<SoortsPosition> queryWrapper = QueryGenerator.initQueryWrapper(soortsPosition, req.getParameterMap());
-		Page<SoortsPosition> page = new Page<SoortsPosition>(pageNo, pageSize);
-		IPage<SoortsPosition> pageList = soortsPositionService.page(page, queryWrapper);
+		QueryWrapper<SportsPosition> queryWrapper = QueryGenerator.initQueryWrapper(sportsPosition, req.getParameterMap());
+		Page<SportsPosition> page = new Page<SportsPosition>(pageNo, pageSize);
+		IPage<SportsPosition> pageList = soortsPositionService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
 	
 	/**
 	 * 添加
 	 *
-	 * @param soortsPosition
+	 * @param sportsPosition
 	 * @return
 	 */
 	@ApiOperation(value="运动员位置-添加", notes="运动员位置-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody SoortsPosition soortsPosition) {
-		soortsPositionService.save(soortsPosition);
+	public Result<?> add(@RequestBody SportsPosition sportsPosition) {
+		soortsPositionService.save(sportsPosition);
 		return Result.ok("添加成功！");
 	}
 	
 	/**
 	 * 编辑
 	 *
-	 * @param soortsPosition
+	 * @param sportsPosition
 	 * @return
 	 */
 	@ApiOperation(value="运动员位置-编辑", notes="运动员位置-编辑")
 	@PostMapping(value = "/edit")
-	public Result<?> edit(@RequestBody SoortsPosition soortsPosition) {
-		soortsPositionService.updateById(soortsPosition);
+	public Result<?> edit(@RequestBody SportsPosition sportsPosition) {
+		soortsPositionService.updateById(sportsPosition);
 		return Result.ok("编辑成功!");
 	}
 	
@@ -143,19 +128,19 @@ public class SoortsPositionController extends JeecgController<SoortsPosition, IS
 	@ApiOperation(value="运动员位置-通过id查询", notes="运动员位置-通过id查询")
 	@PostMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		SoortsPosition soortsPosition = soortsPositionService.getById(id);
-		return Result.ok(soortsPosition);
+		SportsPosition sportsPosition = soortsPositionService.getById(id);
+		return Result.ok(sportsPosition);
 	}
 
   /**
    * 导出excel
    *
    * @param request
-   * @param soortsPosition
+   * @param sportsPosition
    */
   @RequestMapping(value = "/exportXls")
-  public ModelAndView exportXls(HttpServletRequest request, SoortsPosition soortsPosition) {
-      return super.exportXls(request, soortsPosition, SoortsPosition.class, "运动员位置");
+  public ModelAndView exportXls(HttpServletRequest request, SportsPosition sportsPosition) {
+      return super.exportXls(request, sportsPosition, SportsPosition.class, "运动员位置");
   }
 
   /**
@@ -167,7 +152,7 @@ public class SoortsPositionController extends JeecgController<SoortsPosition, IS
    */
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-      return super.importExcel(request, response, SoortsPosition.class);
+      return super.importExcel(request, response, SportsPosition.class);
   }
 
 }

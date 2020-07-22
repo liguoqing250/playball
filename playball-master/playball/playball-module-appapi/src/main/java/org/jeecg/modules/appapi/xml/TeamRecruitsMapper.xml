@@ -2,4 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.appapi.mapper.TeamRecruitsMapper">
 
+    <!--条件分页查询-->
+    <select id="selectByPage" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.vo.TeamRecruitsVo">
+        SELECT
+        ptr.id,
+        pt.team_id teamId,
+        ptr.maxPlayers,
+        ptr.explainInfo,
+        psp.text,
+        pt.t_name name,
+        pt.t_players_total playersTotal,
+        pt.t_image image,
+        pt.t_province province,
+        pt.t_city city,
+        pt.t_district district,
+        pst.sports_name sportsName
+        FROM
+        playball_team_recruits ptr
+        LEFT JOIN playball_sports_position psp ON psp.id=ptr.position
+        LEFT JOIN playball_team pt ON pt.team_id=ptr.team_id
+        LEFT JOIN playball_sports_type pst ON pst.id=pt.st_id
+        where 1=1
+        <if test="params.district != null">
+           and  pt.t_district=#{params.district}
+        </if>
+        <if test="params.stId != null">
+           and  pt.st_id=#{params.stId}
+        </if>
+        <if test="params.searchValue != null">
+            and (
+            pt.t_name=LIKE concat('%',#{params.searchValue},'%') or
+            psp.text=LIKE concat('%',#{params.searchValue},'%')
+            )
+        </if>
+        LIMIT #{params.PageNum},#{params.PageSize}
+    </select>
+
+    <!--获取总条数-->
+    <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        playball_team_recruits ptr
+        LEFT JOIN playball_sports_position psp ON psp.id=ptr.position
+        LEFT JOIN playball_team pt ON pt.team_id=ptr.team_id
+        LEFT JOIN playball_sports_type pst ON pst.id=pt.st_id
+        where 1=1
+        <if test="params.district != null">
+            and  pt.t_district=#{params.district}
+        </if>
+        <if test="params.stId != null">
+            and  pt.st_id=#{params.stId}
+        </if>
+        <if test="params.searchValue != null">
+            and (
+            pt.t_name=LIKE concat('%',#{params.searchValue},'%') or
+            psp.text=LIKE concat('%',#{params.searchValue},'%')
+            )
+        </if>
+    </select>
+
 </mapper>

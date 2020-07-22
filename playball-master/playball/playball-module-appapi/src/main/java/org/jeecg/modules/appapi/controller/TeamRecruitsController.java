@@ -1,14 +1,14 @@
 package org.jeecg.modules.appapi.controller;
 
 import java.util.Arrays;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.appapi.entity.TeamRecruits;
 import org.jeecg.modules.appapi.service.TeamRecruitsService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
@@ -32,27 +32,45 @@ import io.swagger.annotations.ApiOperation;
 public class TeamRecruitsController extends JeecgController<TeamRecruits, TeamRecruitsService> {
 	@Autowired
 	private TeamRecruitsService teamRecruitsService;
-	
-	/**
-	 * 分页列表查询
-	 *
-	 * @param teamRecruits
-	 * @param pageNo
-	 * @param pageSize
-	 * @param req
-	 * @return
-	 */
-	@ApiOperation(value="招募信息-分页列表查询", notes="招募信息-分页列表查询")
-	@PostMapping(value = "/list")
-	public Result<?> queryPageList(TeamRecruits teamRecruits,
-								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-								   HttpServletRequest req) {
-		QueryWrapper<TeamRecruits> queryWrapper = QueryGenerator.initQueryWrapper(teamRecruits, req.getParameterMap());
-		Page<TeamRecruits> page = new Page<TeamRecruits>(pageNo, pageSize);
-		IPage<TeamRecruits> pageList = teamRecruitsService.page(page, queryWrapper);
-		return Result.ok(pageList);
-	}
+
+	 //分页获取球队信息
+	 @PostMapping(value = "/list")
+	 public Result<JSONObject> selectTeamByPage(@RequestBody Map<String,Object> params) {
+		 Result<JSONObject> result = new Result<JSONObject>();
+		 try{
+			 System.out.println(params);
+			 JSONObject obj = new JSONObject();
+			 Page<TeamRecruits> page=teamRecruitsService.selectByPage(params);
+			 obj.put("page",page);
+			 result.setResult(obj);
+			 result.success("请求成功");
+		 }catch (Exception e){
+			 e.printStackTrace();
+			 result.error500("请求失败");
+		 }
+		 return result;
+	 }
+
+//	/**
+//	 * 分页列表查询
+//	 *
+//	 * @param teamRecruits
+//	 * @param pageNo
+//	 * @param pageSize
+//	 * @param req
+//	 * @return
+//	 */
+//	@ApiOperation(value="招募信息-分页列表查询", notes="招募信息-分页列表查询")
+//	@PostMapping(value = "/list")
+//	public Result<?> queryPageList(TeamRecruits teamRecruits,
+//								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+//								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+//								   HttpServletRequest req) {
+//		QueryWrapper<TeamRecruits> queryWrapper = QueryGenerator.initQueryWrapper(teamRecruits, req.getParameterMap());
+//		Page<TeamRecruits> page = new Page<TeamRecruits>(pageNo, pageSize);
+//		IPage<TeamRecruits> pageList = teamRecruitsService.page(page, queryWrapper);
+//		return Result.ok(pageList);
+//	}
 	
 	/**
 	 * 添加

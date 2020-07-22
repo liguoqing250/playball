@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.util.encryption.AesEncryptUtil;
 import org.jeecg.common.util.encryption.EncryptedString;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.PlayballUsersBalance;
 import org.jeecg.modules.appapi.mapper.AppUsersMapper;
+import org.jeecg.modules.appapi.mapper.PlayballUsersBalanceMapper;
 import org.jeecg.modules.appapi.service.AppOpenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,8 @@ public class AppOpenServiceImpl implements AppOpenService {
 
     @Autowired
     AppUsersMapper appUsersMapper;
-
+    @Autowired
+    private PlayballUsersBalanceMapper playballUsersBalanceMapper;
 
     @Override
     public Map<String,Object> loginOrRegister(AppUsers appUsers,Boolean usePassworld) {
@@ -39,6 +42,9 @@ public class AppOpenServiceImpl implements AppOpenService {
                 }else{
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
                     appUsersMapper.insert(appUsers);
+                    PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
+                    playballUsersBalance.setUbUserId(appUsers.getU_id());
+                    playballUsersBalanceMapper.insert(playballUsersBalance);
                     out.put("appUsers",appUsers);
                     out.put("msg","注册成功");
                 }
