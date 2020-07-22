@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 @Slf4j
 @Api(tags="资讯详情")
 @RestController
-@RequestMapping("/cms/news")
+@RequestMapping("/playball/playballNews")
 public class PlayballNewsController extends JeecgController<PlayballNews, IPlayballNewsService> {
 	@Autowired
 	private IPlayballNewsService newsService;

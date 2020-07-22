@@ -8,12 +8,12 @@
 
           <a-col :md="6" :sm="24">
             <a-form-item label="标题">
-              <a-input placeholder="请输入标题" v-model="queryParam.orderCode"></a-input>
+              <a-input placeholder="请输入标题" v-model="queryParam.title"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="资讯类型">
-              <a-select placeholder="请输入资讯类型"  v-model="queryParam.ctype">
+              <a-select placeholder="请输入资讯类型"  v-model="queryParam.newsType">
                 <a-select-option :value="sports.id"  v-for="sports in sportsTypeList"  >
                   {{ sports.sportsName }}
                 </a-select-option>
@@ -118,6 +118,7 @@
   import PlayballNewsModal from './modules/PlayballNewsModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
+  import { getSportsTypeList } from '@/api/api'
 
   export default {
     name: "PlayballNewsList",
@@ -199,21 +200,19 @@
         },
 
 		url: {
-          list: "/cms/news/list",
-          delete: "/cms/news/delete",
-          deleteBatch: "/cms/news/deleteBatch",
-          exportXlsUrl: "/cms/news/exportXls",
-          sportsTypeList: "/playball/playballSportType/list",
+          list: "/playball/playballNews/list",
+          delete: "/playball/playballNews/delete",
+          deleteBatch: "/playball/playballNews/deleteBatch",
+          exportXlsUrl: "/playball/playballNews/exportXls",
         }
       }
     },
     methods: {
       initDictConfig() {
         //获取运动类型
-        getAction(this.url.sportsTypeList).then((res)=>{
+        getSportsTypeList('').then((res)=>{
           if(res.success){
-            this.sportsTypeList= res.result;
-            this.$forceUpdate()
+            this.sportsTypeList = res.result.records;
           }
         })
       },

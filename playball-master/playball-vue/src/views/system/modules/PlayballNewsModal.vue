@@ -29,7 +29,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="资讯类型">
-          <a-select placeholder="请输入资讯类型"  v-model="typeName" @change ="changeSportsList($event)">
+          <a-select placeholder="请输入资讯类型"  v-model="newsModel.newsType" @change ="changeSportsList($event)">
             <a-select-option :value="sports.id"  v-for="sports in sportsTypeList" >
               {{ sports.sportsName }}
             </a-select-option>
@@ -57,6 +57,7 @@
   import ARow from 'ant-design-vue/es/grid/Row'
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import JEditor from '@/components/jeecg/JEditor'
+  import { getSportsTypeList } from '@/api/api'
 
   export default {
     name: "PlayballNewsModal",
@@ -96,9 +97,8 @@
         validatorRules:{
         },
         url: {
-          add: "/cms/news/add",
-          edit: "/cms/news/edit",
-          sportsTypeList: "/playball/playballSportType/list",
+          add: "/playball/playballNews/add",
+          edit: "/playball/playballNews/edit",
         },
       }
     },
@@ -114,17 +114,9 @@
         //--------------------------------------------------------
 
         //获取运动类型
-        getAction(this.url.sportsTypeList).then((res)=>{
+        getSportsTypeList('').then((res)=>{
           if(res.success){
-            this.sportsTypeList= res.result;
-            this.typeName = this.sportsTypeList[0].sportsName
-            //this.$forceUpdate()
-            for (var i=0; i<this.sportsTypeList.length;i++){
-              if(this.sportsTypeList[i].id == record.newsType){
-                this.typeName =  this.sportsTypeList[i].sportsName
-                break
-              }
-            }
+            this.sportsTypeList = res.result.records;
           }
         })
 
@@ -166,7 +158,6 @@
             newsData.content = that.newsModel.content
             newsData.newsType = that.newsModel.newsType
             newsData.image = that.image
-            console.log("打印表单",newsData)
 
             httpAction(httpurl,newsData,method).then((res)=>{
               if(res.success){
