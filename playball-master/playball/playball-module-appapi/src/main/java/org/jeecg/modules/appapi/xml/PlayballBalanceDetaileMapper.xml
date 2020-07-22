@@ -11,6 +11,7 @@
         <result column="bde_consume_name" property="bdeConsumeName" />
         <result column="bde_pay_method" property="bdePayMethod" />
         <result column="bde_pay_state" property="bdePayState" />
+        <result column="bde_rec_wit" property="bdeRecWit" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />

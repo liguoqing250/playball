@@ -51,6 +51,9 @@ public class PlayballBalanceDetaile implements Serializable {
 
     @ApiModelProperty(value = "支付状态 1 、支付成功 2、支付失败")
     private Integer bdePayState;
+    
+    @ApiModelProperty(value = "充值提现  1、充值 2、提现")
+    private Integer bdeRecWit;
 
     @ApiModelProperty(value = "纪录创建时间")
     @TableField(fill = FieldFill.INSERT)

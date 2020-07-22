@@ -43,11 +43,12 @@ public class WxPayServiceImpl {
 		boolean tansferStatus = false;
 		String responseInfo = "";
 		String xml = wxSendData(openid, money, ip ,desc);
+		HashMap<String, Object> responseBody = new HashMap<>();
 		try {
-			// 指定读取证书格式为PKCS12
+			// 指定读取证书格式为PKCS12 
 			KeyStore keyStore = KeyStore.getInstance("PKCS12");
 			FileInputStream instream = new FileInputStream(new File("D:\\Users\\liuerzxc\\Desktop\\playball_L\\apiclient_cert.p12"));
-			System.out.println(instream);
+			//FileInputStream instream = new FileInputStream(new File("D:\\playball\\apiclient_cert.p12"));
 			try {
 				keyStore.load(instream, MCH_ID.toCharArray());
 			} finally {
@@ -73,6 +74,7 @@ public class WxPayServiceImpl {
 					String resultCode = rootElt.elementText("result_code");
 					if (resultCode.equals("SUCCESS")) {
 						tansferStatus = true;
+						responseBody.put("orders", rootElt.elementText("partner_trade_no"));
 						// 成功后操作
 					} else {
 						// 失败后操作
@@ -89,7 +91,7 @@ public class WxPayServiceImpl {
 
 		}
 		if (tansferStatus == true) {}
-		HashMap<String, Object> responseBody = new HashMap<>();
+		
 		responseBody.put("status", tansferStatus);
 		responseBody.put("responseInfo", responseInfo);
 		return responseBody;

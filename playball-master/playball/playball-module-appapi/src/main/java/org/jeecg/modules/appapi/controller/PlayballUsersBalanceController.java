@@ -52,7 +52,6 @@ public class PlayballUsersBalanceController {
 	}
 	
 	//查询用户当前余额
-	/*@GetMapping(value="/getUsersBalance",produces={"application/json;charset=UTF-8"})*/
 	@GetMapping(value="/getUsersBalance")
 	public Result<?> getUsersBalance(PlayballUsersBalance u_bal){
 		System.out.println("查询用户当前余额" + u_bal);
@@ -64,10 +63,10 @@ public class PlayballUsersBalanceController {
 		return Result.error(0, "没有该用户记录");
 	}
 	
-	//更新用户余额
+	//更新用户余额充值
 	@PostMapping("/updateUsersBalance")
 	public Result<?> updateUsersBalance(PlayballUsersBalance u_bal){
-		System.err.println("更新用户余额" + u_bal);
+		System.err.println("更新用户余额充值" + u_bal);
 		//检查用户余额是否存在
 		PlayballUsersBalance isExist = checkUsersBalanceIsExist(u_bal);
 		if(isExist==null){
@@ -75,6 +74,28 @@ public class PlayballUsersBalanceController {
 		}
 		//判断余额加上当前金额是否大于0
 		BigDecimal balance = isExist.getUbBalance().add(u_bal.getUbBalance());
+		//判断余额是否为整数在操作
+		if(balance.compareTo(BigDecimal.ZERO) == -1){
+			return Result.error(0, "参数不匹配");
+		}
+		//重置参数
+		u_bal.setUbId(isExist.getUbId());//设置主键id
+		u_bal.setUbBalance(balance);//设置余额
+		int updateById = mapper.updateById(u_bal);
+		return Result.ok(updateById>0? "操作成功":"操作失败");
+	}
+	
+	//更新用户余额提现
+	@PostMapping("/updateWitUsersBalance")
+	public Result<?> updateWitUsersBalance(PlayballUsersBalance u_bal){
+		System.err.println("更新用户余额提现" + u_bal);
+		//检查用户余额是否存在
+		PlayballUsersBalance isExist = checkUsersBalanceIsExist(u_bal);
+		if(isExist==null){
+			return Result.error(0, "用户不存在");
+		}
+		//判断余额加上当前金额是否大于0
+		BigDecimal balance = isExist.getUbBalance().subtract(u_bal.getUbBalance());
 		//判断余额是否为整数在操作
 		if(balance.compareTo(BigDecimal.ZERO) == -1){
 			return Result.error(0, "参数不匹配");

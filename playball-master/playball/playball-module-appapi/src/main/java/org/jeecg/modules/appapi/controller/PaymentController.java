@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.FieldReserveInfo;
 import org.jeecg.modules.appapi.entity.WxPayment;
+import org.jeecg.modules.appapi.entity.WxWithdraw;
 import org.jeecg.modules.appapi.entity.vo.PaymentVo;
 import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
 import org.jeecg.modules.appapi.service.PaymentService;
@@ -88,19 +89,17 @@ public class PaymentController {
 	 * String money: 付款金额
 	 * String ip: 付款服务器 IP 测试期间就是公司 IP 1.204.113.40
 	 * String desc 描述，例如 Playball 提现*/
-	@GetMapping("/wxWithdrawal")
-	public Result<JSONObject> wxWithdrawal() {
+	@PostMapping("/wxWithdrawal")
+	public Result<JSONObject> wxWithdrawal(WxWithdraw wxWit) {
 		Result<JSONObject> result = new Result<JSONObject>();
 		JSONObject obj = new JSONObject();
 		//转账金额 真是开发转为实体类 指定字段例如
-		//String money = ProcessingAmount(String.format("%.2f", wxPay.getTotal_fee()));
-		String money = ProcessingAmount(String.format("%.2f", new BigDecimal(1)));
+		System.err.println("用户提现" + wxWit);
+		String money = ProcessingAmount(String.format("%.2f", wxWit.getWit_fee()));
 		
-		HashMap<String, Object> hashMap = wxPayService.wxSendWallet("oG0U-uG-2HKAQxDfy1CIhIABsNGs", money,"111.121.76.46","提现测试");
-		Object object = hashMap.get("status");
-		System.err.println("object");
-		System.err.println(object);
-		obj.put("data", object);
+		HashMap<String, Object> hashMap = wxPayService.wxSendWallet(wxWit.getU_openid(), money,wxWit.getIp(),wxWit.getDesc());
+		System.err.println("status" + hashMap.get("status"));
+		obj.put("data", hashMap);
 		result.setResult(obj);
 		return result;
 	}
