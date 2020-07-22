@@ -139,6 +139,10 @@
               that.$message.warning("请确认时间都设置完成！");
             }
           })
+        }else if(this.$refs.custom){
+          this.$refs.custom.getSuccess(function (bOk) {
+
+          })
         }else{
           that.gameTypeShow.bGroup = false
           that.gameTypeShow.bLoop = false
