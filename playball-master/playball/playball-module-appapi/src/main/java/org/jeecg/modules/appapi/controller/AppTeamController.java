@@ -1,20 +1,20 @@
 package org.jeecg.modules.appapi.controller;
 
-import cn.hutool.db.PageResult;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
-import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
+import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
+import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +26,27 @@ public class AppTeamController {
 
     @Autowired
     AppTeamService appTeamService;
-
+    @Autowired
+    AppTeamPlayersService appTeamPlayersService;
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
 
+    //查询入队、退队申请
+    @PostMapping(value = "/queryJoinQuitTeamApply")
+    public Result<JSONObject> queryJoinQuitTeamApply(@RequestParam Integer jqtaType) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            List<JQTeamApplyVo> list=joinQuitTeamApplyService.queryJoinQuitTeamApply(jqtaType);
+            JSONObject obj = new JSONObject();
+            obj.put("data",list);
+            result.success("查询成功");
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("查询失败");
+        }
+        return result;
+    }
     //根据比赛查赛程
     @PostMapping(value = "/queryTeamByGame")
     public Result<JSONObject> queryTeamByGameid(Integer id) {
@@ -61,6 +78,33 @@ public class AppTeamController {
             result.error500("查询失败");
         }
         return result;
+    }
+    //更新
+    @PostMapping(value = "/updateJoinTeamApply")
+    public Result<?> updateJoinTeamApply(@RequestBody JoinQuitTeamApply joinQuitTeamApply) {
+        try{
+            System.err.println(joinQuitTeamApply.getJqta_type());
+            joinQuitTeamApply.setJqta_handleTime(new Date());
+            joinQuitTeamApplyService.update(joinQuitTeamApply);
+            if(joinQuitTeamApply.getJqta_result()==1){
+                //审核通过
+                //更新球队数据
+                AppTeam appTeam=appTeamService.selectById(joinQuitTeamApply.getTeam_id());
+                appTeam.setT_players_total(appTeam.getT_players_total()+1);
+                appTeamService.update(appTeam);
+                //添加球员表
+                AppTeamPlayers appTeamPlayers=new AppTeamPlayers();
+                appTeamPlayers.setU_id(joinQuitTeamApply.getU_id());
+                appTeamPlayers.setTeam_id(joinQuitTeamApply.getTeam_id());
+                appTeamPlayers.setTp_joinTime(new Date());
+                appTeamPlayers.setTp_position(joinQuitTeamApply.getPosition());
+                appTeamPlayersService.insert(appTeamPlayers);
+            }
+            return Result.ok("操作成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.ok("操作失败");
+        }
     }
     //申请加入球队
     @PostMapping(value = "/joinTeamApply")

@@ -6,6 +6,7 @@
     <select id="selectByPage" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.vo.TeamRecruitsVo">
         SELECT
         ptr.id,
+        psp.id position,
         pt.team_id teamId,
         ptr.maxPlayers,
         ptr.explainInfo,

@@ -240,9 +240,6 @@
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
         update playball_team
         <set>
-            <if test="team_id != null">
-                team_id=#{team_id,jdbcType=INTEGER},
-            </if>
             <if test="t_name != null">
                 t_name=#{t_name,jdbcType=VARCHAR},
             </if>
@@ -304,6 +301,7 @@
                 version=#{version,jdbcType=INTEGER},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where team_id = #{team_id,jdbcType=INTEGER}
+
     </update>
 </mapper>

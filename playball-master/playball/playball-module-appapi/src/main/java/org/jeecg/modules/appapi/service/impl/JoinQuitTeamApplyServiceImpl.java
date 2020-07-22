@@ -7,6 +7,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
+import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 import org.jeecg.modules.appapi.mapper.JoinQuitTeamApplyMapper;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,10 @@ public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
         return page;
     }
 
-
+    @Override
+    public List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType) {
+        return mapper.queryJoinQuitTeamApply(jqtaType);
+    }
 
 
 }

@@ -3,6 +3,7 @@ package org.jeecg.modules.appapi.mapper;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.apache.ibatis.annotations.Param;
+import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,5 @@ public interface JoinQuitTeamApplyMapper {
     Integer getCount(@Param("params") Map<String,Object> params);
 
 
+    List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType);
 }

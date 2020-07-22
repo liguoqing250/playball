@@ -15,7 +15,7 @@ public class JoinQuitTeamApply {
     //关联用户表
     private int u_id;
     //操作类型(1加入 2退出)
-    private int jqta_type;
+    private Integer jqta_type;
     //处理完成时间
     private Date jqta_handleTime;
     //处理结果(1通过 2不予通过)
@@ -28,6 +28,16 @@ public class JoinQuitTeamApply {
     private int is_delete;
     //版本号（用作乐观锁）
     private int version;
+
+    private int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public int getJqta_id() {
         return jqta_id;
@@ -53,11 +63,11 @@ public class JoinQuitTeamApply {
         this.u_id = u_id;
     }
 
-    public int getJqta_type() {
+    public Integer getJqta_type() {
         return jqta_type;
     }
 
-    public void setJqta_type(int jqta_type) {
+    public void setJqta_type(Integer jqta_type) {
         this.jqta_type = jqta_type;
     }
 
