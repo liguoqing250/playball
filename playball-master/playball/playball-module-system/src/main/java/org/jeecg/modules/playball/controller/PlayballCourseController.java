@@ -66,10 +66,8 @@ public class PlayballCourseController extends JeecgController<PlayballCourse, IP
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		QueryWrapper<PlayballCourse> queryWrapper = QueryGenerator.initQueryWrapper(playballCourse, req.getParameterMap());
-		log.info("--------------------cms教程-----------------");
 		Page<PlayballCourse> page = new Page<PlayballCourse>(pageNo, pageSize);
 		IPage<PlayballCourse> pageList = playballCourseService.page(page, queryWrapper);
-		log.info("--------------------cms教程"+pageList);
 		return Result.ok(pageList);
 	}
 	

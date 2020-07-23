@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,52 +27,67 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="playball_curriculum对象", description="cms教程")
-public class PlayballCourse implements Serializable  {
-	private static final long serialVersionUID = 1L;
+public class PlayballCourse{
 	
 	/**主键id*/
 	@TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "c_id")
+	@JsonProperty("cId") 
 	private java.lang.Integer cId;
 	/**教程标题*/
+	@JsonProperty("cTitle") 
 	@Excel(name = "教程标题", width = 15)
     @ApiModelProperty(value = "教程标题")
 	private java.lang.String cTitle;
 	/**教程详情*/
 	@Excel(name = "教程详情", width = 15)
     @ApiModelProperty(value = "教程详情")
+	@JsonProperty("cInfo") 
 	private java.lang.String cInfo;
+	/**教程封面*/
+	@Excel(name = "教程封面", width = 15)
+    @ApiModelProperty(value = "教程封面")
+	@JsonProperty("cCover") 
+	private java.lang.String cCover;
 	/**教程视频*/
 	@Excel(name = "教程视频", width = 15)
     @ApiModelProperty(value = "教程视频")
+	@JsonProperty("cVideo") 
 	private java.lang.String cVideo;
 	/**运动类型*/
 	@Excel(name = "运动类型", width = 15)
     @ApiModelProperty(value = "运动类型")
+	@JsonProperty("sId") 
 	private java.lang.Integer sId;
 	/**适龄范围1*/
 	@Excel(name = "适龄范围1", width = 15)
     @ApiModelProperty(value = "适龄范围1")
+	@JsonProperty("cAgerange") 
 	private java.lang.String cAgerange;
 	/**是否付费*/
 	@Excel(name = "是否付费", width = 15)
     @ApiModelProperty(value = "是否付费")
+	@JsonProperty("cIsFree") 
 	private java.lang.Object cIsFree;
 	/**价格*/
 	@Excel(name = "价格", width = 15)
     @ApiModelProperty(value = "价格")
+	@JsonProperty("cPrice") 
 	private java.math.BigDecimal cPrice;
 	/**点赞数*/
 	@Excel(name = "点赞数", width = 15)
     @ApiModelProperty(value = "点赞数")
+	@JsonProperty("cFabulous") 
 	private java.lang.Integer cFabulous;
 	/**浏览数（后面根据这个查询热门视频）*/
 	@Excel(name = "浏览数（后面根据这个查询热门视频）", width = 15)
     @ApiModelProperty(value = "浏览数（后面根据这个查询热门视频）")
+	@JsonProperty("cBrowse") 
 	private java.lang.Integer cBrowse;
 	/**优先级（后期扩展根据级别查询热门）*/
 	@Excel(name = "优先级（后期扩展根据级别查询热门）", width = 15)
     @ApiModelProperty(value = "优先级（后期扩展根据级别查询热门）")
+	@JsonProperty("cFirst") 
 	private java.lang.Integer cFirst;
 	/**纪录创建时间*/
 	@Excel(name = "纪录创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")

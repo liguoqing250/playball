@@ -14,7 +14,11 @@
 
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="运动类型">
-              <a-input placeholder="请输入运动类型" v-model="queryParam.sId"></a-input>
+              <a-select placeholder="请选择运动类别"  v-model="queryParam.sId">
+                <a-select-option :value="sports.id"  v-for="sports in sportsTypeList">
+                  {{ sports.sportsName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
 
@@ -55,7 +59,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="cid"
+        rowKey="cId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -63,6 +67,12 @@
         class="j-table-force-nowrap"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
+
+        <template slot="avatarslot" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <img style="width: 100px;" :src="getAvatarView(record.cCover)">
+          </div>
+        </template>
 
         <span slot="video" slot-scope="text, record">
           <a @click="showVideo(record)">观看视频</a>
@@ -95,8 +105,8 @@
         :title="videomodal.title"
       >
         <template>
-          <div v-html="videomodal.cvideo">{{videomodal.cvideo}}</div>
-          <iframe :src="videomodal.cvideo" frameborder='0'
+          <div v-html=""></div>
+          <iframe :src="videomodal.cVideo" frameborder='0'
                   allow='autoplay;encrypted-media' allowfullscreen style='width:100%;height:500px;'>
           </iframe>
         </template>
@@ -113,6 +123,7 @@
   import PlayballCourseModal from './modules/PlayballCourseModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { getSportsTypeList } from '@/api/api'
+  import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
 
   export default {
     name: "PlayballCourseList",
@@ -138,13 +149,19 @@
 		   {
             title: '教程标题',
             align:"center",
-            dataIndex: 'ctitle'
+            dataIndex: 'cTitle'
            },
 		   {
             title: '教程详情',
             align:"center",
-            dataIndex: 'cinfo'
+            dataIndex: 'cInfo'
            },
+          {
+            title: '封面图片',
+            align:"center",
+            dataIndex: '',
+            scopedSlots: {customRender: "avatarslot"}
+          },
 		   {
             title: '教程视频',
             align:"center",
@@ -154,7 +171,7 @@
 		   {
             title: '运动类型',
             align:"center",
-            dataIndex: 'sid',
+            dataIndex: 'sId',
             customRender: (text, record, index) => {
               let re = "";
               for (index in this.sportsTypeList){
@@ -168,12 +185,12 @@
 		   {
             title: '适龄范围',
             align:"center",
-            dataIndex: 'cagerange'
+            dataIndex: 'cAgerange'
            },
 		   {
             title: '是否付费',
             align:"center",
-            dataIndex: 'cisFree',
+            dataIndex: 'cIsFree',
             customRender: (text, record, index) => {
               let re = "";
               if(text=='0') {
@@ -188,17 +205,17 @@
 		   {
             title: '价格',
             align:"center",
-            dataIndex: 'cprice'
+            dataIndex: 'cPrice'
            },
 		   {
             title: '点赞数',
             align:"center",
-            dataIndex: 'cfabulous'
+            dataIndex: 'cFabulous'
            },
 		   {
             title: '浏览数',
             align:"center",
-            dataIndex: 'cbrowse'
+            dataIndex: 'cBrowse'
            },
 
           {
@@ -236,16 +253,18 @@
       initDictConfig() {
         getSportsTypeList('').then((res)=>{
           if(res.success){
-            this.sportsTypeList = res.result;
-            this.typeName = this.sportsTypeList[0].sportsName
+            this.sportsTypeList = res.result.records;
           }
         })
       },
 
       showVideo(record){
         this.videomodal.bShowVideo = true
-        this.videomodal.title = record.ctitle
-        this.videomodal.cvideo = record.cvideo
+        this.videomodal.title = record.cTitle
+        this.videomodal.cVideo = record.cVideo
+      },
+      getAvatarView: function (avatar) {
+        return getFileAccessHttpUrl(avatar)
       },
     }
   }

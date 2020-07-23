@@ -16,14 +16,21 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="教程标题">
-          <a-input placeholder="请输入教程标题" v-decorator="['ctitle', {}]" />
+          <a-input placeholder="请输入教程标题" v-decorator="['cTitle', {}]" />
         </a-form-item>
 
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="教程详情">
-          <a-textarea placeholder="请输入教程详情" v-decorator="['cinfo', {}]"/>
+          <a-textarea placeholder="请输入教程详情" v-decorator="['cInfo', {}]"/>
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="封面图片">
+          <j-image-upload class="avatar-uploader" text="上传" v-model="imageList" ></j-image-upload>
         </a-form-item>
 
         <a-form-item
@@ -38,7 +45,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="运动类型">
-          <a-select placeholder="请输入视频类型"  v-model="typeName" @change ="changeSportsList($event)">
+          <a-select placeholder="请输入视频类型"  v-model="model.sId" @change ="changeSportsList($event)">
             <a-select-option :value="sports.id"  v-for="sports in sportsTypeList"  >
               {{ sports.sportsName }}
             </a-select-option>
@@ -49,7 +56,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="适龄范围1">
-          <a-input placeholder="请输入适龄范围1" v-decorator="['cagerange', {}]" />
+          <a-input placeholder="请输入适龄范围1" v-decorator="['cAgerange', {}]" />
         </a-form-item>
 
         <a-form-item
@@ -66,7 +73,7 @@
             :labelCol="labelCol"
             :wrapperCol="wrapperCol"
             label="价格">
-            <a-input-number v-decorator="[ 'cprice', {}]" />
+            <a-input-number v-decorator="[ 'cPrice', {}]" />
           </a-form-item>
         </template>
 
@@ -74,7 +81,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="优先级">
-          <a-input-number v-decorator="[ 'cfirst', {}]" />
+          <a-input-number v-decorator="[ 'cFirst', {}]" />
         </a-form-item>
 
       </a-form>
@@ -88,11 +95,13 @@
   import pick from 'lodash.pick'
   import moment from "moment"
   import JUpload from '@/components/jeecg/JUpload'
+  import JImageUpload from '@/components/jeecg/JImageUpload'
 
   export default {
     name: "PlayballCourseModal",
     components: {
-      JUpload
+      JUpload,
+      JImageUpload
     },
     data () {
       return {
@@ -112,6 +121,7 @@
         bFree:false,
         sportsTypeList:{},
         fileList:'',
+        imageList:'',
 
         confirmLoading: false,
         form: this.$form.createForm(this),
@@ -125,6 +135,11 @@
       }
     },
     created () {
+      getSportsTypeList('').then((res)=>{
+        if(res.success){
+          this.sportsTypeList = res.result.records;
+        }
+      })
     },
     methods: {
       add () {
@@ -133,19 +148,18 @@
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
-        //数据库设计没将id作为主键
-        this.model.id = this.model.cid
 
-        getSportsTypeList('').then((res)=>{
-          if(res.success){
-            this.sportsTypeList = res.result;
-            this.typeName = this.sportsTypeList[0].sportsName
-          }
-        })
+        console.log("model=",this.model)
+
+        if(this.model.cId){
+          setTimeout(() => {
+            this.imageList = record.cCover;
+          }, 5)
+        }
 
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'ctitle','cinfo','cagerange','cprice','cfirst'))
+          this.form.setFieldsValue(pick(this.model,'cTitle','cInfo','cAgerange','cPrice','cFirst'))
 		  //时间格式化
         });
 
@@ -162,7 +176,7 @@
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
-            if(!this.model.id){
+            if(!this.model.cId){
               httpurl+=this.url.add;
               method = 'post';
             }else{
@@ -170,12 +184,13 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            formData.cvideo = this.fileList
+            formData.cVideo = this.fileList
+            formData.cCover = this.imageList
             if(this.bFree){
-              formData.cisFree = '1'
+              formData.cIsFree = '1'
             }else{
-              formData.cisFree = '0'
-              formData.cprice = 0
+              formData.cIsFree = '0'
+              formData.cPrice = 0
             }
             console.log("-------formData",formData)
             httpAction(httpurl,formData,method).then((res)=>{

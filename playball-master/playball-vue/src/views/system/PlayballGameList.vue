@@ -225,7 +225,7 @@
         getSportsTypeList('').then((res)=>{
           if(res.success){
             this.sportsTypeList = res.result.records;
-            this.typeName = this.sportsTypeList[0].sportsName
+            //this.typeName = this.sportsTypeList[0].sportsName
           }
         })
       },
