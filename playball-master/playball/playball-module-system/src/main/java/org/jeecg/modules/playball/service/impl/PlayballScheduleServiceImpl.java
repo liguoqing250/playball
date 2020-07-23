@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.mapper.PlayballScheduleMapper;
 import org.jeecg.modules.playball.service.IPlayballScheduleService;
 import org.jeecg.modules.playball.service.IPlayballTeamService;

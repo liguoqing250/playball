@@ -1,6 +1,10 @@
 package org.jeecg.modules.playball.service;
 
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballTeamModel;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPlayballTeamService extends IService<PlayballTeam> {
 
+	public IPage<PlayballTeamModel> queryTeamList(IPage page, PlayballTeamModel playballTeam);
 }

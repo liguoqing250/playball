@@ -2,8 +2,8 @@ package org.jeecg.modules.playball.service;
 
 import java.util.List;
 
+import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
-import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 import org.jeecg.modules.playball.vo.PlayballScheduleResultVo;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;

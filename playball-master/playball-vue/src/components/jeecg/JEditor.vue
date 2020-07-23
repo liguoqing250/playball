@@ -56,9 +56,9 @@
       return {
         //初始化配置
         init: {
-          language_url: '/tinymce/langs/zh_CN.js',
+          language_url: 'tinymce/langs/zh_CN.js',
           language: 'zh_CN',
-          skin_url: '/tinymce/skins/lightgray',
+          skin_url: 'tinymce/skins/lightgray',
           height: 300,
           plugins: this.plugins,
           toolbar: this.toolbar,

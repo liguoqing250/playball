@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jeecg.modules.playball.entity.PlayballGame;
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.mapper.PlayballGameMapper;
 import org.jeecg.modules.playball.service.IPlayballGameService;
 import org.jeecg.modules.playball.vo.PlayballGamesPage;

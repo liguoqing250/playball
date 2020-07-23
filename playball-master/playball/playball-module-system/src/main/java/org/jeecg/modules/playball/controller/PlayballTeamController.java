@@ -12,7 +12,8 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballTeamModel;
 import org.jeecg.modules.playball.service.IPlayballTeamService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -61,13 +62,14 @@ public class PlayballTeamController extends JeecgController<PlayballTeam, IPlayb
 	@AutoLog(value = "球队-分页列表查询")
 	@ApiOperation(value="球队-分页列表查询", notes="球队-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(PlayballTeam playballTeam,
+	public Result<?> queryPageList(PlayballTeamModel playballTeam,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<PlayballTeam> queryWrapper = QueryGenerator.initQueryWrapper(playballTeam, req.getParameterMap());
+		/*QueryWrapper<PlayballTeam> queryWrapper = QueryGenerator.initQueryWrapper(playballTeam, req.getParameterMap());
 		Page<PlayballTeam> page = new Page<PlayballTeam>(pageNo, pageSize);
-		IPage<PlayballTeam> pageList = playballTeamService.page(page, queryWrapper);
+		IPage<PlayballTeam> pageList = playballTeamService.page(page, queryWrapper);*/
+		IPage<PlayballTeamModel> pageList = playballTeamService.queryTeamList(new Page(pageNo,pageSize), playballTeam);
 		return Result.ok(pageList);
 	}
 	
@@ -95,6 +97,7 @@ public class PlayballTeamController extends JeecgController<PlayballTeam, IPlayb
 	@ApiOperation(value="球队-编辑", notes="球队-编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody PlayballTeam playballTeam) {
+		log.info("-----编辑-------"+playballTeam);
 		playballTeamService.updateById(playballTeam);
 		return Result.ok("编辑成功!");
 	}

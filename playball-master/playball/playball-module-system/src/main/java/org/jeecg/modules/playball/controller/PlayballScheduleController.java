@@ -15,7 +15,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.entity.PlayballGame;
 import org.jeecg.modules.playball.service.IPlayballScheduleService;
 import org.jeecg.modules.playball.service.IPlayballGameService;

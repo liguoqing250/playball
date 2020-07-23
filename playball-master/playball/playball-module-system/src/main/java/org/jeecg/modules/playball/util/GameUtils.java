@@ -2,7 +2,6 @@ package org.jeecg.modules.playball.util;
 
 import java.util.*;
 
-import org.jeecg.modules.playball.entity.PlayballTeam;
 
 public class GameUtils {
 	

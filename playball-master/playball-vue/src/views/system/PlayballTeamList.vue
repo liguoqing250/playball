@@ -7,40 +7,24 @@
         <a-row :gutter="24">
 
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="teamId">
-              <a-input placeholder="请输入teamId" v-model="queryParam.teamId"></a-input>
+            <a-form-item label="球队名称">
+              <a-input placeholder="请输入球队名称" v-model="queryParam.tName"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="队名">
-              <a-input placeholder="请输入队名" v-model="queryParam.tName"></a-input>
+            <a-form-item label="球队类别">
+              <a-select placeholder="请选择球队类别"  v-model="queryParam.stId">
+                <a-select-option :value="sports.id"  v-for="sports in sportsTypeList">
+                  {{ sports.sportsName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
-        <template v-if="toggleSearchStatus">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="队徽（图片一张）">
-              <a-input placeholder="请输入队徽（图片一张）" v-model="queryParam.tImage"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="所属单位名">
-              <a-input placeholder="请输入所属单位名" v-model="queryParam.tUnitname"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="球队类型(关联运动类型表)">
-              <a-input placeholder="请输入球队类型(关联运动类型表)" v-model="queryParam.stId"></a-input>
-            </a-form-item>
-          </a-col>
-          </template>
+
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
             </span>
           </a-col>
 
@@ -50,7 +34,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
+      <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
       <a-button type="primary" icon="download" @click="handleExportXls('球队')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -74,7 +58,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="id"
+        rowKey="teamId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -82,6 +66,12 @@
         class="j-table-force-nowrap"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
+
+        <template slot="avatarslot" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <a-avatar shape="square" :src="getAvatarView(record.tImage)" icon="user"/>
+          </div>
+        </template>
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
@@ -91,7 +81,7 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.teamId)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -110,8 +100,11 @@
 
 <script>
   import '@/assets/less/TableExpand.less'
+  import Area from '@/components/_util/Area'
   import PlayballTeamModal from './modules/PlayballTeamModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { getSportsTypeList } from '@/api/api'
+  import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
 
   export default {
     name: "PlayballTeamList",
@@ -135,19 +128,15 @@
             }
            },
 		   {
-            title: 'teamId',
-            align:"center",
-            dataIndex: 'teamId'
-           },
-		   {
             title: '队名',
             align:"center",
             dataIndex: 'tName'
            },
 		   {
-            title: '队徽（图片一张）',
+            title: '队徽',
             align:"center",
-            dataIndex: 'tImage'
+            dataIndex: '',
+            scopedSlots: {customRender: "avatarslot"}
            },
 		   {
             title: '所属单位名',
@@ -157,7 +146,17 @@
 		   {
             title: '球队类型(关联运动类型表)',
             align:"center",
-            dataIndex: 'stId'
+            dataIndex: 'stId',
+             customRender: (text, record, index) => {
+               let re = "";
+               for (index in this.sportsTypeList)  // x 为属性名
+               {
+                 if(this.sportsTypeList[index].id==text){
+                   return this.sportsTypeList[index].sportsName
+                 }
+               }
+               return re;
+             }
            },
 		   {
             title: '当前球队人数',
@@ -170,7 +169,7 @@
             dataIndex: 'tPlayersMax'
            },
 		   {
-            title: '球队介绍 招募说明',
+            title: '球队介绍',
             align:"center",
             dataIndex: 'tIntroduce'
            },
@@ -192,22 +191,19 @@
 		   {
             title: '球队创建人',
             align:"center",
-            dataIndex: 'uId'
+            dataIndex: 'userName'
            },
 		   {
-            title: '所属省--对应地区表主键',
+            title: '地址',
             align:"center",
-            dataIndex: 'tProvince'
-           },
-		   {
-            title: '所属市--对应地区表主键',
-            align:"center",
-            dataIndex: 'tCity'
-           },
-		   {
-            title: '所属区--对应地区表主键',
-            align:"center",
-            dataIndex: 'tDistrict'
+            dataIndex: 'tDistrict',
+            customRender: (text, record, index) => {
+              let res =''
+              if(text != null){
+                res = this.areaData.getText(text.toString())
+              }
+              return res
+            }
            },
 		   {
             title: '建队时间',
@@ -215,29 +211,9 @@
             dataIndex: 'tCreateteamtime'
            },
 		   {
-            title: '队长 球员表ID  p_id',
+            title: '队长姓名',
             align:"center",
-            dataIndex: 'tCaptain'
-           },
-		   {
-            title: '纪录创建时间',
-            align:"center",
-            dataIndex: 'createtime'
-           },
-		   {
-            title: '纪录修改时间',
-            align:"center",
-            dataIndex: 'updatetime'
-           },
-		   {
-            title: '逻辑删除',
-            align:"center",
-            dataIndex: 'isDelete'
-           },
-		   {
-            title: '版本号（用作乐观锁）',
-            align:"center",
-            dataIndex: 'version'
+            dataIndex: 'captainName'
            },
           {
             title: '操作',
@@ -246,6 +222,9 @@
             scopedSlots: { customRender: 'action' },
           }
         ],
+
+        sportsTypeList:{},
+        areaData:'',
 		url: {
           list: "/plalyball/playballTeam/list",
           delete: "/plalyball/playballTeam/delete",
@@ -260,8 +239,27 @@
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
     }
   },
+    created() {
+      this.initAreaData();
+    },
     methods: {
-     
+      initDictConfig() {
+        getSportsTypeList('').then((res)=>{
+          if(res.success){
+            this.sportsTypeList = res.result.records;
+          }
+        })
+      },
+
+      initAreaData(){
+        if(!this.areaData){
+          this.areaData = new Area();
+        }
+      },
+
+      getAvatarView: function (avatar) {
+        return getFileAccessHttpUrl(avatar)
+      },
     }
   }
 </script>

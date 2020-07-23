@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.jeecg.modules.plalyball.mapper.PlayballTeamMapper">
-
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballTeamMapper">
+	<!-- SQL片段：getTeamList 的 FROM 和 WHERE 部分 -->
+	<sql id="getTeamListSql">
+		FROM playball.playball_team pt
+		LEFT JOIN playball.playball_sports_type pst ON pst.id = pt.st_id
+		LEFT JOIN playball.playball_users  pu ON pu.u_id = pt.u_id
+		LEFT JOIN playball.playball_users puex ON puex.u_id = pt.t_captain
+		WHERE
+		1=1
+        <if test="team.tName != null">
+     		and pt.t_name LIKE concat(concat('%',#{team.tName}),'%')  
+        </if>
+        <if test="team.stId != null">
+     		and pt.st_id = #{team.stId}
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getTeamList" resultType="org.jeecg.common.playball.vo.PlayballTeamModel">
+		SELECT
+			pt.team_id AS teamId,
+			pt.t_name AS tName,
+			pt.t_image AS tImage,
+			pt.t_unitname AS tUnitname,
+			pt.st_id AS stId,
+			pt.t_players_total AS tPlayersTotal,
+			pt.t_players_max AS tPlayersMax,
+			pt.t_introduce AS tIntroduce,
+			pt.t_win_total AS tWinTotal,
+			pt.t_divide_total AS tDivideTotal,
+			pt.t_lost_total AS tLostTotal,
+			pt.u_id AS uId,
+			pt.t_province AS tProvince,
+			pt.t_city AS tCity,
+			pt.t_district AS tDistrict,
+			pt.t_createTeamTime AS tCreateteamtime,
+			pt.t_captain AS tCaptain,
+			pst.sports_name AS sportsName,
+			pu.u_nickName AS userName,
+			puex.u_nickName AS captainName
+			<include refid="getTeamListSql"/>
+	</select>
+	
+	<!-- 查询总数-->
+	<select id="getTeamListTotal"  resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getTeamListSql"/>
+	</select>
 </mapper>

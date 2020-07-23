@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
-import org.jeecg.modules.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;

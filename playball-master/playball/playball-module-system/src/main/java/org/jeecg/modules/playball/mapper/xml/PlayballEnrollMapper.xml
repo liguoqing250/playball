@@ -36,7 +36,7 @@
 	</select>
 	
 	<!--  通过赛事id获取报名队伍 -->
-	<select id="getEnrollTeamByGamesId" resultType="org.jeecg.modules.playball.entity.PlayballTeam">
+	<select id="getEnrollTeamByGamesId" resultType="org.jeecg.common.playball.entity.PlayballTeam">
 		SELECT * FROM playball_team pt, playball_enroll pe where
 		pt.team_id = pe.team_id and  pe.games_id = #{gamesId}
 	</select>
