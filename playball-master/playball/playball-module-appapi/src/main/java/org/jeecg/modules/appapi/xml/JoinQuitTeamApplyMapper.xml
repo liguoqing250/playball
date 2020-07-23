@@ -63,7 +63,7 @@
     </select>
 
     <!--根据ID查询-->
-    <select id="queryJoinQuitTeamApply" parameterType="java.lang.Integer" resultType="org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo">
+    <select id="queryJoinQuitTeamApply" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo">
         SELECT
 	pu.u_id,
 	pu.u_name name,
@@ -76,7 +76,10 @@ FROM
 	playball_join_quit_team_apply pjqt
 	LEFT JOIN playball_users pu ON pu.u_id = pjqt.u_id
 WHERE
-	  pjqt.jqta_result=0 and pjqt.jqta_type =#{jqtaType,jdbcType=INTEGER}
+	  pjqt.jqta_result=0 and pjqt.jqta_type =#{params.jqtaType,jdbcType=INTEGER}
+	  <if test="params.playerName!='' and params.playerName!=null">
+          and (pu.u_name like concat(concat('%',#{params.playerName}),'%') or  pu.u_nickName like concat(concat('%',#{params.playerName}),'%') )
+      </if>
     </select>
     <!--根据ID查询-->
     <select id="selectById" parameterType="java.lang.Integer" resultMap="JoinQuitTeamApplyResultMap">

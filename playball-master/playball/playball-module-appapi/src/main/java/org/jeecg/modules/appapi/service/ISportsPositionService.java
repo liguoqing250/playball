@@ -11,6 +11,6 @@ import java.util.List;
  * @Date:   2020-07-21
  * @Version: V1.0
  */
-public interface ISoortsPositionService extends IService<SportsPosition> {
+public interface ISportsPositionService extends IService<SportsPosition> {
     List<SportsPosition> queryByStId(Integer stId);
 }

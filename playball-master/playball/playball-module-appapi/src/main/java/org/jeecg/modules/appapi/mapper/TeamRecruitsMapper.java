@@ -19,4 +19,6 @@ public interface TeamRecruitsMapper extends BaseMapper<TeamRecruits> {
     List<TeamRecruits> selectByPage(@Param("params")Map<String, Object> params);
 
     int getCount(@Param("params") Map<String, Object> params);
+
+    void removeRecruitsByTeam(Integer team_id);
 }

@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Date:   2020-07-21
  * @Version: V1.0
  */
-public interface SoortsPositionMapper extends BaseMapper<SportsPosition> {
+public interface SportsPositionMapper extends BaseMapper<SportsPosition> {
 
 }

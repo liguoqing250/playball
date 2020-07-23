@@ -3,8 +3,8 @@ package org.jeecg.modules.appapi.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
@@ -12,7 +12,6 @@ import org.jeecg.modules.appapi.mapper.JoinQuitTeamApplyMapper;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -80,8 +79,11 @@ public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
     }
 
     @Override
-    public List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType) {
-        return mapper.queryJoinQuitTeamApply(jqtaType);
+    public List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType, String playerName) {
+        Map<String,Object> map=new HashedMap();
+        map.put("jqtaType",jqtaType);
+        map.put("playerName",playerName);
+        return mapper.queryJoinQuitTeamApply(map);
     }
 
 

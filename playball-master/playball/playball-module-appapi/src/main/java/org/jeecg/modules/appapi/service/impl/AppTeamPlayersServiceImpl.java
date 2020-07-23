@@ -1,11 +1,16 @@
 package org.jeecg.modules.appapi.service.impl;
 
 
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
+import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.jeecg.modules.appapi.mapper.AppTeamPlayersMapper;
 import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -32,5 +37,21 @@ public class AppTeamPlayersServiceImpl implements AppTeamPlayersService {
     @Override
     public AppTeamPlayers selectById(int id) {
         return appTeamPlayersMapper.selectById(id);
+    }
+
+    @Override
+    public List<AppTeamPlayersVo> selectByTeamId(int id,String playerName) {
+        Map<String,Object> map =new HashedMap();
+        map.put("id",id);
+        map.put("playerName",playerName);
+        return appTeamPlayersMapper.selectByTeamId(map);
+    }
+
+    @Override
+    public void kickPlayer(Integer uid,Integer teamId) {
+        AppTeamPlayers appTeamPlayers=new AppTeamPlayers();
+        appTeamPlayers.setTeam_id(teamId);
+        appTeamPlayers.setU_id(uid);
+        appTeamPlayersMapper.kickPlayer(appTeamPlayers);
     }
 }

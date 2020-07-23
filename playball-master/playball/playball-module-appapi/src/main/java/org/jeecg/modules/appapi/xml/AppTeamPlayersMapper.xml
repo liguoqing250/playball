@@ -20,6 +20,33 @@
         tp_id,u_id,tp_joinTime,tp_quitTime,team_id,tp_clothes_number,tp_position,createTime,updateTime,is_delete,version
     </sql>
 
+    <!--根据ID查询-->
+    <select id="selectByTeamId" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo">
+        SELECT
+	    ptp.tp_id tpId,
+	    ptp.u_id uId,
+	    ptp.tp_joinTime tpJoinTime,
+	    ptp.tp_quitTime tpQuitTime,
+	    ptp.team_id teamId,
+	    ptp.tp_clothes_number tpClothesNumber,
+	    ptp.tp_position tpPosition,
+	    psp.text positionNmame,
+	    pu.u_name uName,
+	    pu.u_nickName uNickName,
+	    pu.u_headImage uHeadImage
+	    FROM
+	    playball_team_players ptp
+	    LEFT JOIN playball_users pu ON pu.u_id = ptp.u_id
+	    LEFT JOIN playball_sports_position psp ON psp.id=ptp.tp_position
+        WHERE
+	    ptp.team_id = #{params.id,jdbcType=INTEGER}
+	    <if test="params.playerName!='' and params.playerName!=null ">
+           and (pu.u_name like concat(concat('%',#{params.playerName}),'%') or  pu.u_nickName like concat(concat('%',#{params.playerName}),'%') )
+        </if>
+    </select>
+
+
+
     <!--条件分页查询-->
     <select id="selectByPage" parameterType="java.util.Map" resultMap="AppTeamPlayersResultMap">
         select
@@ -77,7 +104,15 @@
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from playball_team_players where id = #{id,jdbcType=INTEGER}
+        delete from playball_team_players where tp_id = #{tp_id,jdbcType=INTEGER}
+    </delete>
+    <!--删 根据ID-->
+    <delete id="removePlayer" parameterType="java.lang.Integer">
+       delete from playball_team_players where team_id = #{team_id,jdbcType=INTEGER}
+    </delete>
+    <!--kickPlayer-->
+    <delete id="kickPlayer" parameterType="org.jeecg.modules.appapi.entity.AppTeamPlayers">
+        delete from playball_team_players where u_id = #{u_id,jdbcType=INTEGER} and team_id = #{team_id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="tp_id" parameterType="org.jeecg.modules.appapi.entity.AppTeamPlayers">

@@ -31,4 +31,5 @@ public interface AppTeamMapper {
     List<AppTeam> queryTeamByEnroll(Integer id);
 
     List<AppTeam> queryTeamByGameid(Integer id);
+
 }

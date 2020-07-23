@@ -2,7 +2,6 @@ package org.jeecg.modules.appapi.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 
@@ -24,5 +23,5 @@ public interface JoinQuitTeamApplyService {
     //多条件分页查询
     Page selectByPage(Map<String,Object> params);
 
-    List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType);
+    List<JQTeamApplyVo> queryJoinQuitTeamApply(Integer jqtaType,String playerName);
 }

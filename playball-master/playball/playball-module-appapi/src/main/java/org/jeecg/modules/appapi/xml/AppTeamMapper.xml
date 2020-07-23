@@ -99,8 +99,7 @@
     </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from playball_team
- where id = #{id,jdbcType=INTEGER}
+        delete from playball_team where team_id = #{team_id,jdbcType=INTEGER}
     </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="team_id" parameterType="org.jeecg.modules.appapi.entity.AppTeam">

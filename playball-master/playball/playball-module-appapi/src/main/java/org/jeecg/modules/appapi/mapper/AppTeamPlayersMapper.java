@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
+import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,10 @@ public interface AppTeamPlayersMapper {
     int getCount(@Param("params") Map<String, Object> params);
 
     AppTeamPlayers selectByUserId(int userId);
+
+    List<AppTeamPlayersVo> selectByTeamId(@Param("params") Map<String, Object> params);
+
+    void kickPlayer(AppTeamPlayers appTeamPlayers);
+
+    void removePlayer(Integer team_id);
 }

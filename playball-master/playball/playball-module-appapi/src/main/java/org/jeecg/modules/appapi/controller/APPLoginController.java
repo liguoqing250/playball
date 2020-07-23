@@ -57,6 +57,7 @@ public class APPLoginController {
             }else{
                 result.error500(map.get("msg").toString());
             }
+            System.out.println(map.get("msg").toString());
         }catch (Exception e){
             e.printStackTrace();
             result.error500("请求失败");

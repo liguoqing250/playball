@@ -4,6 +4,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.jeecg.modules.shiro.authc.JwtToken;
@@ -11,6 +13,10 @@ import org.jeecg.modules.shiro.vo.DefContants;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * @Description: 鉴权登录拦截器
@@ -68,6 +74,24 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 			httpServletResponse.setStatus(HttpStatus.OK.value());
 			return false;
 		}
-		return super.preHandle(request, response);
+		try{
+			return super.preHandle(request, response);
+		}catch (Exception e){
+			httpServletResponse.setStatus(HttpStatus.OK.value());
+			JSONObject data = new JSONObject();
+			data.put("code", 401);
+			data.put("message", "Token失效，请重新登录");
+			data.put("success", false);
+			data.put("timestamp", new Date().getTime());
+			/**获取OutputStream输出流*/
+			OutputStream outputStream = response.getOutputStream();
+			/**设置json返回格式*/
+			((HttpServletResponse) response).setHeader("content-type", "application/json");
+			/**将字符转换成字节数组，指定以UTF-8编码进行转换*/
+			byte[] dataByteArr = data.toJSONString().getBytes(StandardCharsets.UTF_8);
+			/**使用OutputStream流向客户端输出字节数组*/
+			outputStream.write(dataByteArr);
+			return false;
+		}
 	}
 }

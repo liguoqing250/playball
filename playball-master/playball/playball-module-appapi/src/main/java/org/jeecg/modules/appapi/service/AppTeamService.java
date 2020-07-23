@@ -36,4 +36,6 @@ public interface AppTeamService  {
     List<AppTeam> queryTeamByGameid(Integer id);
 
     List<AppTeam> queryTeamByEnroll(Integer id);
+
+    void disbandTeam();
 }

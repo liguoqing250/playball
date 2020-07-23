@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.appapi.entity.SportsPosition;
-import org.jeecg.modules.appapi.service.ISoortsPositionService;
+import org.jeecg.modules.appapi.service.ISportsPositionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,9 +30,9 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags="运动员位置")
 @RestController
 @RequestMapping("/SoortsPosition")
-public class SportsPositionController extends JeecgController<SportsPosition, ISoortsPositionService> {
+public class SportsPositionController extends JeecgController<SportsPosition, ISportsPositionService> {
 	@Autowired
-	private ISoortsPositionService soortsPositionService;
+	private ISportsPositionService soortsPositionService;
 
 	 /**
 	  * 通过st_id查询

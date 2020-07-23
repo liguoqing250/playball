@@ -7,6 +7,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
+import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.AppTeamService;
@@ -31,12 +32,26 @@ public class AppTeamController {
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
 
+
     //查询入队、退队申请
-    @PostMapping(value = "/queryJoinQuitTeamApply")
-    public Result<JSONObject> queryJoinQuitTeamApply(@RequestParam Integer jqtaType) {
+    @PostMapping(value = "/disbandTeam")
+    public Result<JSONObject> disbandTeam() {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
-            List<JQTeamApplyVo> list=joinQuitTeamApplyService.queryJoinQuitTeamApply(jqtaType);
+           appTeamService.disbandTeam();
+            result.success("操作完成");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("操作失败");
+        }
+        return result;
+    }
+    //查询入队、退队申请
+    @PostMapping(value = "/queryJoinQuitTeamApply")
+    public Result<JSONObject> queryJoinQuitTeamApply(@RequestParam Integer jqtaType,@RequestParam String playerName) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            List<JQTeamApplyVo> list=joinQuitTeamApplyService.queryJoinQuitTeamApply(jqtaType,playerName);
             JSONObject obj = new JSONObject();
             obj.put("data",list);
             result.success("查询成功");
@@ -60,6 +75,19 @@ public class AppTeamController {
         }catch (Exception e){
             e.printStackTrace();
             result.error500("查询失败");
+        }
+        return result;
+    }
+    //update
+    @PostMapping(value = "/update")
+    public Result<JSONObject> update(@RequestBody AppTeam appTeam) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            appTeamService.update(appTeam);
+            result.success("编辑成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("编辑失败");
         }
         return result;
     }
@@ -207,6 +235,35 @@ public class AppTeamController {
             Page<AppTeam> page=appTeamService.selectByPage(params);
             obj.put("page",page);
             result.setResult(obj);
+            result.success("请求成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+        return result;
+    }
+    //查询球员
+    @PostMapping(value = "/queryMyTeamPlayers")
+    public Result<JSONObject> queryMyTeamPlayers(@RequestParam Integer id,@RequestParam String playerName) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            JSONObject obj = new JSONObject();
+            List<AppTeamPlayersVo> players=appTeamPlayersService.selectByTeamId(id,playerName);
+            obj.put("players",players);
+            result.setResult(obj);
+            result.success("请求成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+        return result;
+    }
+    //转让队长
+    @PostMapping(value = "/kickPlayer")
+    public Result<JSONObject> changeLeader(@RequestParam Integer uId,@RequestParam Integer teamId) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            appTeamPlayersService.kickPlayer(uId,teamId);
             result.success("请求成功");
         }catch (Exception e){
             e.printStackTrace();

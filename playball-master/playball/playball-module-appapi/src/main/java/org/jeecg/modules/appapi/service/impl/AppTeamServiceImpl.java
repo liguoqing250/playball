@@ -3,12 +3,14 @@ package org.jeecg.modules.appapi.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.mapper.AppTeamPlayersMapper;
+import org.jeecg.modules.appapi.mapper.TeamRecruitsMapper;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ import java.util.Map;
 @Service
 public class AppTeamServiceImpl  implements AppTeamService {
 
+    @Autowired
+    TeamRecruitsMapper teamRecruitsMapper;
     @Autowired
     AppTeamMapper appTeamMapper;
 
@@ -139,6 +143,20 @@ public class AppTeamServiceImpl  implements AppTeamService {
     @Override
     public List<AppTeam> queryTeamByEnroll(Integer id) {
         return appTeamMapper.queryTeamByEnroll(id);
+    }
+
+    @Override
+    public void disbandTeam() {
+        //获取当前用户信息
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token=request.getHeader("X-Access-Token");
+        AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+        AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
+        appTeamMapper.deleteById(appTeam.getTeam_id());
+        appTeamPlayersMapper.removePlayer(appTeam.getTeam_id());
+        Map<String,Object> map=new HashedMap();
+        map.put("team_id",appTeam.getTeam_id());
+        teamRecruitsMapper.deleteByMap(map);
     }
 
 }
