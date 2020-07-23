@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.jeecg.common.playball.entity.*;
 import org.jeecg.common.playball.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
@@ -20,5 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface IPlayballBaseAPI {
 	
 	public List<PlayballSportsPositionModel> getPositionListBySportsId(Integer sportsId);
+	
+	public void addFeedback(PlayballFeedback feedback);
 	
 }

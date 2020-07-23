@@ -28,6 +28,7 @@ import org.jeecg.common.constant.DataBaseConstant;
 import org.jeecg.common.constant.WebsocketConst;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.playball.api.IPlayballBaseAPI;
+import org.jeecg.common.playball.entity.PlayballFeedback;
 import org.jeecg.common.playball.vo.*;
 import org.jeecg.common.util.*;
 import org.jeecg.common.util.oss.OssBootUtil;
@@ -36,6 +37,8 @@ import org.jeecg.modules.playball.entity.*;
 import org.jeecg.modules.playball.mapper.*;
 import org.jeecg.modules.playball.service.IPlayballSportTypeService;
 import org.jeecg.modules.playball.service.IPlayballSportsPositionService;
+import org.jeecg.modules.playball.service.IPlayballFeedbackService;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -59,6 +62,9 @@ public class PlayballBaseApiImpl implements IPlayballBaseAPI {
 	
 	@Autowired
 	private IPlayballSportsPositionService positionService;
+	
+	@Autowired
+	private IPlayballFeedbackService backService;
 	//@Resource
 	//private SysLogMapper sysLogMapper;
 	
@@ -66,4 +72,7 @@ public class PlayballBaseApiImpl implements IPlayballBaseAPI {
 		return positionService.getPositionListBySportsId(sportsId);
 	}
 	
+	public void addFeedback(PlayballFeedback feedback) {
+		backService.save(feedback);
+	}
 }
