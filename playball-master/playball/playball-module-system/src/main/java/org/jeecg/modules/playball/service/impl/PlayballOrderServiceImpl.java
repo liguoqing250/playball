@@ -24,7 +24,8 @@ public class PlayballOrderServiceImpl extends ServiceImpl<PlayballOrderMapper, P
 	
 	@Autowired
 	private PlayballOrderMapper orderMapper;
-
+	
+	@Override
 	public IPage<PlayballOrderModel> queryOrderList(IPage page, PlayballOrderModel playballOrderModel){
 		List<PlayballOrderModel> list = orderMapper.getOrderList(page,playballOrderModel);
 		Integer total = orderMapper.getOrderListTotal(playballOrderModel);

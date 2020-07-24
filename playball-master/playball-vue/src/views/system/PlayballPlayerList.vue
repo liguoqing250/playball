@@ -6,11 +6,21 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="赛事名称">
-              <a-input placeholder="请输入赛事名称" v-model="queryParam.gamesName"></a-input>
-            </a-form-item>
-          </a-col>
+        <a-col :xl="6" :lg="7" :md="8" :sm="24">
+          <a-form-item label="球员昵称">
+            <a-input placeholder="请输入球员昵称" v-model="queryParam.nickName"></a-input>
+          </a-form-item>
+        </a-col>
+        <a-col :xl="6" :lg="7" :md="8" :sm="24">
+          <a-form-item label="球队名称">
+            <a-input placeholder="请输入球队名称" v-model="queryParam.teamName"></a-input>
+          </a-form-item>
+        </a-col>
+        <a-col :xl="6" :lg="7" :md="8" :sm="24">
+          <a-form-item label="场上位置">
+            <a-input placeholder="请输入场上位置" v-model="queryParam.positionName"></a-input>
+          </a-form-item>
+        </a-col>
 
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -24,12 +34,9 @@
     </div>
 
     <!-- 操作按钮区域 -->
-    <!--
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('赛程表')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+      <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
+      <a-button type="primary" icon="download" @click="handleExportXls('队员管理')">导出</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
@@ -37,7 +44,6 @@
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
     </div>
-    -->
 
     <!-- table区域-begin -->
     <div>
@@ -50,7 +56,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="id"
+        rowKey="tpId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -61,6 +67,18 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
+
+          <a-divider type="vertical" />
+          <a-dropdown>
+            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                  <a>删除</a>
+                </a-popconfirm>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </span>
 
       </a-table>
@@ -68,24 +86,24 @@
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
-    <playballSchedule-modal ref="modalForm" @ok="modalFormOk"></playballSchedule-modal>
+    <playballPlayer-modal ref="modalForm" @ok="modalFormOk"></playballPlayer-modal>
   </a-card>
 </template>
 
 <script>
   import '@/assets/less/TableExpand.less'
-  import PlayballScheduleModal from './modules/PlayballScheduleModal'
+  import PlayballPlayerModal from './modules/PlayballPlayerModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
-    name: "PlayballScheduleList",
+    name: "PlayballPlayerList",
     mixins:[JeecgListMixin],
     components: {
-      PlayballScheduleModal
+      PlayballPlayerModal
     },
     data () {
       return {
-        description: '赛程表管理页面',
+        description: '队员管理管理页面',
         // 表头
         columns: [
           {
@@ -98,62 +116,36 @@
               return parseInt(index)+1;
             }
            },
+
 		   {
-            title: '赛事名称',
+            title: '球员昵称',
             align:"center",
-            dataIndex: 'gamesName'
+            dataIndex: 'nickName'
            },
 		   {
-            title: '球队名称',
+            title: '球员加入时间',
+            align:"center",
+            dataIndex: 'tpJointime'
+           },
+		   {
+            title: '退队时间',
+            align:"center",
+            dataIndex: 'tpQuittime'
+           },
+		   {
+            title: '所属球队',
             align:"center",
             dataIndex: 'teamName'
            },
-       {
-            title: '对阵球队',
-            align:"center",
-            dataIndex: '',
-            customRender:function (t,r,index) {
-              if(t.opponentId != null){
-                return t.opponentName
-              }else{
-                return "轮空"
-              }
-            }
-          },
-       {
-            title: '比分',
-            align:"center",
-            dataIndex: '',
-            customRender:function (t,r,index) {
-              if(t.opponentId != null){
-                return t.enterBall+":"+t.lostBall;
-              }else{
-                return "3:0"
-              }
-
-            }
-          },
-          {
-            title: '状态',
-            align:"center",
-            dataIndex: 'gameStatus',
-            customRender:function (text) {
-              if(text==1){
-                return "已赛";
-              }else{
-                return "未赛";
-              }
-            }
-          },
 		   {
-            title: '比赛日期',
+            title: '球衣号码',
             align:"center",
-            dataIndex: 'matchTime'
+            dataIndex: 'tpClothesNumber'
            },
 		   {
-            title: '属于分组',
+            title: '球场位置',
             align:"center",
-            dataIndex: 'groupId'
+            dataIndex: 'positionName'
            },
           {
             title: '操作',
@@ -163,11 +155,11 @@
           }
         ],
 		url: {
-          list: "/playball/playballSchedule/list",
-          delete: "/playball/playballSchedule/delete",
-          deleteBatch: "/playball/playballSchedule/deleteBatch",
-          exportXlsUrl: "playball/playballSchedule/exportXls",
-          importExcelUrl: "playball/playballSchedule/importExcel",
+          list: "/playball/playballPlayer/list",
+          delete: "/playball/playballPlayer/delete",
+          deleteBatch: "/playball/playballPlayer/deleteBatch",
+          exportXlsUrl: "playball/playballPlayer/exportXls",
+          importExcelUrl: "playball/playballPlayer/importExcel",
        },
     }
   },

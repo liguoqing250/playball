@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballPlayerMapper">
+	<!-- SQL片段 的 FROM 和 WHERE 部分 -->
+	<sql id="getPlayerListSql">
+		from playball.playball_team_players ptp
+		left join playball.playball_users pu on ptp.u_id = pu.u_id
+		left join playball.playball_team pt on ptp.team_id = pt.team_id
+		left join playball.playball_sports_position psp on ptp.tp_position = psp.id
+		WHERE
+		1=1
+        <if test="playerModel.teamName != null">
+     		and pt.t_name LIKE concat(concat('%',#{playerModel.teamName}),'%')  
+        </if>
+        <if test="playerModel.nickName != null">
+     		and pu.u_nickName  LIKE concat(concat('%',#{playerModel.nickName}),'%') 
+        </if>
+        <if test="playerModel.positionName != null">
+     		and psp.text  LIKE concat(concat('%',#{playerModel.positionName}),'%') 
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getPlayerList" parameterType="java.util.Map" resultType="org.jeecg.common.playball.vo.PlayballPlayerModel">
+		SELECT
+			ptp.tp_id AS tpId,
+			ptp.u_id AS uid,
+			ptp.tp_joinTime AS tpJointime,
+			ptp.tp_quitTime AS tpQuittime,
+			ptp.team_id AS teamId,
+			ptp.tp_clothes_number AS tpClothesNumber,
+			ptp.tp_position AS tpPosition,
+			ptp.ability_value AS abilityValue,
+			ptp.createTime AS createtime,
+			ptp.updateTime AS updatetime,
+			ptp.is_delete AS isDelete,
+			ptp.version AS version,
+			
+			pu.u_name AS userName,
+			pu.u_nickName AS nickName,
+			pt.t_name AS teamName,
+			psp.text AS positionName,
+			pt.st_id AS sportsId
+			<include refid="getPlayerListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getPlayerListTotal"  resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getPlayerListSql"/>
+	</select>
+	
+	
+</mapper>

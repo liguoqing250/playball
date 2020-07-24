@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballAppUserMapper">
+	
+	<sql id="getAppUserListSql">
+		FROM playball.playball_users
+		where 1=1
+        <if test="playballAppUser.uNickname != null">
+     		and u_nickName LIKE concat(concat('%',#{playballAppUser.uNickname}),'%')  
+        </if>
+        <if test="playballAppUser.uPhonenumber != null">
+     		and u_phoneNumber = #{playballAppUser.uPhonenumber}
+        </if>
+	</sql>
+	
+	<!-- 获取场地信息 -->
+	<select id="getAppUserList" resultType="org.jeecg.common.playball.entity.PlayballAppUser">
+		SELECT
+			 u_id AS uId,
+	       u_name AS uName,
+	   u_nickName AS  	   uNickname,
+	u_phoneNumber AS  	uPhonenumber,
+	  u_passworld AS  	  uPassworld,
+	        u_sex AS  	        uSex,
+	        u_age AS  	        uAge,
+	     u_height AS  	     uHeight,
+	     u_weight AS  	     uWeight,
+	  u_headimage AS  	  uHeadimage,
+	u_registerWay AS  	uRegisterway,
+	    wx_openid AS  	    wxOpenid,
+	    qq_openid AS  	    qqOpenid,
+	   u_alipayid AS  	   uAlipayid,
+	     u_idCard AS  	     uIdcard,
+	   u_province AS  	   uProvince,
+	       u_city AS  	       uCity,
+	   u_district AS  	   uDistrict,
+	    u_address AS  	    uAddress,
+  u_lastlogin_time AS    uLastloginTime,
+	    u_profile AS  	    uProfile,
+	u_invited_user AS  	uInvitedUser,
+	  createTime AS  	  createtime,
+	  updateTime AS  	  updatetime,
+	   is_delete  AS  	   isDelete,
+	   version   AS  	   version
+		<include refid="getAppUserListSql"/>
+	</select>
+	
+	<!-- 查 的总数-->
+	<select id="getAppUserListTotal" resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getAppUserListSql"/>
+	</select>
+	
+</mapper>
