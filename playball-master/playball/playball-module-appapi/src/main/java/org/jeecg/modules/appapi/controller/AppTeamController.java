@@ -48,7 +48,7 @@ public class AppTeamController {
     }
     //查询入队、退队申请
     @PostMapping(value = "/queryJoinQuitTeamApply")
-    public Result<JSONObject> queryJoinQuitTeamApply(@RequestParam Integer jqtaType,@RequestParam String playerName) {
+    public Result<JSONObject> queryJoinQuitTeamApply( Integer jqtaType, String playerName) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             List<JQTeamApplyVo> list=joinQuitTeamApplyService.queryJoinQuitTeamApply(jqtaType,playerName);

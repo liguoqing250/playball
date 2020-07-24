@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballGame;
-import org.jeecg.modules.playball.entity.PlayballTeam;
 import org.jeecg.modules.playball.vo.PlayballGamesPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

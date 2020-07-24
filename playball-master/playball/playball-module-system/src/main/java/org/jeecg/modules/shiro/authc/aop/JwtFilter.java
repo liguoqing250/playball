@@ -74,24 +74,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 			httpServletResponse.setStatus(HttpStatus.OK.value());
 			return false;
 		}
-		try{
-			return super.preHandle(request, response);
-		}catch (Exception e){
-			httpServletResponse.setStatus(HttpStatus.OK.value());
-			JSONObject data = new JSONObject();
-			data.put("code", 401);
-			data.put("message", "Token失效，请重新登录");
-			data.put("success", false);
-			data.put("timestamp", new Date().getTime());
-			/**获取OutputStream输出流*/
-			OutputStream outputStream = response.getOutputStream();
-			/**设置json返回格式*/
-			((HttpServletResponse) response).setHeader("content-type", "application/json");
-			/**将字符转换成字节数组，指定以UTF-8编码进行转换*/
-			byte[] dataByteArr = data.toJSONString().getBytes(StandardCharsets.UTF_8);
-			/**使用OutputStream流向客户端输出字节数组*/
-			outputStream.write(dataByteArr);
-			return false;
-		}
+		return super.preHandle(request, response);
+		
 	}
 }
