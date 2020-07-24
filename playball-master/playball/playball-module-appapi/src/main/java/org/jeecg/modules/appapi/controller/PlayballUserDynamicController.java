@@ -1,16 +1,20 @@
 package org.jeecg.modules.appapi.controller;
 
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.PlayballUserDynamic;
-import org.jeecg.modules.appapi.entity.PlayballUsersBalance;
+import org.jeecg.modules.appapi.entity.bo.PlayballUserDynamicBo;
+import org.jeecg.modules.appapi.entity.vo.PlayballUserDynamicVo;
 import org.jeecg.modules.appapi.mapper.PlayballUserDynamicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 /**
  * <p>
@@ -37,6 +41,17 @@ public class PlayballUserDynamicController {
 			return Result.ok("添加成功");
 		}
 		return Result.error(0, "添加成功");
+	}
+	
+	//查询用户动态发布信息列表
+	@GetMapping("/getUserDynamic")
+	public Result<?> getUserDynamic(PlayballUserDynamicVo u_dynVo){
+		System.err.println("查询用户动态发布信息" + u_dynVo);
+		//设置分页数据
+		IPage<PlayballUserDynamic> page = new Page<PlayballUserDynamic>(u_dynVo.getPage(), u_dynVo.getLimit());
+		
+		IPage<PlayballUserDynamicBo> selectPage = mapper.selectDynList(page, null);
+		return Result.ok(selectPage);
 	}
 }
 

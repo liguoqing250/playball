@@ -39,11 +39,11 @@ public class PlayballUserDynamic implements Serializable {
     @ApiModelProperty(value = "发布动态内容")
     private String udyContent;
 
-    @ApiModelProperty(value = "发布动态图片（最大支持 9 张图片）")
+    @ApiModelProperty(value = "发布动态图片（最大支持 9 张图片）发布动态视频（最大支持 1 个视频）")
     private String udyResources;
 
-    @ApiModelProperty(value = "发布动态视频（最大支持 1 个视频）")
-    private String udyVideo;
+    @ApiModelProperty(value = "动态资源类型：1 图片 2视频")
+    private Integer udyResType;
 
     @ApiModelProperty(value = "发布动态信息位置（系统自动获取）")
     private String udyPosition;

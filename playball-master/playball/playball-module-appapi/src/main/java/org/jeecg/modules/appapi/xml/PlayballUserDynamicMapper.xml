@@ -8,7 +8,7 @@
         <result column="udy_user_id" property="udyUserId" />
         <result column="udy_content" property="udyContent" />
         <result column="udy_resources" property="udyResources" />
-        <result column="udy_video" property="udyVideo" />
+        <result column="udy_res_type" property="udyResType" />
         <result column="udy_position" property="udyPosition" />
         <result column="udy_visible" property="udyVisible" />
         <result column="udy_draft" property="udyDraft" />
@@ -16,6 +16,31 @@
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
         <result column="version" property="version" />
+    </resultMap>
+    
+    <select id="selectDynList" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserDynamicVo" resultMap="ResultMap">
+    	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
+		INNER JOIN playball_users u
+		ON d.udy_user_id = u.u_id
+    </select>
+    
+    <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserDynamicBo">
+        <id column="udy_id" property="udyId" />
+        <result column="udy_user_id" property="udyUserId" />
+        <result column="udy_content" property="udyContent" />
+        <result column="udy_resources" property="udyResources" />
+        <result column="udy_res_type" property="udyResType" />
+        <result column="udy_position" property="udyPosition" />
+        <result column="udy_visible" property="udyVisible" />
+        <result column="udy_draft" property="udyDraft" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+        
+        <result column="u_id" property="uId" />
+        <result column="u_headImage" property="uHeadImage" />
+        <result column="u_nickName" property="uNickName" />
     </resultMap>
 
 </mapper>

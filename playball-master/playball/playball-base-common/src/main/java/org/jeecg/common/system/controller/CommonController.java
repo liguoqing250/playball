@@ -77,6 +77,7 @@ public class CommonController {
 		String bizPath = request.getParameter("biz");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		MultipartFile file = multipartRequest.getFile("file");// 获取上传文件对象
+		System.err.println("file" + file.getName());
 		if(oConvertUtils.isEmpty(bizPath)){
 			if(CommonConstant.UPLOAD_TYPE_OSS.equals(uploadType)){
 				//未指定目录，则用阿里云默认目录 upload
