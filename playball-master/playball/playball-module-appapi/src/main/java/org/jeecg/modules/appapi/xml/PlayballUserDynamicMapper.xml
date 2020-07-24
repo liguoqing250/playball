@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.PlayballUserDynamicMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.appapi.entity.PlayballUserDynamic">
+        <id column="udy_id" property="udyId" />
+        <result column="udy_user_id" property="udyUserId" />
+        <result column="udy_content" property="udyContent" />
+        <result column="udy_resources" property="udyResources" />
+        <result column="udy_video" property="udyVideo" />
+        <result column="udy_position" property="udyPosition" />
+        <result column="udy_visible" property="udyVisible" />
+        <result column="udy_draft" property="udyDraft" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+    </resultMap>
+
+</mapper>
