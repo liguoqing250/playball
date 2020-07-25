@@ -47,24 +47,25 @@
         <a-form-item label="职务" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <j-select-position placeholder="请选择职务" :multiple="false" v-decorator="['post', {}]"/>
         </a-form-item>
+        -->
 
         <a-form-item label="角色分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!roleDisabled" >
           <a-select
-            mode="multiple"
             style="width: 100%"
             placeholder="请选择用户角色"
             optionFilterProp = "children"
             v-model="selectedRole"
+            @change="handleChange"
             :getPopupContainer= "(target) => target.parentNode">
             <a-select-option v-for="(role,roleindex) in roleList" :key="roleindex.toString()" :value="role.id">
               {{ role.roleName }}
             </a-select-option>
           </a-select>
         </a-form-item>
-        -->
 
-        <!--部门分配-->
-        <a-form-item label="场馆分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!departDisabled">
+
+        <!--部门分配--v-show="!departDisabled"-->
+        <a-form-item label="场馆分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="bDepartShow" >
           <a-input-search
             placeholder="点击选择场馆"
             v-model="checkedDepartNameString"
@@ -257,6 +258,7 @@
         headers:{},
         form:this.$form.createForm(this),
         picUrl: "",
+        bDepartShow:true,
         url: {
           fileUpload: window._CONFIG['domianURL']+"/sys/common/upload",
           userWithDepart: "/sys/user/userDepartList", // 引入为指定用户查看部门信息需要的url
@@ -303,6 +305,16 @@
         queryUserRole({userid:userid}).then((res)=>{
           if(res.success){
             this.selectedRole = res.result;
+            for(var index in this.roleList){
+              console.log("----3---3-3",this.roleList[index].id)
+              console.log("----3---3-3",this.roleList[index].roleName)
+              console.log("----3---3-3",this.selectedRole)
+              if(this.roleList[index].id == this.selectedRole && this.roleList[index].roleName=== "管理员"){
+                this.bDepartShow = false
+                break
+              }
+            }
+            console.log(this.bDepartShow)
           }else{
             console.log(res.message);
           }
@@ -324,11 +336,13 @@
         this.edit({activitiSync:'1'});
       },
       edit (record) {
+        console.log("kajshfasfasfjlajsldfa")
         this.resetScreenSize(); // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
         let that = this;
         that.initialRoleList();
         that.checkedDepartNameString = "";
         that.form.resetFields();
+        console.log("-------",record)
         if(record.hasOwnProperty("id")){
           that.loadUserRoles(record.id);
           setTimeout(() => {
@@ -339,7 +353,8 @@
         that.visible = true;
         that.model = Object.assign({}, record);
         that.$nextTick(() => {
-          that.form.setFieldsValue(pick(this.model,'username','sex','realname','email','phone','activitiSync','workNo','telephone','post'))
+          //that.form.setFieldsValue(pick(this.model,'username','sex','realname','email','phone','activitiSync','workNo','telephone','post'))
+          that.form.setFieldsValue(pick(this.model,'username','sex','realname','email','phone','workNo','telephone','post'))
         });
         //身份为上级显示负责部门，否则不显示
         if(this.model.userIdentity=="2"){
@@ -349,6 +364,7 @@
             this.identity="1";
             this.departIdShow=false;
         }
+
         // 调用查询用户对应的部门信息的方法
         that.checkedDepartKeys = [];
         that.loadCheckedDeparts();
@@ -401,6 +417,7 @@
         this.departIdShow=false;
         this.identity="1";
         this.fileList=[];
+        this.bDepartShow = true;
       },
       moment,
       handleSubmit () {
@@ -421,7 +438,8 @@
             }else{
               formData.avatar = null;
             }
-            formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
+            //formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
+            formData.selectedroles = this.selectedRole
             formData.selecteddeparts = this.userDepartModel.departIdList.length>0?this.userDepartModel.departIdList.join(","):'';
             formData.userIdentity=this.identity;
             //如果是上级择传入departIds,否则为空
@@ -430,6 +448,7 @@
             }else{
               formData.departIds="";
             }
+            console.log("--------- 信息-------",formData)
             // that.addDepartsToUser(that,formData); // 调用根据当前用户添加部门信息的方法
             let obj;
             if(!this.model.id){
@@ -603,6 +622,7 @@
 
       // 获取用户对应部门弹出框提交给返回的数据
       modalFormOk (formData) {
+        console.log("----modalFormOk----formData=",formData)
         this.checkedDepartNames = [];
         this.selectedDepartKeys = [];
         this.checkedDepartNameString = '';
@@ -641,7 +661,15 @@
         }else{
             this.departIdShow=true;
         }
+      },
+      handleChange(value){
+        if(value === "f6817f48af4fb3af11b9e8bf182f618b"){
+          this.bDepartShow = false
+        }else{
+          this.bDepartShow = true
+        }
       }
+
     }
   }
 </script>

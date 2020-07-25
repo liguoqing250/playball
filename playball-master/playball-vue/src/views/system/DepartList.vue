@@ -210,6 +210,30 @@
                 label="备注">
                 <a-textarea placeholder="请输入备注" v-decorator="['memo', {'initialValue':''}]"/>
               </a-form-item>
+
+              <a-row style="margin-left:110px">
+                <a-col :span="8">
+                  <a-form-item
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                    label="经度">
+                    <a-input v-model="locationLon"/>
+                  </a-form-item>
+                </a-col>
+                <a-col :span="8">
+                  <a-form-item
+                    :labelCol="labelCol"
+                    :wrapperCol="wrapperCol"
+                    label="纬度">
+                    <a-input v-model="locationLat"/>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+
+              <Qqmap
+                @getLatLng="getLatLng">
+              </Qqmap>
+
             </a-form>
             <div class="anty-form-btn">
               <a-button @click="emptyCurrForm" type="default" htmlType="button" icon="sync">重置</a-button>
@@ -243,6 +267,7 @@
   import JDate from '@/components/jeecg/JDate'
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import JAreaLinkage from '@comp/jeecg/JAreaLinkage'
+  import Qqmap from '@/components/map/map'
 
   // 表头
   const columns = [
@@ -261,7 +286,8 @@
       JDate,
       JImageUpload,
       JAreaLinkage,
-      Area
+      Area,
+      Qqmap
     },
     data() {
       return {
@@ -291,6 +317,9 @@
         areaLinkage:'',
         allTreeKeys:[],
         checkStrictly: true,
+
+        locationLon:'',
+        locationLat:'',
 
         form: this.$form.createForm(this),
         labelCol: {
@@ -498,6 +527,9 @@
           this.areaLinkage=''
         }
 
+        this.locationLon = record.locationLon
+        this.locationLat = record.locationLat
+
           setTimeout(() => {
             this.fileList = record.imageUrl;
           }, 5)
@@ -555,6 +587,8 @@
             formData.district = that.areaLinkage.substring(4,6)
             formData.openTime = that.openTime
             formData.closeTime = that.closeTime
+            formData.locationLon = that.locationLon
+            formData.locationLat = that.locationLat
 
             httpAction(this.url.edit, formData, 'put').then((res) => {
               if (res.success) {
@@ -673,6 +707,10 @@
             this.getAllKeys(node.children[a])
           }
         }
+      },
+      getLatLng(e){
+        this.locationLon=e[0]
+        this.locationLat=e[1]
       }
       // <!---- author:os_chengtgen -- date:20190827 --  for:切换父子勾选模式 =======------>
 

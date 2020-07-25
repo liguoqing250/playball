@@ -13,20 +13,21 @@
     <template>
       <a-form :form="form">
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="场馆选择">
-      <a-tree
-        multiple
+        <!--checkable
+          multiple
+          @check="onCheck"
+          -->
+        <a-tree
         treeCheckable="tree"
-        checkable
         @expand="onExpand"
         :expandedKeys="expandedKeysss"
         :checkedKeys="checkedKeys"
         allowClear="true"
         :checkStrictly="true"
-        @check="onCheck"
         :dropdownStyle="{maxHeight:'200px',overflow:'auto'}"
         :treeData="departTree"
         placeholder="请选择场馆"
-        @click="onClick"
+        @select="onSelect"
         >
       </a-tree>
       </a-form-item>
@@ -134,6 +135,10 @@
       // 选择部门时作用的API
       onCheck(checkedKeys, info){
         this.departList = [];
+
+        console.log(checkedKeys)
+        console.log(info)
+
         this.checkedKeys = checkedKeys.checked;
         let checkedNodes = info.checkedNodes;
 
@@ -151,6 +156,7 @@
         queryIdTree().then((res)=>{
           if(res.success){
             this.departTree = res.result;
+            console.log("----departTree----",this.departTree)
             if(this.checkedKeys&&this.checkedKeys.length >0){
               let treekey=[];
               let arr=res.result;
@@ -174,8 +180,27 @@
       },
       modalFormOk(){
 
-      }
       },
+      onSelect(checkedKeys, info){
+        console.log(checkedKeys)
+        console.log(info)
+        this.departList = [];
+
+        console.log(checkedKeys)
+        console.log(info)
+
+        this.checkedKeys = checkedKeys;
+        let checkedNodes = info.selectedNodes;
+
+        let de = checkedNodes[0].data.props;
+        let depart = {key:"",value:"",title:""};
+        depart.key = de.value;
+        depart.value = de.value;
+        depart.title = de.title;
+        this.departList.push(depart);
+
+      }
+    }
   }
 </script>
 

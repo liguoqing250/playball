@@ -122,7 +122,6 @@
           label="详细地址">
           <a-input placeholder="请输入详细地址" v-decorator="['address', {'initialValue':''}]"/>
         </a-form-item>
-
         <!--
         <a-form-item
           :labelCol="labelCol"
@@ -145,6 +144,28 @@
           <a-textarea placeholder="请输入备注" v-decorator="['memo', {}]"  />
         </a-form-item>
 
+        <a-row style="margin-left:110px">
+          <a-col :span="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="经度">
+              <a-input v-model="locationLon"/>
+            </a-form-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              label="纬度">
+              <a-input v-model="locationLat"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
+        <qqmap
+        @getLatLng="getLatLng">
+        </qqmap>
         <!--
         <a-form-item
           :labelCol="labelCol"
@@ -178,15 +199,20 @@
   import JDate from '@/components/jeecg/JDate'
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import JAreaLinkage from '@comp/jeecg/JAreaLinkage'
+  import getMapLatLng from '@/components/map/map'
+  import Qqmap from '../../../components/map/map'
+
 
   export default {
     name: "SysDepartModal",
     components: {
+      Qqmap,
       moment,
       ATextarea,
       JDate,
       JImageUpload,
-      JAreaLinkage
+      JAreaLinkage,
+      getMapLatLng
     },
     data () {
       return {
@@ -217,8 +243,8 @@
         },
         openTime:'',
         closeTime:'',
-        longitude:'',// 经度
-        latitude:'',//纬度
+        locationLon:'',// 经度
+        locationLat:'',//纬度
 
         areaLinkage:'',
         jdate: {},
@@ -251,33 +277,6 @@
         this.closeTime = timeString;
       },
 
-      /*createMap() {
-        //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-        //设置地图中心点
-        var myLatlng = new qq.maps.LatLng(26.556864,106.703179);
-        //定义工厂模式函数
-        var myOptions = {
-          zoom: 8,               //设置地图缩放级别
-          center: myLatlng,      //设置中心点样式
-          mapTypeId: qq.maps.MapTypeId.ROADMAP  //设置地图样式详情参见MapType
-        }
-        //获取dom元素添加地图信息
-        setTimeout(() => {
-          var map = new qq.maps.Map(document.getElementById("mapContainer"), myOptions);
-
-          //给地图添加点击事件
-          //并获取鼠标点击的经纬度
-          qq.maps.event.addListener(map, 'click', function(event) {
-            this.longitude = event.latLng.getLat();
-            this.latitude = event.latLng.getLng();
-
-            alert("经度:"+this.longitude+","+"纬度:"+this.latitude);
-          });
-        }, 5)
-      },
-      SearchAddress(){
-      },*/
-
       loadTreeData(){
         var that = this;
         queryIdTree().then((res)=>{
@@ -302,10 +301,9 @@
       },
       edit (record) {
           this.form.resetFields();
-          //this.model = Object.assign({}, {});
+          this.model = Object.assign({}, {});
           this.visible = true;
           this.loadTreeData();
-          this.createMap();
           /*this.model.parentId = record!=null?record.toString():null;
           if(this.seen){
             this.model.orgCategory = '1';
@@ -334,7 +332,8 @@
             formData.district = that.areaLinkage.substring(4,6)
             formData.openTime = that.openTime
             formData.closeTime = that.closeTime
-
+            formData.locationLon = that.locationLon
+            formData.locationLat = that.locationLat
             //时间格式化
             console.log("触发表单验证",formData)
             httpAction(this.url.add,formData,"post").then((res)=>{
@@ -362,7 +361,10 @@
         }else{
           callback("您的手机号码格式不正确!");
         }
-
+      },
+      getLatLng(e){
+        this.locationLon=e[0]
+        this.locationLat=e[1]
       }
     }
   }
