@@ -48,6 +48,7 @@ public class PlayballCurriculumController {
 		if(curVo.getSId()!=0){
 			queryWrapper.eq("s_id", curVo.getSId());
 		}
+		queryWrapper.orderByDesc("update_time");
 		//设置分页
 		Page<PlayballCurriculum> page = new Page<PlayballCurriculum>(curVo.getPage(),curVo.getLimit());
 		IPage<PlayballCurriculum> selectPage = mapper.selectPage(page, queryWrapper);

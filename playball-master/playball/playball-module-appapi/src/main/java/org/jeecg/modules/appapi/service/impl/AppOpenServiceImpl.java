@@ -37,6 +37,8 @@ public class AppOpenServiceImpl implements AppOpenService {
             if(appUsers.getU_registerWay()!=1){
                 //第三方登录或者注册
                 if(selectAppUsers!=null){
+                	appUsers.setU_id(selectAppUsers.getU_id());
+                	appUsersMapper.update(appUsers);//登录成功后更新数据
                     out.put("msg","登录成功");
                     out.put("appUsers",selectAppUsers);
                 }else{
