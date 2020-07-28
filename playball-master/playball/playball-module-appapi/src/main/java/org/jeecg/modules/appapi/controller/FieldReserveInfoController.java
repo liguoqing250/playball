@@ -74,13 +74,13 @@ public class FieldReserveInfoController extends JeecgController<FieldReserveInfo
 	 /**
 	  * 查询可预订最早时间
 	  *
-	  * @param fieldReserveInfo
+	  * @param
 	  * @return
 	  */
 	 @ApiOperation(value="运动类型，所属场地", notes="查询可预订最早时间")
 	 @PostMapping(value = "/queryFieldBookable")
-	 public Result<?> queryFieldBookable(FieldReserveInfo fieldReserveInfo) {
-		 List<FieldBookable> list = fieldReserveInfoService.queryFieldBookable(fieldReserveInfo);
+	 public Result<?> queryFieldBookable(String bId,Integer stId) {
+		 List<FieldBookable> list = fieldReserveInfoService.queryFieldBookable(bId,stId);
 		 return Result.ok(list);
 	 }
 	/**

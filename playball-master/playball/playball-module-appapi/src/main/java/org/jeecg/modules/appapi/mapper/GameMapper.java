@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface GameMapper extends BaseMapper<Game> {
     List<Game> queryByFieldId(Integer id);
+
+    List<Game> queryByBid(String id);
 }

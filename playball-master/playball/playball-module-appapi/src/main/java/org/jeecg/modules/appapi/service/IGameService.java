@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface IGameService extends IService<Game> {
     List<Game> queryByFieldId(Integer id);
+
+    List<Game> queryByBid(String id);
 }

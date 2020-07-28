@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.appapi.mapper.ArenaMapper">
-
+	<resultMap id="ArenaVoMap" type="org.jeecg.modules.appapi.entity.vo.ArenaVo">
+		<result column="price" jdbcType="VARCHAR" property="price" />
+		<result column="distance" jdbcType="VARCHAR" property="distance" />
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="parent_id" jdbcType="INTEGER" property="parent_id" />
+		<result column="depart_name" jdbcType="VARCHAR" property="depart_name" />
+		<result column="depart_name_en" jdbcType="VARCHAR" property="depart_name_en" />
+		<result column="depart_name_abbr" jdbcType="VARCHAR" property="depart_name_abbr" />
+		<result column="depart_order" jdbcType="VARCHAR" property="depart_order" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="org_category" jdbcType="VARCHAR" property="org_category" />
+		<result column="org_type" jdbcType="VARCHAR" property="org_type" />
+		<result column="org_code" jdbcType="VARCHAR" property="org_code" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="fax" jdbcType="VARCHAR" property="fax" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="memo" jdbcType="VARCHAR" property="memo" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="image_url" jdbcType="VARCHAR" property="image_url" />
+		<result column="open_time" jdbcType="VARCHAR" property="open_time" />
+		<result column="close_time" jdbcType="TIMESTAMP" property="close_time" />
+		<result column="del_flag" jdbcType="INTEGER" property="del_flag" />
+		<result column="create_by" jdbcType="VARCHAR" property="create_by" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="create_time" />
+		<result column="update_by" jdbcType="VARCHAR" property="update_by" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="update_time" />
+		<result column="province" jdbcType="VARCHAR" property="province" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="district" jdbcType="VARCHAR" property="district" />
+		<result column="location_lon" jdbcType="VARCHAR" property="location_lon" />
+		<result column="location_lat" jdbcType="VARCHAR" property="location_lat" />
+	</resultMap>
+    <select id="queryPageList" parameterType="java.util.Map" resultMap="ArenaVoMap">
+     SELECT
+	( SELECT MIN( pfi.field_price ) FROM playball_field_info pfi WHERE pfi.business_id = sd.id ) AS price,
+	( st_distance ( point ( #{params.lat,jdbcType=FLOAT}, #{params.lon,jdbcType=FLOAT} ), point ( sd.location_lat, sd.location_lon ) ) * 111.195 ) AS distance,
+	sd.*
+FROM
+	sys_depart sd
+	LEFT JOIN playball_field_info pfi ON sd.id = pfi.business_id
+WHERE
+	sd.id = pfi.business_id
+	<if test="params.sportsId!=null and params.sportsId !=''">
+        AND pfi.sports_id = #{params.sportsId}
+    </if>
+	GROUP BY sd.id
+	<if test="params.column!=null and params.column !=''">
+		ORDER BY ${params.column} ${params.order}
+	</if>
+		LIMIT #{params.offSet},#{params.limit}
+    </select>
 </mapper>

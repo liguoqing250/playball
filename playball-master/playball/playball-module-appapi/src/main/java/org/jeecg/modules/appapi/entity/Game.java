@@ -85,7 +85,8 @@ public class Game {
 	/**isDelete*/
 	@Excel(name = "isDelete", width = 15)
     @ApiModelProperty(value = "isDelete")
-	private Integer isDelete;
+	
+private Integer isDelete;
 	/**version*/
 	@Excel(name = "version", width = 15)
     @ApiModelProperty(value = "version")

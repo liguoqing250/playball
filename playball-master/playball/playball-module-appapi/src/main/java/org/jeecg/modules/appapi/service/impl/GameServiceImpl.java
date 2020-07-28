@@ -25,4 +25,9 @@ public class GameServiceImpl extends ServiceImpl<GameMapper, Game> implements IG
     public List<Game> queryByFieldId(Integer id) {
         return gameMapper.queryByFieldId(id);
     }
+
+    @Override
+    public List<Game> queryByBid(String id) {
+        return gameMapper.queryByBid(id);
+    }
 }

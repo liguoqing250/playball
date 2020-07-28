@@ -48,7 +48,8 @@ import io.swagger.annotations.ApiOperation;
 public class ArenaController extends JeecgController<Arena, IArenaService> {
 	@Autowired
 	private IArenaService arenaService;
-	
+
+
 	/**
 	 * 分页列表查询
 	 *
@@ -64,11 +65,31 @@ public class ArenaController extends JeecgController<Arena, IArenaService> {
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<Arena> queryWrapper = QueryGenerator.initQueryWrapper(arena, req.getParameterMap());
+
 		Page<Arena> page = new Page<Arena>(pageNo, pageSize);
-		IPage<Arena> pageList = arenaService.page(page, queryWrapper);
+		IPage<Arena> pageList = arenaService.queryPageList(page,req.getParameterMap());
 		return Result.ok(pageList);
 	}
+//	/**
+//	 * 分页列表查询
+//	 *
+//	 * @param arena
+//	 * @param pageNo
+//	 * @param pageSize
+//	 * @param req
+//	 * @return
+//	 */
+//	@ApiOperation(value="商家表-分页列表查询", notes="商家表-分页列表查询")
+//	@PostMapping(value = "/list")
+//	public Result<?> queryPageList(Arena arena,
+//								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+//								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+//								   HttpServletRequest req) {
+//		QueryWrapper<Arena> queryWrapper = QueryGenerator.initQueryWrapper(arena, req.getParameterMap());
+//		Page<Arena> page = new Page<Arena>(pageNo, pageSize);
+//		IPage<Arena> pageList = arenaService.page(page, queryWrapper);
+//		return Result.ok(pageList);
+//	}
 	
 	/**
 	 * 添加

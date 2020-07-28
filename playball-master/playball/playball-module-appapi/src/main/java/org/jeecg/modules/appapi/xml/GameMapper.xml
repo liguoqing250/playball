@@ -5,4 +5,8 @@
     <select id="queryByFieldId"  parameterType="java.lang.Integer" resultType="org.jeecg.modules.appapi.entity.Game">
         select * from playball_games where field_id=#{id,jdbcType=INTEGER}
     </select>
+
+    <select id="queryByBid"  parameterType="java.lang.String" resultType="org.jeecg.modules.appapi.entity.Game">
+        SELECT pg.* FROM playball_games pg LEFT JOIN playball_field_info pfi ON pfi.id=pg.field_id WHERE pfi.business_id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -64,7 +64,8 @@ public class PlayballOrders implements Serializable {
     private Date updateTime;
 
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDelete;
+    
+private Integer isDelete;
 
     @ApiModelProperty(value = "版本号（用作乐观锁）")
     @Version

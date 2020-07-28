@@ -41,9 +41,9 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
     FieldInfoMapper fieldInfoMapper;
 
     @Override
-    public List<FieldBookable> queryFieldBookable(FieldReserveInfo fieldReserveInfo) {
+    public List<FieldBookable> queryFieldBookable(String bId,Integer stId) {
 
-        Arena arene=arenaMapper.selectById(fieldInfoMapper.selectById(fieldReserveInfo.getfId()).getBusinessId());
+        Arena arene=arenaMapper.selectById(bId);
         List<FieldBookable> list=new ArrayList<>();
 
 
@@ -52,8 +52,8 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
             try {
                 Map<String,Object> map=new HashMap<>();
 
-                map.put("bId",arene.getId());
-                map.put("stId",fieldReserveInfo.getStId());
+                map.put("bId",bId);
+                map.put("stId",stId);
 
                 FieldBookable fieldBookable=new FieldBookable();
                 Calendar  calendar = Calendar.getInstance();
@@ -100,7 +100,20 @@ public class FfieldReserveInfoServiceImpl extends ServiceImpl<FieldReserveInfoMa
                 System.out.println("--------------------------------");
                 if(mintime.size()>0){
                     fieldBookable.setAvailable(true);
-                    fieldBookable.setBookableTime(mintime.get(0)+":"+Integer.valueOf(arene.getOpenTime().split(":")[1]));
+                    String timea="";
+                    String timebvalue="";
+                    Integer time2=Integer.valueOf(arene.getOpenTime().split(":")[1]);
+                    if(mintime.get(0)>10){
+                        timea=mintime.get(0).toString();
+                    }else{
+                        timea="0"+mintime.get(0).toString();
+                    }
+                    if(time2>10){
+                        timebvalue=time2.toString();
+                    }else{
+                        timebvalue="0"+time2.toString();
+                    }
+                    fieldBookable.setBookableTime(timea+":"+timebvalue);
                 }else{
                     fieldBookable.setBookableTime("无");
                     fieldBookable.setAvailable(false);

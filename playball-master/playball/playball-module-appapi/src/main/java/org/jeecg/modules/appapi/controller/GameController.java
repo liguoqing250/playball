@@ -122,7 +122,18 @@ public class GameController extends JeecgController<Game, IGameService> {
 		this.gameService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功！");
 	}
-
+	 /**
+	  * 通过商家id查询
+	  *
+	  * @param id
+	  * @return
+	  */
+	 @ApiOperation(value="比赛-通过id查询", notes="比赛-通过id查询")
+	 @PostMapping(value = "/queryByBid")
+	 public Result<?> queryByBid(@RequestParam(name="id",required=true) String id) {
+		 List<Game> game = gameService.queryByBid(id);
+		 return Result.ok(game);
+	 }
 	 /**
 	  * 通过场地id查询
 	  *
