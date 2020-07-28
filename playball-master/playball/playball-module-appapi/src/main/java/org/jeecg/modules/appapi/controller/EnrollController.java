@@ -88,7 +88,7 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 	 */
 	@ApiOperation(value="比赛报名表-添加", notes="比赛报名表-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody Enroll enroll) {
+	public Result<?> add(@RequestBody Enroll enroll,HttpServletRequest req) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		String token=request.getHeader("X-Access-Token");
 		AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
@@ -104,8 +104,12 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 		}else{
 			return Result.error("个人不能参与比赛");
 		}
+		if(enrollService.hasenroll(enroll)){
+			return Result.error("已报名，请勿重复报名");
+		}
 		enrollService.save(enroll);
-		return Result.ok("报名成功！");
+
+		return Result.ok(enroll);
 	}
 	
 	/**
@@ -128,7 +132,7 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 	 * @return
 	 */
 	@ApiOperation(value="比赛报名表-通过id删除", notes="比赛报名表-通过id删除")
-	@DeleteMapping(value = "/delete")
+	@PostMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
 		enrollService.removeById(id);
 		return Result.ok("删除成功!");
