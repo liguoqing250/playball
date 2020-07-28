@@ -31,7 +31,7 @@
                  v-for="(item, index) in enrollTeamList" :key="index">
             <a-form-item>
               <a-card hoverable style="width:240px">
-                <a-card-meta :title="item.tname">
+                <a-card-meta :title="item.tName">
                 </a-card-meta>
               </a-card>
             </a-form-item>
@@ -132,7 +132,7 @@
               that.gameTypeShow.bGroup = false
               that.gameTypeShow.bLoop = false
               that.gameTypeShow.bOut = false
-              this.gameTypeShow.bCustom = false
+              that.gameTypeShow.bCustom = false
               that.visible = false
               that.close()
             }else{
@@ -141,13 +141,12 @@
           })
         }else if(this.$refs.custom){
           this.$refs.custom.getSuccess(function (bOk) {
-
           })
         }else{
           that.gameTypeShow.bGroup = false
           that.gameTypeShow.bLoop = false
           that.gameTypeShow.bOut = false
-          this.gameTypeShow.bCustom = false
+          that.gameTypeShow.bCustom = false
           that.visible = false
           that.close()
         }
@@ -169,6 +168,7 @@
         //获取报名球队展示
         let params = {gamesId:this.gamesInfo.id}
         getAction(this.url.enrollTeamList, params).then((res)=>{
+          console.log("------球队展示-------",res.result)
           if(res.success){
             this.enrollTeamList = res.result
 

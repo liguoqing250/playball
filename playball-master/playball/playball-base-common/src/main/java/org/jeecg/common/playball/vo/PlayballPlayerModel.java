@@ -56,4 +56,8 @@ public class PlayballPlayerModel {
 	
 	private java.lang.Integer sportsId;
 	
+	private java.lang.String abilityValue;
+	
+	private java.lang.String dataJson;
+	
 }

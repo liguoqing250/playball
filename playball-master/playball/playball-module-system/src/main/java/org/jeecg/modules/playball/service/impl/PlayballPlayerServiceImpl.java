@@ -9,6 +9,7 @@ import org.jeecg.modules.playball.service.IPlayballPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -34,5 +35,9 @@ public class PlayballPlayerServiceImpl extends ServiceImpl<PlayballPlayerMapper,
 		result.setRecords(list);
 		
 		return result;
+	}
+	
+	public List<PlayballPlayerModel> getGamePlayersList(String teamId, String gameId, String scheduleId) {
+		return playMapper.getGamePlayersList(Integer.valueOf(teamId),Integer.valueOf(gameId),Integer.valueOf(scheduleId));
 	}
 }

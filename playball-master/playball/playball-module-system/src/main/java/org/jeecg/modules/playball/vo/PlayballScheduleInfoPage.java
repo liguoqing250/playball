@@ -61,5 +61,10 @@ public class PlayballScheduleInfoPage {
     private String teamImage;
     //球队图片
     private String opponentImage;
-    
+    //比赛开始时间
+    private Date startTime;
+    //比赛结束时间
+    private Date endTime;
+    //运动类型
+    private Integer sportsId;
 }

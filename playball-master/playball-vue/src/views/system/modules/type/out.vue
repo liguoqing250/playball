@@ -3,16 +3,16 @@
       <a-tabs>
         <a-tab-pane tab="赛程表" key="1">
           <!--已有模块-->
-          <div v-for="(itemList, index) in gamesInfo.scheduleList" :key="index">
+          <div v-for="(itemList, index) in gamesInfo.matchList" :key="index">
             <span>第{{index+1}}阶段对阵表</span>
             <a-row type="flex" style="margin-bottom:10px" :gutter="16" v-for="(item, i) in itemList" :key="i">
               <a-col :span="5">
                 <a-form-item>
                   <a-card hoverable style="width: 240px">
-                    <a-card-meta :title="item.team.tname">
+                    <a-card-meta :title="item.teamName">
                     </a-card-meta>
 
-                    <a-input placeholder="请输入比分" v-model="item.gameSchedule.enterBall"/>
+                    <a-input placeholder="请输入比分" v-model="item.enterBall"/>
 
                   </a-card>
                 </a-form-item>
@@ -20,11 +20,11 @@
 
               <a-col :span="5">
                 <a-form-item>
-                  <a-card hoverable style="width: 240px" v-if="item.topponent != null">
-                    <a-card-meta :title="item.topponent.tname">
+                  <a-card hoverable style="width: 240px" v-if="item.opponentId != null">
+                    <a-card-meta :title="item.opponentName">
                     </a-card-meta>
 
-                    <a-input placeholder="请输入比分" v-model="item.gameSchedule.lostBall"/>
+                    <a-input placeholder="请输入比分" v-model="item.lostBall"/>
 
                   </a-card>
                 </a-form-item>
@@ -34,12 +34,12 @@
                 <a-form-item
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
-                  label="比赛时间:" v-if="item.topponent != null">
-                  <span>{{item.gameSchedule.matchTime}}</span>
+                  label="比赛时间:" v-if="item.opponentId != null">
+                  <span>{{item.matchTime}}</span>
                 </a-form-item>
-                <span v-if="item.gameSchedule.gameResult == 1">结果:{{item.team.tname}}获胜</span>
-                <span v-if="item.gameSchedule.gameResult == 3">结果:{{item.topponent.tname}}获胜</span>
-                <span v-if="item.gameSchedule.gameStatus == 2">比赛还未开始</span>
+                <span v-if="item.gameResult == 1">结果:{{item.teamName}}获胜</span>
+                <span v-if="item.gameResult == 3">结果:{{item.opponentName}}获胜</span>
+                <span v-if="item.gameStatus == 2">比赛还未开始</span>
               </a-col>
             </a-row>
           </div>
@@ -53,7 +53,7 @@
               <a-col>
                 <a-form-item>
                   <a-card hoverable style="width: 240px">
-                    <a-card-meta :title="item.team.tname">
+                    <a-card-meta :title="item.teamName">
                     </a-card-meta>
                   </a-card>
                 </a-form-item>
@@ -61,8 +61,8 @@
 
               <a-col>
                 <a-form-item>
-                  <a-card hoverable style="width: 240px" v-if="item.topponent != null">
-                    <a-card-meta :title="item.topponent.tname">
+                  <a-card hoverable style="width: 240px" v-if="item.opponentId != null">
+                    <a-card-meta :title="item.opponentName">
                     </a-card-meta>
                   </a-card>
                 </a-form-item>
@@ -72,8 +72,8 @@
                 <a-form-item
                   :labelCol="labelCol"
                   :wrapperCol="wrapperCol"
-                  label="请设置比赛时间" v-if="item.topponent != null">
-                  <j-date v-model="item.gameSchedule.matchTime" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" />
+                  label="请设置比赛时间" v-if="item.opponentId != null">
+                  <j-date v-model="item.matchTime" :showTime="true" dateFormat="YYYY-MM-DD HH:mm:ss" />
                 </a-form-item>
               </a-col>
             </a-row>
@@ -142,8 +142,8 @@
         if(this.bCreate){
           if (this.matchList.length > 0){
             for (var i in this.matchList) {
-              console.log("比赛时间",this.matchList[i].gameSchedule.matchTime)
-              if(this.matchList[i].gameSchedule.matchTime == null && this.matchList[i].topponent != null){
+              console.log("比赛时间",this.matchList[i].matchTime)
+              if(this.matchList[i].matchTime == null && this.matchList[i].opponentId != null){
                 callback(false)
                 return
               }
@@ -184,7 +184,7 @@
         getAction(that.url.getOutMatchList, params).then((re)=> {
           if (re.success) {
             that.gamesInfo = re.result
-            console.log("重新获取",re.result)
+            console.log("--------重新获取-------",re.result)
             if(that.gamesInfo.gameInfo.stage == 0){
               this.bCreate = true
             }else{
@@ -202,8 +202,8 @@
                 that.bChampion = true
                 return
               }*/
-              for(var i in that.gamesInfo.scheduleList[size-1]){
-                if(that.gamesInfo.scheduleList[size-1][i].gameSchedule.gameStatus == 2){
+              for(var i in that.gamesInfo.matchList[size-1]){
+                if(that.gamesInfo.matchList[size-1][i].gameStatus == 2){
                   //表示有比赛没比完，不做任何事情
                   bFinish = false
                   break
@@ -223,10 +223,11 @@
           gamesId:this.gamesId,
           nextStage:this.bNextStage
         }
-
+        console.log("-------创建比赛-------params",params)
         getAction(this.url.createOutMacth, params).then((res)=>{
+          console.log("-------创建比赛-------",res)
           if(res.success){
-            this.matchList = res.result.schedule
+            this.matchList = res.result.matchList
             this.finished = res.result.finished
             //this.bCreate = false
             console.log(this.matchList)

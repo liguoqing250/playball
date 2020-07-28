@@ -22,7 +22,7 @@ public class PlayballScheduleUserDataServiceImpl extends ServiceImpl<PlayballSch
 	private PlayballScheduleUserDataMapper userDataMapper;
 	
 	@Override
-	public List<PlayballScheduleUserData> getListBySportsId(Integer sportsId){
-		return userDataMapper.getListBySportsId(sportsId);
+	public List<PlayballScheduleUserData> getListBySportsId(String sportsId){
+		return userDataMapper.getListBySportsId(Integer.valueOf(sportsId));
 	}
 }

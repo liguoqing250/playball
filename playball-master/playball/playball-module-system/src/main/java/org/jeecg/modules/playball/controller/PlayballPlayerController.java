@@ -13,6 +13,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.common.playball.entity.PlayballPlayer;
+import org.jeecg.common.playball.entity.PlayballSportsData;
 import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.service.IPlayballPlayerService;
 import java.util.Date;
@@ -71,6 +72,23 @@ public class PlayballPlayerController extends JeecgController<PlayballPlayer, IP
 		IPage<PlayballPlayer> pageList = playballPlayerService.page(page, queryWrapper);*/
 		IPage<PlayballPlayerModel> pageList = playballPlayerService.queryList(new Page(pageNo,pageSize), playerModel);
 		return Result.ok(pageList);
+	}
+	
+	@GetMapping(value="/getGamePlayersList")
+	public Result<?> getListBySportsId(HttpServletRequest req) {
+		Result<List<PlayballPlayerModel>> result = new Result<List<PlayballPlayerModel>>();
+		try {
+			List<PlayballPlayerModel> list = playballPlayerService.getGamePlayersList(req.getParameter("teamId"),req.getParameter("gameId"),req.getParameter("scheduleId"));
+			result.setSuccess(true);
+			result.setMessage("查找成功");
+        	result.setResult(list);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("查找过程中出现了异常: " + e.getMessage());
+			return result;
+		}
 	}
 	
 	/**

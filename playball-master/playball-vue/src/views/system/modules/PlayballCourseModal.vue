@@ -185,6 +185,7 @@
             }
             let formData = Object.assign(this.model, values);
             formData.cVideo = this.fileList
+            console.log(this.fileList)
             formData.cCover = this.imageList
             if(this.bFree){
               formData.cIsFree = '1'

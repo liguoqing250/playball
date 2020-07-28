@@ -1,20 +1,29 @@
 package org.jeecg.modules.playball.service.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballSchedule;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.modules.playball.entity.PlayballGame;
 import org.jeecg.modules.playball.mapper.PlayballScheduleMapper;
+import org.jeecg.modules.playball.service.IPlayballEnrollService;
+import org.jeecg.modules.playball.service.IPlayballGameService;
 import org.jeecg.modules.playball.service.IPlayballScheduleService;
 import org.jeecg.modules.playball.service.IPlayballTeamService;
+import org.jeecg.modules.playball.util.GameUtils;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 import org.jeecg.modules.playball.vo.PlayballScheduleResultVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,6 +45,12 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 	
 	@Autowired
 	private IPlayballTeamService playballTeamService;
+	
+	@Autowired
+	private IPlayballEnrollService enrollService;
+	
+	@Autowired
+	private IPlayballGameService gameService;
 	
 	@Override
 	public IPage<PlayballScheduleInfoPage>  querySchedulePageList(IPage page, PlayballScheduleInfoPage scheduleInfo){
@@ -107,5 +122,117 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 	
 	public List<PlayballScheduleInfoPage> getMacthListByGameId(Integer gameId){
 		return scheduleMapper.getMacthListByGameId(gameId);
+	}
+	
+	public List<List<PlayballScheduleInfoPage>> getMacthByGameId(Integer gameId){
+		List<PlayballScheduleInfoPage> list = scheduleMapper.getMacthListByGameId(gameId);
+		
+		List<List<PlayballScheduleInfoPage>> matchList = GameUtils.groupDataByCondition(list, new Comparator<PlayballScheduleInfoPage>() {
+		     @Override
+		     public int compare(PlayballScheduleInfoPage o1, PlayballScheduleInfoPage o2) {
+		         return o1.getStage().equals(o2.getStage()) ? 0 : -1;
+		     }
+		 });
+		
+		return matchList;
+	}
+	
+	public JSONObject createMacthList(Integer gameId, String nextStage){	
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("finished", 0);
+		  
+		List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
+		List<PlayballScheduleInfoPage> winMatchList = new ArrayList<PlayballScheduleInfoPage>();
+		List<PlayballTeam> lostTeamList = new ArrayList<PlayballTeam>(); 
+		boolean bRemove = true;
+		if(nextStage.equals("true")) {
+			//获取赢比赛的队伍，下一轮比赛队伍
+			List<List<PlayballScheduleInfoPage>> matchList = this.getMacthByGameId(gameId);
+			
+			for(int j=0; j < matchList.size(); j++) {
+				List<PlayballScheduleInfoPage> nextlist = matchList.get(j);
+				if(nextlist.size()==2) {
+					//剩两场比赛，说明只剩4只队伍，无需删除，胜者和胜者打，负方和负方打
+					bRemove = false;
+				}
+				for(int i=0; i < nextlist.size(); i++) {
+					Integer teamId = 0;
+					if(nextlist.get(i).getGameResult() == 3) {
+						teamId = nextlist.get(i).getTeamId();
+					}else if(nextlist.get(i).getGameResult() == 1) {
+						teamId = nextlist.get(i).getOpponentId();
+					}
+					//把输掉比赛的队伍从报名列表中移除
+					for(int c=0; c<teamList.size();c++) {
+						if(teamList.get(c).getTeamId() == teamId) {
+							if(!bRemove) {
+								lostTeamList.add(teamList.get(c));
+							}
+							teamList.remove(c);
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (teamList != null && teamList.size() > 0) {
+      	  	//创建一个新集合
+      	  	List<PlayballTeam> newList = new ArrayList<PlayballTeam>();
+      	  	newList = GameUtils.disorganizeList(teamList);
+      	  	//两两分组
+      	  	if(!bRemove) {
+      	  		for(int i=0; i<lostTeamList.size(); i++) {
+      	  			newList.add(lostTeamList.get(i));
+      	  		}
+      	  		jsonObj.put("finished", 1);
+      	  	}
+      	  	List<List<PlayballTeam>> matchTempList = GameUtils.fixedGrouping(newList, 2);
+      	  
+			for(int i=0; i<matchTempList.size(); i++) {
+				PlayballScheduleInfoPage resultModel = new PlayballScheduleInfoPage();
+				
+				resultModel.setGamesId(gameId);
+				resultModel.setTeamId(matchTempList.get(i).get(0).getTeamId());
+				resultModel.setTeamName(matchTempList.get(i).get(0).getTName());
+				resultModel.setTeamImage(matchTempList.get(i).get(0).getTImage());
+				if(matchTempList.get(i).size()==2) {
+					resultModel.setOpponentId(matchTempList.get(i).get(1).getTeamId());
+					resultModel.setOpponentName(matchTempList.get(i).get(1).getTName());
+					resultModel.setTeamImage(matchTempList.get(i).get(1).getTImage());
+				}
+				
+				winMatchList.add(resultModel);
+			}
+		}
+		jsonObj.put("matchList", winMatchList);
+		
+		return jsonObj;
+	}
+	
+	@Override
+	public void addMatch(List<PlayballScheduleInfoPage> matchList, Integer gameId, Integer finished) {
+		PlayballGame gameInfo =gameService.getById(gameId);
+		Integer stage = gameInfo.getStage()+1;
+		gameInfo.setStage(stage);
+		
+		if(finished == 1) {
+		   gameInfo.setFinished(1);//更新赛事状态，表示赛事所有比赛结束啦
+		}
+		for(int i=0; i<matchList.size(); i++) {
+			//获取要比赛的两只球队
+			PlayballSchedule schedule = new PlayballSchedule();
+			BeanUtils.copyProperties(matchList.get(i), schedule);
+			log.info("-----addMatch-----"+schedule);
+			schedule.setStage(stage);
+			if(matchList.get(i).getOpponentId() == null) {
+				//如果为空，轮空队伍3:0获胜
+				schedule.setEnterBall(3);
+				schedule.setGameResult(1);
+				schedule.setGameStatus(1);
+			}
+			
+			this.save(schedule);
+		}
+		gameService.updateById(gameInfo);
 	}
 }

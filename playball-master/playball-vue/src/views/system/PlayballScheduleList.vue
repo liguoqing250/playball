@@ -59,8 +59,18 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+         <span slot="actionTeamData" slot-scope="text, record">
+            <a @click="handleEditTeamUserData(text, record)">{{record.teamName}}</a>
+         </span>
+
+        <span slot="actionOpponentData" slot-scope="text, record">
+            <a @click="handleEditOpponentUserData(text, record)" v-if="text!=null">
+              {{record.opponentName}}
+            </a>
+         </span>
+
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a @click="handleEdit(record)">设置比赛时间和比赛结果</a>
         </span>
 
       </a-table>
@@ -69,19 +79,22 @@
 
     <!-- 表单区域 -->
     <playballSchedule-modal ref="modalForm" @ok="modalFormOk"></playballSchedule-modal>
+    <PlayballScheduleUserDataModal ref="PlayballScheduleUserDataModal"></PlayballScheduleUserDataModal>
   </a-card>
 </template>
 
 <script>
   import '@/assets/less/TableExpand.less'
   import PlayballScheduleModal from './modules/PlayballScheduleModal'
+  import PlayballScheduleUserDataModal from './modules/PlayballScheduleUserDataModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 
   export default {
     name: "PlayballScheduleList",
     mixins:[JeecgListMixin],
     components: {
-      PlayballScheduleModal
+      PlayballScheduleModal,
+      PlayballScheduleUserDataModal
     },
     data () {
       return {
@@ -106,19 +119,21 @@
 		   {
             title: '球队名称',
             align:"center",
-            dataIndex: 'teamName'
+            dataIndex: 'teamId',
+            scopedSlots: { customRender: 'actionTeamData' }
            },
        {
             title: '对阵球队',
             align:"center",
-            dataIndex: '',
-            customRender:function (t,r,index) {
+            dataIndex: 'opponentId',
+            scopedSlots: { customRender: 'actionOpponentData' }
+            /*customRender:function (t,r,index) {
               if(t.opponentId != null){
                 return t.opponentName
               }else{
                 return "轮空"
               }
-            }
+            }*/
           },
        {
             title: '比分',
@@ -177,7 +192,12 @@
     }
   },
     methods: {
-
+      handleEditTeamUserData(text,record){
+        this.$refs.PlayballScheduleUserDataModal.show(text,record.teamName,record);
+      },
+      handleEditOpponentUserData(text,record){
+        this.$refs.PlayballScheduleUserDataModal.show(text,record.opponentName,record);
+      }
     }
   }
 </script>

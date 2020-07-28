@@ -12,6 +12,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.playball.entity.PlayballAbilityValue;
 import org.jeecg.common.playball.entity.PlayballSportsData;
 import org.jeecg.modules.playball.service.IPlayballSportsDataService;
 import java.util.Date;
@@ -69,6 +70,23 @@ public class PlayballSportsDataController extends JeecgController<PlayballSports
 		Page<PlayballSportsData> page = new Page<PlayballSportsData>(pageNo, pageSize);
 		IPage<PlayballSportsData> pageList = playballSportsDataService.page(page, queryWrapper);
 		return Result.ok(pageList);
+	}
+	
+	@GetMapping(value="/getSportsDataBySportsId")
+	public Result<?> getListBySportsId(HttpServletRequest req) {
+		Result<List<PlayballSportsData>> result = new Result<List<PlayballSportsData>>();
+		try {
+			List<PlayballSportsData> list = playballSportsDataService.getListBySportsId(req.getParameter("sportsId"));
+			result.setSuccess(true);
+			result.setMessage("查找成功");
+        	result.setResult(list);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("查找过程中出现了异常: " + e.getMessage());
+			return result;
+		}
 	}
 	
 	/**

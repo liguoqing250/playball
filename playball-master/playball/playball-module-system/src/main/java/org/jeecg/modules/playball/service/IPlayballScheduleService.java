@@ -8,6 +8,8 @@ import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 import org.jeecg.modules.playball.vo.PlayballScheduleResultVo;
 import org.jeecg.modules.playball.vo.PlayballScheduleInfoPage;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -31,4 +33,9 @@ public interface IPlayballScheduleService extends IService<PlayballSchedule> {
 	public List<PlayballSchedule> getAllScheduleListByGameId(Integer gameId);
 	
 	public List<PlayballScheduleInfoPage> getMacthListByGameId(Integer gameId);
+	
+	public List<List<PlayballScheduleInfoPage>> getMacthByGameId(Integer gameId);
+	public JSONObject createMacthList(Integer gameId, String nextStage);
+	
+	public void addMatch(List<PlayballScheduleInfoPage> matchList, Integer gameId, Integer finished);
 }

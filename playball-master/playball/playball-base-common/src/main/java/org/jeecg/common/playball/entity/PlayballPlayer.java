@@ -61,6 +61,12 @@ public class PlayballPlayer {
 	@Excel(name = "关联球员位置表", width = 15)
     @ApiModelProperty(value = "关联球员位置表")
 	private java.lang.Integer tpPosition;
+	
+	/**能力值*/
+	@Excel(name = "球员能力值", width = 15)
+    @ApiModelProperty(value = "球员能力值")
+	private java.lang.String abilityValue;
+	
 	/**纪录创建时间*/
 	@Excel(name = "纪录创建时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

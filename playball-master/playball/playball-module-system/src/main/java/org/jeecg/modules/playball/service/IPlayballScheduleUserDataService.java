@@ -13,6 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPlayballScheduleUserDataService extends IService<PlayballScheduleUserData> {
 	
-	public List<PlayballScheduleUserData> getListBySportsId(Integer sportsId);
+	public List<PlayballScheduleUserData> getListBySportsId(String sportsId);
 	
 }

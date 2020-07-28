@@ -23,7 +23,12 @@ public class PlayballAbilityValueServiceImpl extends ServiceImpl<PlayballAbility
 	private PlayballAbilityValueMapper abilityMapper;
 	
 	@Override
-	public List<PlayballAbilityValue> getListBySportsId(Integer sportsId){
-		return abilityMapper.getListBySportsId(sportsId);
+	public List<PlayballAbilityValue> getListBySportsId(String sportsId){
+		if(sportsId == null) {
+			return this.list();
+		}else {
+			return abilityMapper.getListBySportsId(Integer.valueOf(sportsId));
+		}
+		
 	}
 }

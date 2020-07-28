@@ -70,7 +70,7 @@ public class PlayballScheduleUserDataController extends JeecgController<Playball
 		return Result.ok(pageList);
 	}
 	
-	@GetMapping(value="/listBySportsId")
+	/*@GetMapping(value="/listBySportsId")
 	public Result<?> getListBySportsId(HttpServletRequest req) {
 		Integer sportsId = Integer.valueOf(req.getParameter("sportsId"));
 		
@@ -87,7 +87,7 @@ public class PlayballScheduleUserDataController extends JeecgController<Playball
 			result.setMessage("查找过程中出现了异常: " + e.getMessage());
 			return result;
 		}
-	}
+	}*/
 	
 	/**
 	 * 添加

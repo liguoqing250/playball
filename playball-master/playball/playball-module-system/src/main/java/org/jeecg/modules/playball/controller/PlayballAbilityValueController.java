@@ -77,10 +77,10 @@ public class PlayballAbilityValueController extends JeecgController<PlayballAbil
 		return Result.ok(pageList);
 	}
 	
-	@GetMapping(value="/listBySportsId")
+	@GetMapping(value="/getAbilityBySportsId")
 	public Result<?> getListBySportsId(HttpServletRequest req) {
-		Integer sportsId = Integer.valueOf(req.getParameter("sportsId"));
-		
+		//Integer sportsId = Integer.valueOf(req.getParameter("sportsId"));
+		String sportsId = req.getParameter("sportsId");
 		Result<List<PlayballAbilityValue>> result = new Result<List<PlayballAbilityValue>>();
 		try {
 			List<PlayballAbilityValue> list = playballAbilityValueService.getListBySportsId(sportsId);

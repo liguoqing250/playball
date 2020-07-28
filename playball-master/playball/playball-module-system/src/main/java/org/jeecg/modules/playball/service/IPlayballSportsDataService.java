@@ -1,5 +1,7 @@
 package org.jeecg.modules.playball.service;
 
+import java.util.List;
+
 import org.jeecg.common.playball.entity.PlayballSportsData;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -10,5 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version: V1.0
  */
 public interface IPlayballSportsDataService extends IService<PlayballSportsData> {
-
+	
+	public List<PlayballSportsData> getListBySportsId(String sportsId);
+	
 }

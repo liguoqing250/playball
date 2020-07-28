@@ -8,89 +8,42 @@
     @ok="handleOk"
     @cancel="handleCancel"
     cancelText="关闭">
-    
+
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
-      
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="tpId">
-          <a-input-number v-decorator="[ 'tpId', validatorRules.tpId ]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="关联用户表">
-          <a-input-number v-decorator="[ 'uId', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="球员加入时间">
-          <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss' v-decorator="[ 'tpJointime', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="退队时间">
-          <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss' v-decorator="[ 'tpQuittime', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="所属球队">
-          <a-input-number v-decorator="[ 'teamId', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="球衣号码">
-          <a-input-number v-decorator="[ 'tpClothesNumber', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="关联球员位置表">
-          <a-input-number v-decorator="[ 'tpPosition', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="纪录创建时间">
-          <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss' v-decorator="[ 'createtime', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="纪录修改时间">
-          <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss' v-decorator="[ 'updatetime', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="逻辑删除">
-          <a-input placeholder="请输入逻辑删除" v-decorator="['isDelete', {}]" />
-        </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label="版本号（用作乐观锁）">
-          <a-input placeholder="请输入版本号（用作乐观锁）" v-decorator="['version', {}]" />
-        </a-form-item>
-		
+
+        <a-row >
+          <a-col :span="6" v-for="(item, i) in abilityValueList" :key="i">
+            <a-form-item
+              :labelCol="labelCol"
+              :wrapperCol="wrapperCol"
+              :label="item.avName">
+              <a-input-number v-model="item.value"/>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
       </a-form>
     </a-spin>
   </j-modal>
 </template>
 
 <script>
-  import { httpAction } from '@/api/manage'
+  import { httpAction, getAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import moment from "moment"
+  import ARow from 'ant-design-vue/es/grid/Row'
 
   export default {
     name: "PlayballPlayerModal",
+    components: { ARow },
+    props: {
+      sportsId: {
+        type: Number,
+        default: null
+      },
+
+    },
     data () {
       return {
         title:"操作",
@@ -107,12 +60,16 @@
 
         confirmLoading: false,
         form: this.$form.createForm(this),
+
+        abilityValueList:{},
+
         validatorRules:{
         tpId:{rules: [{ required: true, message: '请输入tpId!' }]},
         },
         url: {
           add: "/playball/playballPlayer/add",
           edit: "/playball/playballPlayer/edit",
+          getAbilityBySportsId:"/playball/playballAbilityValue/getAbilityBySportsId",
         },
       }
     },
@@ -120,21 +77,14 @@
     },
     methods: {
       add () {
-        this.edit({});
+        //this.edit({});
       },
       edit (record) {
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'tpId','uId','teamId','tpClothesNumber','tpPosition','isDelete','version'))
-		  //时间格式化
-          this.form.setFieldsValue({tpJointime:this.model.tpJointime?moment(this.model.tpJointime):null})
-          this.form.setFieldsValue({tpQuittime:this.model.tpQuittime?moment(this.model.tpQuittime):null})
-          this.form.setFieldsValue({createtime:this.model.createtime?moment(this.model.createtime):null})
-          this.form.setFieldsValue({updatetime:this.model.updatetime?moment(this.model.updatetime):null})
-        });
 
+        this.loadAbility(record)
       },
       close () {
         this.$emit('close');
@@ -148,7 +98,7 @@
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
-            if(!this.model.id){
+            if(!this.model.tpId){
               httpurl+=this.url.add;
               method = 'post';
             }else{
@@ -156,12 +106,15 @@
                method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            //时间格式化
-            formData.tpJointime = formData.tpJointime?formData.tpJointime.format('YYYY-MM-DD HH:mm:ss'):null;
-            formData.tpQuittime = formData.tpQuittime?formData.tpQuittime.format('YYYY-MM-DD HH:mm:ss'):null;
-            formData.createtime = formData.createtime?formData.createtime.format('YYYY-MM-DD HH:mm:ss'):null;
-            formData.updatetime = formData.updatetime?formData.updatetime.format('YYYY-MM-DD HH:mm:ss'):null;
-            
+            let abilityData=[]
+            for(var index in that.abilityValueList){
+              abilityData.push({
+                avName: that.abilityValueList[index].avName,
+                value: that.abilityValueList[index].value,
+              })
+            }
+            formData.abilityValue = JSON.stringify(abilityData)
+
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -183,7 +136,24 @@
       handleCancel () {
         this.close()
       },
-
+      loadAbility(record){
+        let that = this
+        let list = JSON.parse(record.abilityValue)
+        getAction(that.url.getAbilityBySportsId,{sportsId:record.sportsId}).then((res)=>{
+          if(res.success){
+            that.abilityValueList = res.result
+            for(var index in list){
+              for(var i in that.abilityValueList){
+                if(list[index].avName == that.abilityValueList[i].avName){
+                  that.abilityValueList[i].value = list[index].value
+                }
+              }
+            }
+          }else{
+            that.$message.warning(res.message);
+          }
+        });
+      },
 
     }
   }

@@ -17,4 +17,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 public interface PlayballPlayerMapper extends BaseMapper<PlayballPlayer> {
 	public List<PlayballPlayerModel> getPlayerList(IPage page, @Param("playerModel")PlayballPlayerModel playerModel);
 	public Integer getPlayerListTotal(@Param("playerModel")PlayballPlayerModel playerModel);
+	
+	public List<PlayballPlayerModel> getGamePlayersList(@Param("teamId")Integer teamId, @Param("gameId")Integer gameId,@Param("scheduleId")Integer scheduleId);
 }
