@@ -21,6 +21,8 @@ public class AppTeamPlayers {
     private Integer tp_clothes_number;
     //位置
     private Integer tp_position;
+    //球员能力值
+    private String ability_value;
     //纪录创建时间
     private Date createTime;
     //纪录修改时间
@@ -30,6 +32,13 @@ public class AppTeamPlayers {
     //版本号（用作乐观锁）
     private String version;
 
+    public String getAbility_value() {
+        return ability_value;
+    }
+
+    public void setAbility_value(String ability_value) {
+        this.ability_value = ability_value;
+    }
 
     public Integer getTp_id() {
         return tp_id;

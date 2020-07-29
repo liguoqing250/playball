@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.ScheduleUserdataMapper">
+
+
+    <!--条件分页查询-->
+    <select id="queryPlayerInfoByTpId" parameterType="java.lang.Integer" resultType="org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo">
+    SELECT
+	CASE ptp.team_id
+		WHEN pgs.team_id THEN
+		( SELECT t_name FROM playball_team WHERE team_id = pgs.opponent_id )
+		ELSE
+		( SELECT t_name FROM playball_team WHERE team_id = pgs.team_id )
+
+	END 	AS teamName,
+	psp.text AS position,
+	pus.id AS id,
+	pus.schedule_id AS scheduleId,
+	pus.player_id AS playerId,
+	pus.sports_id AS sportsId,
+	pus.user_id AS userId,
+	pus.data_json AS dataJson,
+	pus.create_time AS createTime,
+	pus.update_time AS updateTime,
+	pus.is_delete AS isDelete
+FROM
+	playball_schedule_userdata pus
+	LEFT JOIN playball_game_schedule pgs ON pgs.id = pus.schedule_id
+	LEFT JOIN playball_sports_position psp ON psp.st_id = pus.sports_id
+	LEFT JOIN playball_team_players ptp ON ptp.tp_position = psp.id
+WHERE
+	ptp.tp_id = #{tpId,jdbcType=INTEGER}
+    </select>
+</mapper>

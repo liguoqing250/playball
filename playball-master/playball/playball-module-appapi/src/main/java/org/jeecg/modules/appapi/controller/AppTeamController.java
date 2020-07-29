@@ -32,7 +32,16 @@ public class AppTeamController {
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
 
-
+    //查询入队、退队申请
+    @PostMapping(value = "/selectTeamPlayerByTpId")
+    public Result<?> selectTeamPlayerByTpId(@RequestParam Integer tpId) {
+        try{
+            return Result.ok(appTeamPlayersService.selectById(tpId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return  Result.error("查询失败");
+        }
+    }
     //查询入队、退队申请
     @PostMapping(value = "/disbandTeam")
     public Result<JSONObject> disbandTeam() {
@@ -168,11 +177,17 @@ public class AppTeamController {
     public Result<JSONObject> createTeam(@RequestBody AppTeam appTeam) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
-            //appTeamService.insert(appTeam);
-            appTeamService.createTeam(appTeam);
             JSONObject obj = new JSONObject();
-            obj.put("data",appTeam);
-            result.success("创建成功");
+            AppTeam queryTeam=appTeamService.setlectByTeamName(appTeam.getT_name());
+            if(queryTeam!=null){
+                result.success("创建失败");
+            }else{
+                appTeamService.createTeam(appTeam);
+
+                obj.put("data",appTeam);
+                result.success("创建成功");
+            }
+
             result.setResult(obj);
         }catch (Exception e){
             e.printStackTrace();

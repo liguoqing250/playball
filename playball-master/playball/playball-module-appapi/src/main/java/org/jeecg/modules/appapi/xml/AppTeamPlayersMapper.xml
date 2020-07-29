@@ -13,11 +13,12 @@
          <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
          <result column="is_delete" jdbcType="VARCHAR" property="is_delete" />
          <result column="version" jdbcType="VARCHAR" property="version" />
+         <result column="ability_value" jdbcType="VARCHAR" property="ability_value" />
     </resultMap>
 
     <!-- 查询字段-->
     <sql id="AppTeamPlayers_Column_List">
-        tp_id,u_id,tp_joinTime,tp_quitTime,team_id,tp_clothes_number,tp_position,createTime,updateTime,is_delete,version
+        tp_id,u_id,tp_joinTime,tp_quitTime,team_id,tp_clothes_number,tp_position,createTime,updateTime,is_delete,version,ability_value
     </sql>
 
     <!--根据ID查询-->
