@@ -109,7 +109,6 @@
         getSportsTypeList('').then((res)=>{
           if(res.success){
             this.sportsTypeList = res.result.records;
-            this.model.sportsId = record.sportsId;
           }
         })
 
