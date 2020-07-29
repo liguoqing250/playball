@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballDynamicMapper">
+	<!-- SQL片段：getDynamicList 的 FROM 和 WHERE 部分 -->
+	<sql id="getDynamicListSql">
+		from playball.playball_user_dynamic pud, playball.playball_users pu
+		WHERE
+		pud.is_delete = 0 and pud.udy_user_id = pu.u_id
+        <if test="playballDynamicModel.userName != null">
+     		and pu.u_name LIKE concat(concat('%',#{playballDynamicModel.userName}),'%')  
+        </if>
+        <if test="playballDynamicModel.nickName != null">
+     		and pu.u_nickName LIKE concat(concat('%',#{playballDynamicModel.nickName}),'%')  
+        </if>
+	</sql>
+	
+	<!-- 获取赛事信息 -->
+	<select id="getDynamicList" parameterType="java.util.Map" resultType="org.jeecg.common.playball.vo.PlayballDynamicModel">
+		SELECT
+			pud.udy_id AS udyId,
+			pud.udy_user_id AS udyUserId,
+			pud.udy_content AS udyContent,
+			pud.udy_resources AS udyResources,
+			pud.udy_res_type AS udyResType,
+			pud.udy_position AS udyPosition,
+			pud.udy_visible AS udyVisible,
+			pud.udy_draft AS udyDraft,
+			pu.u_name AS userName,
+			pu.u_nickName AS nickname
+			<include refid="getDynamicListSql"/>
+	</select>
+	
+	<!-- 查询 getUserByOrgCode 的总数-->
+	<select id="getDynamicListTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(1) <include refid="getDynamicListSql"/>
+	</select>
+</mapper>

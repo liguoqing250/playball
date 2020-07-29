@@ -75,7 +75,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="id"
+        rowKey="ordId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"

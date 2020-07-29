@@ -76,6 +76,7 @@
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
+          <!--
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
@@ -87,6 +88,7 @@
               </a-menu-item>
             </a-menu>
           </a-dropdown>
+          -->
         </span>
 
       </a-table>
@@ -152,7 +154,7 @@
             dataIndex: 'uPassworld'
            },
 		   {
-            title: '性别 1男/ 2女',
+            title: '性别',
             align:"center",
             dataIndex: 'uSex',
             customRender: (text, record, index) => {
@@ -188,7 +190,7 @@
            },
 
 		   {
-            title: '注册渠道1 手机 2QQ   3微信',
+            title: '注册渠道',
             align:"center",
             dataIndex: 'uRegisterway',
              customRender: (text, record, index) => {
@@ -207,12 +209,12 @@
 		   {
             title: 'QQ--openid',
             align:"center",
-            dataIndex: 'wxOpenid'
+            dataIndex: 'qqOpenid'
            },
 		   {
             title: '微信openid',
             align:"center",
-            dataIndex: 'qqOpenid'
+            dataIndex: 'wxOpenid'
            },
 		   {
             title: '支付宝账号',

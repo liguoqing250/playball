@@ -36,6 +36,7 @@
     <div class="table-operator">
       <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
       <a-button type="primary" icon="download" @click="handleExportXls('球队')">导出</a-button>
+      <!--
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -45,6 +46,7 @@
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
+      -->
     </div>
 
     <!-- table区域-begin -->
@@ -66,6 +68,10 @@
         class="j-table-force-nowrap"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
+
+        <span slot="showIntroduce" slot-scope="text, record">
+          <a @click="showIntroduce(record)">查看球队介绍</a>
+        </span>
 
         <template slot="avatarslot" slot-scope="text, record, index">
           <div class="anty-img-wrap">
@@ -92,6 +98,20 @@
       </a-table>
     </div>
     <!-- table区域-end -->
+
+    <div>
+      <j-modal
+        :visible.sync="model.bShow"
+        :width="1200"
+        :title="model.title"
+      >
+        <template>
+          <div v-html="">
+            {{model.introduce}}
+          </div>
+        </template>
+      </j-modal>
+    </div>
 
     <!-- 表单区域 -->
     <playballTeam-modal ref="modalForm" @ok="modalFormOk"></playballTeam-modal>
@@ -171,7 +191,8 @@
 		   {
             title: '球队介绍',
             align:"center",
-            dataIndex: 'tIntroduce'
+            dataIndex: 'tIntroduce',
+            scopedSlots: {customRender: "showIntroduce"}
            },
 		   {
             title: '胜 次数',
@@ -225,6 +246,13 @@
 
         sportsTypeList:{},
         areaData:'',
+
+        model: {
+          title: '球队介绍',
+          bShow:false,
+          introduce:'',
+        },
+
 		url: {
           list: "/plalyball/playballTeam/list",
           delete: "/plalyball/playballTeam/delete",
@@ -259,6 +287,10 @@
 
       getAvatarView: function (avatar) {
         return getFileAccessHttpUrl(avatar)
+      },
+      showIntroduce(record){
+        this.model.bShow= true
+        this.model.introduce = record.tIntroduce
       },
     }
   }

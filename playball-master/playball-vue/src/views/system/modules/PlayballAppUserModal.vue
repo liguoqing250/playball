@@ -61,8 +61,8 @@
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules:{
-        uId:{rules: [{ required: true, message: '请输入uId!' }]},
-        uPassworld:{rules: [{ required: true, message: '请输入密码，非空约束!' }]},
+        //uId:{rules: [{ required: true, message: '请输入uId!' }]},
+        //uPassworld:{rules: [{ required: true, message: '请输入密码，非空约束!' }]},
         },
         url: {
           add: "/playball/playballAppUser/add",
@@ -81,7 +81,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'uId','uName','uNickname','uPhonenumber'))
+          this.form.setFieldsValue(pick(this.model,'uName','uNickname','uPhonenumber'))
         });
 
       },
@@ -97,7 +97,7 @@
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
-            if(!this.model.id){
+            if(!this.model.uId){
               httpurl+=this.url.add;
               method = 'post';
             }else{
@@ -117,9 +117,6 @@
               that.confirmLoading = false;
               that.close();
             })
-
-
-
           }
         })
       },

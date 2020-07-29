@@ -68,6 +68,18 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <template slot="showTitle" slot-scope="text, record, index">
+          <span class="text-nowrap" style="max-width: 300px;word-wrap:break-word;white-space: normal;">
+            {{text}}
+          </span>
+        </template>
+
+        <template slot="showInfo" slot-scope="text, record, index">
+          <span class="text-nowrap" style="max-width: 1000px;word-wrap:break-word;white-space: normal;">
+            {{text}}
+          </span>
+        </template>
+
         <template slot="avatarslot" slot-scope="text, record, index">
           <div class="anty-img-wrap">
             <img style="width: 100px;" :src="getAvatarView(record.cCover)">
@@ -86,7 +98,7 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.cid)">
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.cId)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -133,7 +145,7 @@
     },
     data () {
       return {
-        description: 'cms教程管理页面',
+        description: '教程管理页面',
         // 表头
         columns: [
           {
@@ -149,12 +161,16 @@
 		   {
             title: '教程标题',
             align:"center",
-            dataIndex: 'cTitle'
+            dataIndex: 'cTitle',
+            width:300,
+            scopedSlots: {customRender: "showTitle"}
            },
 		   {
             title: '教程详情',
             align:"center",
-            dataIndex: 'cInfo'
+            dataIndex: 'cInfo',
+            width:1000,
+            scopedSlots: {customRender: "showInfo"}
            },
           {
             title: '封面图片',

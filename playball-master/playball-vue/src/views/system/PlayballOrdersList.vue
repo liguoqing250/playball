@@ -17,7 +17,7 @@
               <a-input placeholder="请输入用户名称" v-model="queryParam.userName"></a-input>
             </a-form-item>
           </a-col>
-          
+
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="商家名称">
               <a-input placeholder="请输入商家名称" v-model="queryParam.businessName"></a-input>
@@ -59,6 +59,7 @@
     <div class="table-operator">
       <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
       <a-button type="primary" icon="download" @click="handleExportXls('订单管理')">导出</a-button>
+      <!--
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -68,6 +69,7 @@
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
       </a-dropdown>
+      -->
     </div>
 
     <!-- table区域-begin -->
@@ -81,7 +83,7 @@
         ref="table"
         size="middle"
         bordered
-        rowKey="id"
+        rowKey="ordId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"

@@ -145,7 +145,7 @@
           {
             title: '资讯标题',
             align:"center",
-            dataIndex: 'title'
+            dataIndex: 'title',
           },
           {
             title: '封面图片',
