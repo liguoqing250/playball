@@ -16,6 +16,7 @@ import org.jeecg.common.playball.entity.PlayballPlayer;
 import org.jeecg.common.playball.entity.PlayballSportsData;
 import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.service.IPlayballPlayerService;
+import org.jeecg.modules.playball.service.IPlayballScheduleUserDataService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -50,6 +52,9 @@ import io.swagger.annotations.ApiOperation;
 public class PlayballPlayerController extends JeecgController<PlayballPlayer, IPlayballPlayerService> {
 	@Autowired
 	private IPlayballPlayerService playballPlayerService;
+	
+	@Autowired
+	private IPlayballScheduleUserDataService dataService;
 	
 	/**
 	 * 分页列表查询

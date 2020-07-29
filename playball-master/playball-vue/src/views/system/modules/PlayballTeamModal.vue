@@ -105,7 +105,6 @@
             }
             let formData = Object.assign(this.model, values);
 
-            console.log("是的发送到发送",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
                 that.$message.success(res.message);

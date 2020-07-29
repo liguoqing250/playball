@@ -19,4 +19,5 @@ public interface PlayballPlayerMapper extends BaseMapper<PlayballPlayer> {
 	public Integer getPlayerListTotal(@Param("playerModel")PlayballPlayerModel playerModel);
 	
 	public List<PlayballPlayerModel> getGamePlayersList(@Param("teamId")Integer teamId, @Param("gameId")Integer gameId,@Param("scheduleId")Integer scheduleId);
+	
 }

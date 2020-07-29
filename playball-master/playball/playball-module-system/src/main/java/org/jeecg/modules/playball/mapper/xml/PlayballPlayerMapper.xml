@@ -63,7 +63,9 @@
 			pu.u_name AS userName,
 			pu.u_nickName AS nickName,
 			psp.text AS positionName,
-			psu.data_json AS dataJson
+			psu.data_json AS dataJson,
+			psu.id AS scheduleUserDataId,
+			psu.sports_id AS sportsId
 		FROM playball.playball_team_players ptp
 		LEFT JOIN playball.playball_enroll pe ON pe.team_id = ptp.team_id
 		LEFT JOIN playball.playball_enroll_player pep ON pe.id = pep.enroll_id

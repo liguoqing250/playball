@@ -21,4 +21,5 @@ public interface IPlayballPlayerService extends IService<PlayballPlayer> {
 	public IPage<PlayballPlayerModel> queryList(IPage page, PlayballPlayerModel playerModel);
 	
 	public List<PlayballPlayerModel> getGamePlayersList(String teamId, String gameId, String scheduleId);
+	
 }

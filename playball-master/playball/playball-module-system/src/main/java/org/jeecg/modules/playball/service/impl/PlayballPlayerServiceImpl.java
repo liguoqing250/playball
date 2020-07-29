@@ -40,4 +40,5 @@ public class PlayballPlayerServiceImpl extends ServiceImpl<PlayballPlayerMapper,
 	public List<PlayballPlayerModel> getGamePlayersList(String teamId, String gameId, String scheduleId) {
 		return playMapper.getGamePlayersList(Integer.valueOf(teamId),Integer.valueOf(gameId),Integer.valueOf(scheduleId));
 	}
+	
 }

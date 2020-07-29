@@ -60,4 +60,5 @@ public class PlayballPlayerModel {
 	
 	private java.lang.String dataJson;
 	
+	private java.lang.Integer scheduleUserDataId;
 }
