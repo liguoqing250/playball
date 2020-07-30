@@ -13,6 +13,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules. appapi.entity.Game;
+import org.jeecg.modules.appapi.mapper.GameMapper;
 import org.jeecg.modules. appapi.service.IGameService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -48,6 +49,9 @@ import io.swagger.annotations.ApiOperation;
 public class GameController extends JeecgController<Game, IGameService> {
 	@Autowired
 	private IGameService gameService;
+	
+	@Autowired
+	private GameMapper mapper;
 
 
 	/**
@@ -181,6 +185,17 @@ public class GameController extends JeecgController<Game, IGameService> {
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
       return super.importExcel(request, response, Game.class);
+  }
+  
+  @GetMapping("/newestGame")
+  public Result<?> newestGame() {
+	  //默认分页 5
+	  Page<Game> page = new Page<Game>(1, 5);
+	  //时间倒序
+	  QueryWrapper<Game> queryWrapper = new QueryWrapper<Game>();
+	  	queryWrapper.orderByDesc("start_time");
+	  IPage<Game> selectPage = mapper.selectPage(page, queryWrapper);
+      return Result.ok(selectPage);
   }
 
 }

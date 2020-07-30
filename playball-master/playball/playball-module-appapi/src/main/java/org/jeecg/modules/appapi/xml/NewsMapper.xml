@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.PlayballNewsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.appapi.entity.PlayballNews">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="image" property="image" />
+        <result column="content" property="content" />
+        <result column="comment_total" property="commentTotal" />
+        <result column="page_view" property="pageView" />
+        <result column="news_type" property="newsType" />
+        <result column="label" property="label" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="del_flg" property="delFlg" />
+        <result column="version" property="version" />
+    </resultMap>
+
+</mapper>
