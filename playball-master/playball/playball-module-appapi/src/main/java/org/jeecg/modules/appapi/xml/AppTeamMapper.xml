@@ -23,11 +23,14 @@
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
         <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="attack_value" jdbcType="INTEGER" property="attack_value" />
+        <result column="defense_value" jdbcType="INTEGER" property="defense_value" />
+        <result column="unite_value" jdbcType="INTEGER" property="unite_value" />
     </resultMap>
 
     <!-- 查询字段-->
     <sql id="AppTeam_Column_List">
-        team_id,t_name,t_image,t_unitname,st_id,t_players_total,t_players_max,t_introduce,t_win_total,t_divide_total,t_lost_total,u_id,t_province,t_city,t_district,t_createTeamTime,t_captain,createTime,updateTime,is_delete,version
+        team_id,t_name,t_image,t_unitname,st_id,t_players_total,t_players_max,t_introduce,t_win_total,t_divide_total,t_lost_total,u_id,t_province,t_city,t_district,t_createTeamTime,t_captain,createTime,updateTime,is_delete,version,attack_value, defense_value,unite_value
     </sql>
 
     <!--条件分页查询-->

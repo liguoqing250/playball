@@ -159,4 +159,15 @@ public class AppTeamServiceImpl  implements AppTeamService {
         teamRecruitsMapper.deleteByMap(map);
     }
 
+    @Override
+    public AppTeam setlectByTeamName(String t_name) {
+        Map<String,Object> map=new HashedMap();
+        map.put("t_name",t_name);
+        List<AppTeam> list=appTeamMapper.selectByKey(map);
+        if(list.size()>0){
+            return list.get(0);
+        }
+        return null;
+    }
+
 }

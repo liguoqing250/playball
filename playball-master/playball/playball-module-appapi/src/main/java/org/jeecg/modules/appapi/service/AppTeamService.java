@@ -38,4 +38,6 @@ public interface AppTeamService  {
     List<AppTeam> queryTeamByEnroll(Integer id);
 
     void disbandTeam();
+
+    AppTeam setlectByTeamName(String t_name);
 }

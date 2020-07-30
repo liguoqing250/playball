@@ -80,11 +80,16 @@ public class EnrollPlayerController extends JeecgController<EnrollPlayer, IEnrol
 	 @ApiOperation(value="参赛球员-添加", notes="参赛球员-添加")
 	 @PostMapping(value = "/addList")
 	 public Result<?> add(@RequestBody List<EnrollPlayer> enrollPlayerList) {
-		 for (int i = 0; i < enrollPlayerList.size(); i++) {
-			 enrollPlayerService.save(enrollPlayerList.get(i));
-		 }
+	 	try{
+			for (int i = 0; i < enrollPlayerList.size(); i++) {
+				enrollPlayerService.save(enrollPlayerList.get(i));
+			}
+			return Result.ok("报名成功！");
+		}catch (Exception e){
+			return Result.error("报名失败");
+		}
 
-		 return Result.ok("报名成功！");
+
 	 }
 	/**
 	 * 添加

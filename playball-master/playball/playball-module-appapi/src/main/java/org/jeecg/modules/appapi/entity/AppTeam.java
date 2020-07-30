@@ -41,6 +41,10 @@ public class AppTeam {
     private Date t_createTeamTime;
     //队长 球员表ID  p_id
     private Integer t_captain;
+    private Integer attack_value;
+    private Integer defense_value;
+    private Integer unite_value;
+    
     //纪录创建时间
     private Date createTime;
     //纪录修改时间
@@ -49,6 +53,30 @@ public class AppTeam {
     private Integer is_delete;
     //版本号（用作乐观锁）
     private Integer version;
+
+    public Integer getAttack_value() {
+        return attack_value;
+    }
+
+    public void setAttack_value(Integer attack_value) {
+        this.attack_value = attack_value;
+    }
+
+    public Integer getDefense_value() {
+        return defense_value;
+    }
+
+    public void setDefense_value(Integer defense_value) {
+        this.defense_value = defense_value;
+    }
+
+    public Integer getUnite_value() {
+        return unite_value;
+    }
+
+    public void setUnite_value(Integer unite_value) {
+        this.unite_value = unite_value;
+    }
 
     public Integer getT_players_max() {
         return t_players_max;

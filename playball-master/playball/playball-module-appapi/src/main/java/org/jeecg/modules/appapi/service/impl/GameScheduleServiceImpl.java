@@ -1,6 +1,7 @@
 package org.jeecg.modules.appapi.service.impl;
 
 import org.jeecg.modules. appapi.entity.GameSchedule;
+import org.jeecg.modules.appapi.entity.vo.GameScheduleVo;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules. appapi.mapper.GameScheduleMapper;
 import org.jeecg.modules. appapi.service.IGameScheduleService;
@@ -39,5 +40,10 @@ public class GameScheduleServiceImpl extends ServiceImpl<GameScheduleMapper, Gam
 
         }
         return list;
+    }
+
+    @Override
+    public List<GameScheduleVo> queryTeamGameScore(Integer team_id) {
+        return gameScheduleMapper.queryTeamGameScore(team_id);
     }
 }

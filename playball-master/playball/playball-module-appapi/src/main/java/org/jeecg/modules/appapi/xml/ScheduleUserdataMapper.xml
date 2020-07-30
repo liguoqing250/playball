@@ -6,14 +6,16 @@
     <!--条件分页查询-->
     <select id="queryPlayerInfoByTpId" parameterType="java.lang.Integer" resultType="org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo">
     SELECT
-	CASE ptp.team_id
+CASE
+		ptp.team_id
 		WHEN pgs.team_id THEN
-		( SELECT t_name FROM playball_team WHERE team_id = pgs.opponent_id )
-		ELSE
-		( SELECT t_name FROM playball_team WHERE team_id = pgs.team_id )
-
-	END 	AS teamName,
-	psp.text AS position,
+		( SELECT t_name FROM playball_team WHERE team_id = pgs.opponent_id ) ELSE ( SELECT t_name FROM playball_team WHERE team_id = pgs.team_id )
+	END AS teamName,
+CASE
+		ptp.tp_position IS NULL
+	WHEN TRUE THEN
+		'队长' ELSE ( SELECT text FROM playball_sports_position WHERE id = ptp.tp_position )
+	END AS position,
 	pus.id AS id,
 	pus.schedule_id AS scheduleId,
 	pus.player_id AS playerId,
@@ -26,8 +28,7 @@
 FROM
 	playball_schedule_userdata pus
 	LEFT JOIN playball_game_schedule pgs ON pgs.id = pus.schedule_id
-	LEFT JOIN playball_sports_position psp ON psp.st_id = pus.sports_id
-	LEFT JOIN playball_team_players ptp ON ptp.tp_position = psp.id
+	LEFT JOIN playball_team_players ptp ON ptp.tp_id = pus.player_id
 WHERE
 	ptp.tp_id = #{tpId,jdbcType=INTEGER}
     </select>

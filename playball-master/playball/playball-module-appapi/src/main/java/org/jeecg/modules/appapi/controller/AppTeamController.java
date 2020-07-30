@@ -180,10 +180,10 @@ public class AppTeamController {
             JSONObject obj = new JSONObject();
             AppTeam queryTeam=appTeamService.setlectByTeamName(appTeam.getT_name());
             if(queryTeam!=null){
-                result.success("创建失败");
+                result.success("重复球队名，请换一个");
+                obj.put("data",null);
             }else{
                 appTeamService.createTeam(appTeam);
-
                 obj.put("data",appTeam);
                 result.success("创建成功");
             }

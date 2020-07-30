@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules. appapi.entity.GameSchedule;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.jeecg.modules.appapi.entity.vo.GameScheduleVo;
 
 /**
  * @Description: 比赛
@@ -13,5 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @Version: V1.0
  */
 public interface GameScheduleMapper extends BaseMapper<GameSchedule> {
-
+    List<GameScheduleVo> queryTeamGameScore(Integer team_id);
 }

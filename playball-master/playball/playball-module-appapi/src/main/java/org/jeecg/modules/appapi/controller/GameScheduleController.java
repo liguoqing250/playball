@@ -13,6 +13,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules. appapi.entity.GameSchedule;
+import org.jeecg.modules.appapi.entity.vo.GameScheduleVo;
 import org.jeecg.modules. appapi.service.IGameScheduleService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,6 +27,7 @@ import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +51,23 @@ public class GameScheduleController extends JeecgController<GameSchedule, IGameS
 	@Autowired
 	private IGameScheduleService gameScheduleService;
 
-
+	 /**
+	  * 通过team_id查询赛程记录
+	  *
+	  * @param team_id
+	  * @return
+	  */
+	 @ApiOperation(value="比赛-通过GameId查询赛程", notes="比赛-通过GameId查询赛程")
+	 @PostMapping(value = "/queryTeamGameScore")
+	 public Result<?> queryTeamGameScore(@RequestParam(name="team_id",required=true) Integer team_id) {
+	 	try {
+			List<GameScheduleVo>  list = gameScheduleService.queryTeamGameScore(team_id);
+			System.err.println(list.size());
+			return Result.ok(list);
+		}catch (Exception e){
+			return Result.error("查询失败");
+		}
+	 }
 	 /**
 	  * 通过GameId查询赛程
 	  *
