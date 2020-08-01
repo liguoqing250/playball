@@ -142,6 +142,9 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 		jsonObj.put("finished", 0);
 		  
 		List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
+		if(teamList.size() <= 2) {
+			jsonObj.put("finished", 1);
+		}
 		List<PlayballScheduleInfoPage> winMatchList = new ArrayList<PlayballScheduleInfoPage>();
 		List<PlayballTeam> lostTeamList = new ArrayList<PlayballTeam>(); 
 		boolean bRemove = true;

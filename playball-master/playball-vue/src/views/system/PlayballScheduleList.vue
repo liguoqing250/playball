@@ -141,7 +141,9 @@
             dataIndex: '',
             customRender:function (t,r,index) {
               if(t.opponentId != null){
-                return t.enterBall+":"+t.lostBall;
+                let eb = t.enterBall?t.enterBall:0
+                let lb = t.lostBall?t.lostBall:0
+                return eb+":"+lb;
               }else{
                 return "3:0"
               }
