@@ -36,7 +36,7 @@
     <select id="queryPageList" parameterType="java.util.Map" resultMap="ArenaVoMap">
      SELECT
 	( SELECT MIN( pfi.field_price ) FROM playball_field_info pfi WHERE pfi.business_id = sd.id ) AS price,
-	( st_distance ( point ( #{params.lat,jdbcType=FLOAT}, #{params.lon,jdbcType=FLOAT} ), point ( sd.location_lat, sd.location_lon ) ) * 111.195 ) AS distance,
+	( st_distance ( point ( #{params.lat,jdbcType=FLOAT}, #{params.lon,jdbcType=FLOAT} ), point ( sd.location_lon,sd.location_lat  ) ) * 111195 ) AS distance,
 	sd.*
 FROM
 	sys_depart sd
@@ -45,6 +45,9 @@ WHERE
 	sd.id = pfi.business_id
 	<if test="params.sportsId!=null and params.sportsId !=''">
         AND pfi.sports_id = #{params.sportsId}
+    </if>
+	<if test="params.searchValue!=null and params.searchValue !=''">
+        AND sd.depart_name  like concat(concat('%',#{params.searchValue}),'%')
     </if>
 	GROUP BY sd.id
 	<if test="params.column!=null and params.column !=''">

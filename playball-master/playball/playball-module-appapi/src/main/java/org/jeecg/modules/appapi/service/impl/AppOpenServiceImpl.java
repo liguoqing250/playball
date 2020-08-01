@@ -43,6 +43,7 @@ public class AppOpenServiceImpl implements AppOpenService {
                     out.put("appUsers",selectAppUsers);
                 }else{
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
+
                     appUsersMapper.insert(appUsers);
                     PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
                     playballUsersBalance.setUbUserId(appUsers.getU_id());
@@ -74,7 +75,11 @@ public class AppOpenServiceImpl implements AppOpenService {
                     }else{
                         //密码加密
                         appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
+                        appUsers.setU_name(appUsers.getU_phoneNumber());
                         appUsersMapper.insert(appUsers);
+                        PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
+                        playballUsersBalance.setUbUserId(appUsers.getU_id());
+                        playballUsersBalanceMapper.insert(playballUsersBalance);
                         out.put("appUsers",appUsers);
                         out.put("msg","注册成功");
                     }

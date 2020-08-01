@@ -29,8 +29,6 @@ public class ArenaServiceImpl extends ServiceImpl<ArenaMapper, Arena> implements
         for(String key:parameterMap.keySet()){//keySet获取map集合key的集合  然后在遍历key即可
             String[] value=parameterMap.get(key);
             map.put(key,value[0]);
-            System.out.print(key);
-            System.out.println(value[0]);
         }
         int pageNo= Integer.valueOf(map.get("pageNo").toString());
         int pageSize= Integer.valueOf(map.get("pageSize").toString());
