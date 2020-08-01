@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.playball.mapper.PlayballAdvertisementMapper">
+
+	<select id="getAppRouteList"  resultType="org.jeecg.common.playball.entity.PlayballAdvertisementAppRoute">
+		SELECT app_id as appId, app_name as appName, app_url as appUrl from playball_app_route
+	</select>
+	
+</mapper>

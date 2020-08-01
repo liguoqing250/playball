@@ -1,6 +1,6 @@
 package org.jeecg.modules.playball.service.impl;
 
-import org.jeecg.modules.playball.entity.PlayballNews;
+import org.jeecg.common.playball.entity.PlayballNews;
 import org.jeecg.modules.playball.mapper.PlayballNewsMapper;
 import org.jeecg.modules.playball.service.IPlayballNewsService;
 import org.springframework.stereotype.Service;

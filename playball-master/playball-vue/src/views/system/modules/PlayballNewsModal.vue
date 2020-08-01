@@ -21,17 +21,44 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="封面图片">
-          <j-image-upload class="avatar-uploader" text="上传" v-model="image" ></j-image-upload>
+          label="简述">
+          <a-input placeholder="请输入简述内容" v-decorator="['introduction', {}]" />
         </a-form-item>
+
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="封面类型">
+          <j-search-select-tag placeholder="请选择封面类型" v-model="newsModel.label" :dictOptions="labelOptions">
+          </j-search-select-tag>
+        </a-form-item>
+
+        <template v-if="newsModel.label==1">
+          <a-form-item
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+            label="封面图片">
+            <j-image-upload class="avatar-uploader" text="上传" v-model="image" ></j-image-upload>
+          </a-form-item>
+        </template>
+        <template v-if="newsModel.label==2">
+          <a-form-item
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+            label="封面视频">
+            <j-upload v-model="image"></j-upload>
+          </a-form-item>
+        </template>
+
 
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="资讯类型">
           <a-select placeholder="请输入资讯类型"  v-model="newsModel.newsType" @change ="changeSportsList($event)">
-            <a-select-option :value="sports.id"  v-for="sports in sportsTypeList" >
-              {{ sports.sportsName }}
+            <a-select-option :value="item.ntId"  v-for="item in newsTypeList" >
+              {{ item.ntName }}
             </a-select-option>
           </a-select>
         </a-form-item>
@@ -57,7 +84,8 @@
   import ARow from 'ant-design-vue/es/grid/Row'
   import JImageUpload from '@/components/jeecg/JImageUpload'
   import JEditor from '@/components/jeecg/JEditor'
-  import { getSportsTypeList } from '@/api/api'
+  import JSearchSelectTag from '@/components/dict/JSearchSelectTag'
+  import JUpload from '@/components/jeecg/JUpload'
 
   export default {
     name: "PlayballNewsModal",
@@ -65,7 +93,9 @@
       ARow,
       JDate,
       JImageUpload,
-      JEditor
+      JEditor,
+      JSearchSelectTag,
+      JUpload
     },
     data () {
       return {
@@ -88,7 +118,7 @@
           newsType:1,
         },
 
-        sportsTypeList:{},
+        newsTypeList:{},
         typeName:'',
         image:'',
 
@@ -96,13 +126,24 @@
         form: this.$form.createForm(this),
         validatorRules:{
         },
+
+        labelOptions:[{
+          text:"图片",
+          value:"1"
+        },{
+          text:"视频",
+          value:"2"
+        }],
+
         url: {
           add: "/playball/playballNews/add",
           edit: "/playball/playballNews/edit",
+          getNewsTypeList:"/playball/playballCMSNewsType/queryList",
         },
       }
     },
     created () {
+      this.getNewsTypeList();
     },
     methods: {
       add () {
@@ -113,13 +154,6 @@
         this.newsModel = Object.assign({}, record);
         //--------------------------------------------------------
 
-        //获取运动类型
-        getSportsTypeList('').then((res)=>{
-          if(res.success){
-            this.sportsTypeList = res.result.records;
-          }
-        })
-
         if(this.newsModel.id){
           setTimeout(() => {
             this.image = record.image;
@@ -129,7 +163,7 @@
         //--------------------------------------------------------
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.newsModel,'title','newsModel.content','image','newsModel.newsType'))
+          this.form.setFieldsValue(pick(this.newsModel,'title','introduction'))
         });
       },
       close () {
@@ -181,6 +215,13 @@
       changeSportsList(id){
         this.newsModel.newsType = id
 
+      },
+      getNewsTypeList(){
+        getAction(this.url.getNewsTypeList,{}).then((res)=>{
+          if(res.success){
+            this.newsTypeList=res.result;
+          }
+        });
       },
     }
   }

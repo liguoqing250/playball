@@ -1,6 +1,6 @@
 package org.jeecg.modules.playball.service;
 
-import org.jeecg.modules.playball.entity.PlayballNews;
+import org.jeecg.common.playball.entity.PlayballNews;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

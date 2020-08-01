@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.modules.playball.entity.PlayballNews;
+import org.jeecg.common.playball.entity.PlayballNews;
 import org.jeecg.modules.playball.service.IPlayballNewsService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -49,7 +49,6 @@ public class PlayballNewsController extends JeecgController<PlayballNews, IPlayb
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		log.info("------------------------queryPageList");
 		
 		QueryWrapper<PlayballNews> queryWrapper = QueryGenerator.initQueryWrapper(playballNews, req.getParameterMap());
 		Page<PlayballNews> page = new Page<PlayballNews>(pageNo, pageSize);

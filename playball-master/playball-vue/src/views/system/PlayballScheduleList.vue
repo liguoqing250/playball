@@ -64,7 +64,7 @@
          </span>
 
         <span slot="actionOpponentData" slot-scope="text, record">
-            <a @click="handleEditOpponentUserData(text, record)" v-if="text!=null">
+            <a @click="handleEditOpponentUserData(text, record)">
               {{record.opponentName}}
             </a>
          </span>
@@ -193,6 +193,8 @@
   },
     methods: {
       handleEditTeamUserData(text,record){
+        console.log(text)
+        console.log(record)
         this.$refs.PlayballScheduleUserDataModal.show(text,record.teamName,record);
       },
       handleEditOpponentUserData(text,record){

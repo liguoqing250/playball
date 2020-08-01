@@ -14,8 +14,8 @@
           <a-col :md="6" :sm="24">
             <a-form-item label="资讯类型">
               <a-select placeholder="请输入资讯类型"  v-model="queryParam.newsType">
-                <a-select-option :value="sports.id"  v-for="sports in sportsTypeList"  >
-                  {{ sports.sportsName }}
+                <a-select-option :value="item.ntId"  v-for="item in newsTypeList"  >
+                  {{ item.ntName }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -118,7 +118,6 @@
   import PlayballNewsModal from './modules/PlayballNewsModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { httpAction,getAction,getFileAccessHttpUrl } from '@/api/manage'
-  import { getSportsTypeList } from '@/api/api'
 
   export default {
     name: "PlayballNewsList",
@@ -175,10 +174,10 @@
             dataIndex: 'newsType',
             customRender: (text, record, index) => {
               let re = "";
-              for (index in this.sportsTypeList)  // x 为属性名
+              for (index in this.newsTypeList)  // x 为属性名
               {
-                if(this.sportsTypeList[index].id==text){
-                  return this.sportsTypeList[index].sportsName
+                if(this.newsTypeList[index].ntId==text){
+                  return this.newsTypeList[index].ntName
                 }
               }
               return re;
@@ -192,7 +191,7 @@
           }
         ],
 
-        sportsTypeList:{},
+        newsTypeList:{},
         newsInfomodal: {
           title: '',
           visible: false,
@@ -204,17 +203,19 @@
           delete: "/playball/playballNews/delete",
           deleteBatch: "/playball/playballNews/deleteBatch",
           exportXlsUrl: "/playball/playballNews/exportXls",
+          getNewsTypeList:"/playball/playballCMSNewsType/queryList",
         }
       }
     },
     methods: {
       initDictConfig() {
-        //获取运动类型
-        getSportsTypeList('').then((res)=>{
+        //获取资讯类型
+        getAction(this.url.getNewsTypeList,{}).then((res)=>{
           if(res.success){
-            this.sportsTypeList = res.result.records;
+            this.newsTypeList=res.result;
+            console.log(this.newsTypeList)
           }
-        })
+        });
       },
       getAvatarView: function (avatar) {
         return getFileAccessHttpUrl(avatar)
