@@ -166,6 +166,16 @@
           }
         });
       },
+      handleAdd(){
+        if(this.ipagination.total < 5){
+          this.$refs.modalForm.add();
+        }else{
+          //this.$message.warning('广告轮播最大数量为5条,请您删除或者修改现有广告')
+          this.$warning({
+            content: '广告轮播最大数量为5条,请您删除或者修改现有广告',
+          });
+        }
+      }
     }
   }
 </script>

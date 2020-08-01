@@ -149,8 +149,6 @@
         this.form.resetFields();
         this.model = Object.assign({}, record);
 
-        console.log("model=",this.model)
-
         if(this.model.cId){
           setTimeout(() => {
             this.imageList = record.cCover;
