@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.PlayballPosterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.appapi.entity.PlayballPoster">
+        <id column="pos_id" property="posId" />
+        <result column="pos_describe" property="posDescribe" />
+        <result column="pos_rotation" property="posRotation" />
+        <result column="pos_type" property="posType" />
+        <result column="pos_jump_url" property="posJumpUrl" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+    </resultMap>
+
+</mapper>
