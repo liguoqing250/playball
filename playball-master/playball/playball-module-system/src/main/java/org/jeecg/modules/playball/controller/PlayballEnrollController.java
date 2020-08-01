@@ -14,6 +14,7 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.playball.entity.PlayballEnroll;
 import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.service.IPlayballEnrollService;
 import org.jeecg.modules.playball.vo.PlayballEnrollPage;
 
@@ -101,8 +102,26 @@ public class PlayballEnrollController extends JeecgController<PlayballEnroll, IP
 		  	log.error(e.getMessage(), e);
 		      result.setSuccess(false);
 		      result.setMessage("查找过程中出现了异常: " + e.getMessage());
-		          return result;
+		      return result;
 		 	}
+	 }
+	 
+	 @GetMapping(value = "/getEnrollPlayerById")
+	 public Result<?> getEnrollPlayerById(PlayballEnroll playballEnroll, HttpServletRequest req) {
+		 Result<List<PlayballPlayerModel>> result = new Result<>();
+		 try {
+			 List<PlayballPlayerModel> list = playballEnrollService.getEnrollTeamPlayerById(playballEnroll.getId());
+			 
+			 result.setResult(list);
+			 result.setSuccess(true);
+		     result.setMessage("查找成功");
+		     return result;
+		     
+		 }catch(Exception e) {
+			 result.setSuccess(false);
+		     result.setMessage("查找过程中出现了异常: " + e.getMessage());
+		     return result;
+		 }
 	 }
 	
 	/**

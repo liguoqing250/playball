@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jeecg.modules.playball.entity.PlayballEnroll;
 import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.vo.PlayballEnrollPage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,4 +22,6 @@ public interface IPlayballEnrollService extends IService<PlayballEnroll> {
 	
 
 	public List<PlayballTeam> getEnrollTeamByGamesId(Integer gamesId);
+	
+	public List<PlayballPlayerModel>  getEnrollTeamPlayerById(Integer id);
 }

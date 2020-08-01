@@ -41,4 +41,20 @@
 		pt.team_id = pe.team_id and  pe.games_id = #{gamesId}
 	</select>
 	
+	<!--  通过id获取报名参数队员 -->
+	<select id="getEnrollPlayerById" resultType="org.jeecg.common.playball.vo.PlayballPlayerModel">
+		SELECT
+		pu.u_name AS userName,
+		pu.u_nickName AS nickName,
+		pu.u_headImage AS headImage,
+		ptp.tp_clothes_number AS tpClothesNumber,
+		psp.text AS positionName
+		FROM playball.playball_enroll pe
+		LEFT JOIN playball.playball_enroll_player pep ON pep.enroll_id = pe.id
+		LEFT JOIN playball.playball_users pu ON pu.u_id = pep.user_id
+		LEFT JOIN playball.playball_team_players ptp ON ptp.tp_id = pep.player_id
+		LEFT JOIN playball.playball_sports_position psp ON psp.id = ptp.tp_position
+		WHERE pe.id = #{id}
+	</select>
+	
 </mapper>

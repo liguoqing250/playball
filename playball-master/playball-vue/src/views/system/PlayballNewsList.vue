@@ -174,8 +174,7 @@
             dataIndex: 'newsType',
             customRender: (text, record, index) => {
               let re = "";
-              for (index in this.newsTypeList)  // x 为属性名
-              {
+              for (index in this.newsTypeList){
                 if(this.newsTypeList[index].ntId==text){
                   return this.newsTypeList[index].ntName
                 }

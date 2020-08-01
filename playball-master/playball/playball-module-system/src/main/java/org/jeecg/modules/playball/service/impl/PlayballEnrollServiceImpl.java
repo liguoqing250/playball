@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jeecg.modules.playball.entity.PlayballEnroll;
 import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.mapper.PlayballEnrollMapper;
 import org.jeecg.modules.playball.mapper.PlayballGameMapper;
 import org.jeecg.modules.playball.service.IPlayballEnrollService;
@@ -43,5 +44,10 @@ public class PlayballEnrollServiceImpl extends ServiceImpl<PlayballEnrollMapper,
 	public List<PlayballTeam> getEnrollTeamByGamesId(Integer gamesId){
 		
 		return enrollMapper.getEnrollTeamByGamesId(gamesId);
+	}
+	
+	@Override
+	public List<PlayballPlayerModel>  getEnrollTeamPlayerById(Integer id){
+		return enrollMapper.getEnrollPlayerById(id);
 	}
 }

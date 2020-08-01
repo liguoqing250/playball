@@ -50,6 +50,8 @@ public class PlayballPlayerModel {
 	
 	private java.lang.String nickName;
 	
+	private java.lang.String headImage;
+	
 	private java.lang.String teamName;
 	
 	private java.lang.String positionName;

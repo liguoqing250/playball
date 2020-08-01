@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.playball.entity.PlayballEnroll;
 import org.jeecg.common.playball.entity.PlayballTeam;
+import org.jeecg.common.playball.vo.PlayballPlayerModel;
 import org.jeecg.modules.playball.vo.PlayballEnrollPage;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -23,4 +24,5 @@ public interface PlayballEnrollMapper extends BaseMapper<PlayballEnroll> {
 	
 	public List<PlayballTeam> getEnrollTeamByGamesId(@Param("gamesId")Integer gamesId);
 	
+	public List<PlayballPlayerModel>  getEnrollPlayerById(@Param("id")Integer id);
 }

@@ -66,6 +66,12 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <template slot="show" slot-scope="text, record, index">
+          <span>
+            <a @click="showPlayers(record)">查看报名球员</a>
+          </span>
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -132,6 +138,12 @@
             align:"center",
             dataIndex: 'createTime'
            },
+          {
+            title: '操作',
+            dataIndex: 'show',
+            align:"center",
+            scopedSlots: { customRender: 'show' },
+          }
           /*{
             title: '操作',
             dataIndex: 'action',
@@ -139,6 +151,8 @@
             scopedSlots: { customRender: 'action' },
           }*/
         ],
+
+        visible: false,
 		url: {
           list: "/playball/playballEnroll/list",
           delete: "/playball/playballEnroll/delete",
@@ -154,7 +168,9 @@
     }
   },
     methods: {
-
+      showPlayers(record){
+        this.$refs.modalForm.edit(record);
+      },
     }
   }
 </script>
