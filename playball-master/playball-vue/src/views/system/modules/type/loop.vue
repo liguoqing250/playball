@@ -43,7 +43,7 @@
                 <a-card hoverable style="width: 240px">
                   <a-card-meta
                     :title="item.teamName"
-                    description="0">
+                    :description="item.enterBall">
                     <a-avatar
                       slot="avatar"
                       size="large" icon="user"
@@ -62,7 +62,7 @@
                   <a-card hoverable style="width: 240px">
                     <a-card-meta
                       :title="item.opponentName"
-                      description="0">
+                      :description="item.lostBall">
                       <a-avatar
                         slot="avatar"
                         size="large" icon="user"

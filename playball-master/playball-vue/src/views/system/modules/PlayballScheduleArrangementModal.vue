@@ -122,7 +122,8 @@
 
       },
       handleOk () {
-        let that = this
+        this.handleCancel()
+        /*let that = this
 
         if(this.$refs.out){
           this.$refs.out.getSuccess(function (bOk) {
@@ -147,7 +148,7 @@
           that.gameTypeShow.bCustom = false
           that.visible = false
           that.close()
-        }
+        }*/
       },
       handleCancel () {
         this.gameTypeShow.bGroup = false
