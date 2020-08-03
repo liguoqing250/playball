@@ -8,6 +8,7 @@
         <result column="title" property="title" />
         <result column="image" property="image" />
         <result column="content" property="content" />
+        <result column="introduction" property="introduction" />
         <result column="comment_total" property="commentTotal" />
         <result column="page_view" property="pageView" />
         <result column="news_type" property="newsType" />

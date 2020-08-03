@@ -40,6 +40,9 @@ public class PlayballNews implements Serializable {
 
     @ApiModelProperty(value = "详细内容")
     private String content;
+    
+    @ApiModelProperty(value = "内容简述")
+    private String introduction;
 
     @ApiModelProperty(value = "评论量")
     private Integer commentTotal;
