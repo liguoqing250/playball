@@ -15,7 +15,6 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="请设置比赛日期">
-          <!--v-decorator="[ 'matchTime', validatorRules.matchTime]"-->
           <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss'  :disabled="dateDisabled"
                          v-decorator="['matchTime',{rules: [{validator: validateMatchTime,},],},]"/>
         </a-form-item>
@@ -128,7 +127,7 @@
           //比赛时间肯定要大于开始时间且小于结束时间，在这期间内都可以设置时间
           //当前时间大于比赛结束时间，比赛结束，无需设置任何时间
           if(now.getTime() > this.gameEndTime.getTime()){
-            //this.dateDisabled=true
+            this.dateDisabled=true
           }
 
           //大于比赛时间才能设置比分，比将比赛状态设置为结束状态

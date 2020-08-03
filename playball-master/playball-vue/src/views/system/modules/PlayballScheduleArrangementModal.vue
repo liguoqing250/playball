@@ -26,9 +26,7 @@
       <!-- 球队展示区域 -->
       <template v-if="toggleSearchStatus">
         <a-row type="flex" style="margin-bottom:10px" :gutter="16" >
-          <a-col :span="6"
-                 @click="selectField(item,index)"
-                 v-for="(item, index) in enrollTeamList" :key="index">
+          <a-col :span="6" v-for="(item, index) in enrollTeamList" :key="index">
             <a-form-item>
               <a-card hoverable style="width:240px">
                 <a-card-meta :title="item.tName">

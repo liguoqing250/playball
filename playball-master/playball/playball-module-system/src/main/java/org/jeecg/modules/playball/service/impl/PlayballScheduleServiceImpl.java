@@ -239,4 +239,33 @@ public class PlayballScheduleServiceImpl extends ServiceImpl<PlayballScheduleMap
 		gameService.updateById(gameInfo);
 	}
 	
+	public void addLoopMatch(List<List<PlayballScheduleInfoPage>> matchList, Integer gameId, Integer finished) {
+		PlayballGame gameInfo =gameService.getById(gameId);
+		Integer stage = matchList.size();
+		gameInfo.setStage(stage);
+		
+		if(finished == 1) {
+		   gameInfo.setFinished(1);//更新赛事状态，表示赛事所有比赛结束啦
+		}
+		for(int i=0; i<matchList.size(); i++) {
+			for(int j=0; j<matchList.get(i).size();j++) {
+				//获取要比赛的两只球队
+				PlayballScheduleInfoPage scheduleInfo = JSON.parseObject(JSON.toJSONString(matchList.get(i).get(j)),PlayballScheduleInfoPage.class);
+				PlayballSchedule schedule = new PlayballSchedule();
+				BeanUtils.copyProperties(scheduleInfo, schedule);
+				schedule.setStage(i+1);
+				if(scheduleInfo.getOpponentId() == null) {
+					//如果为空，轮空队伍3:0获胜
+					schedule.setEnterBall(3);
+					schedule.setGameResult(1);
+					schedule.setGameStatus(1);
+				}
+				
+				this.save(schedule);
+			}
+		}
+		
+		gameService.updateById(gameInfo);
+	}
+
 }

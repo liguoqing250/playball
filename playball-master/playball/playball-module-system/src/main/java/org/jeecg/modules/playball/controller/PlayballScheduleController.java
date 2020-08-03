@@ -160,21 +160,46 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
    @GetMapping(value = "/createLoopMacth")
    public Result<?> getCreateLoopMacth(HttpServletRequest req) {
 	   Integer gameId = Integer.valueOf(req.getParameter("gamesId"));
-	   
-	   List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
-	   
-	   teamList = GameUtils.disorganizeList(teamList);
-	   Result<List<List<Map<String, PlayballTeam>>>> result = new Result<List<List<Map<String, PlayballTeam>>>>();
-	   if(teamList.size()%2 == 1) {
-		   PlayballTeam team = new PlayballTeam();
-		   team.setTName("yuzhi");
-		   teamList.add(team);
-	   }
-	   List<List<Map<String, PlayballTeam>>> matchList = GameUtils.createGroup(teamList);
-	   try{
+	   Result<List<List<PlayballScheduleInfoPage>>> result = new Result<List<List<PlayballScheduleInfoPage>>>();
+	   try {
+		   List<PlayballTeam> teamList = enrollService.getEnrollTeamByGamesId(gameId);
+		   //如果队伍为单数，加一虚拟队伍进行分组
+		   if(teamList.size()%2 == 1) {
+			   PlayballTeam team = new PlayballTeam();
+			   team.setTName("yuzhi");
+			   teamList.add(team);
+		   }
+		   teamList = GameUtils.disorganizeList(teamList);
+		   
+		   Integer stage = 0;
+		   List<List<PlayballScheduleInfoPage>> matchList = new ArrayList<List<PlayballScheduleInfoPage>>();
+		   List<List<Map<String, PlayballTeam>>> list = GameUtils.createGroup(teamList);
+		   for(int i=0; i<list.size(); i++ ) {
+			   stage = i+1;
+			   List<PlayballScheduleInfoPage> tempList = new ArrayList<PlayballScheduleInfoPage>();
+			   for(int j=0; j<list.get(i).size(); j++) {
+				   PlayballScheduleInfoPage scheduleInfo = new PlayballScheduleInfoPage();
+				   scheduleInfo.setStage(stage);
+				   scheduleInfo.setGamesId(gameId);
+				   if(list.get(i).get(j).get("team").getTeamId() != null){
+					   scheduleInfo.setTeamId(list.get(i).get(j).get("team").getTeamId());
+					   scheduleInfo.setTeamName(list.get(i).get(j).get("team").getTName());
+					   if(list.get(i).get(j).get("opponent").getTeamId() != null) {
+						   scheduleInfo.setOpponentId(list.get(i).get(j).get("opponent").getTeamId());
+						   scheduleInfo.setOpponentName(list.get(i).get(j).get("opponent").getTName());
+					   }
+				   }else{
+					   scheduleInfo.setTeamId(list.get(i).get(j).get("opponent").getTeamId());
+					   scheduleInfo.setTeamName(list.get(i).get(j).get("opponent").getTName());
+				   }
+				   
+				   tempList.add(scheduleInfo);
+			   }
+			   matchList.add(tempList);
+		   }
 		   result.setResult(matchList);
-           result.success("OK");
-       }catch (Exception e){
+	       result.success("OK");
+	   }catch (Exception e){
            e.printStackTrace();
            result.error500("请求失败");
        }
@@ -187,26 +212,10 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
    @RequestMapping(value = "/addLoopMacth", method = RequestMethod.POST)
    public Result<?> addLoopMacth(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
 	   log.info("addLoopMacth-------获取addLoopMacth="+jsonObject);
-	   Integer gamesId = jsonObject.getIntValue("gamesId");
+	   Integer gameId = jsonObject.getIntValue("gamesId");
 	   Integer finished = jsonObject.getIntValue("finished");
-	   
-	   Integer stage = 0;
-	   List<List<Map<String, PlayballTeam>>> matchList = (List<List<Map<String, PlayballTeam>>>)jsonObject.get("matchList");
-	   for(int i=0; i<matchList.size(); i++ ) {
-		   stage = i+1;
-		   PlayballSchedule schedule = new PlayballSchedule();
-		   for(int j=0; j<matchList.get(i).size(); j++) {
-			   PlayballTeam team = JSON.parseObject(JSON.toJSONString(matchList.get(i).get(j).get("team")),PlayballTeam.class);
-			   PlayballTeam opponent = JSON.parseObject(JSON.toJSONString(matchList.get(i).get(j).get("opponent")),PlayballTeam.class);
-			   schedule.setGamesId(gamesId);
-			   schedule.setStage(stage);
-			   schedule.setTeamId(team.getTeamId());
-			   schedule.setOpponentId(opponent.getTeamId());
-			   log.info("-------PlayballSchedule="+schedule);
-			   scheduleService.save(schedule);
-		   }
-	   }
-	   gameService.updateStageById(stage,gamesId);
+	   List<List<PlayballScheduleInfoPage>> matchList = (List<List<PlayballScheduleInfoPage>>)jsonObject.get("matchList");
+	   scheduleService.addLoopMatch(matchList,gameId, finished);
 	   
 	   return Result.ok("添加成功！");
    }
