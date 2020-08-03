@@ -106,6 +106,15 @@ public class PlayballTeam implements Serializable  {
     @ApiModelProperty(value = "所属区--对应地区表主键")
 	@JsonProperty("tDistrict") 
 	private java.lang.Integer tDistrict;
+	/**进攻能力*/
+	@Excel(name = "进攻能力", width = 15)
+	private java.lang.Integer attackValue;
+	/**防守能力*/
+	@Excel(name = "防守能力", width = 15)
+	private java.lang.Integer defenseValue;
+	/**综合能力*/
+	@Excel(name = "综合能力", width = 15)
+	private java.lang.Integer uniteValue;
 	/**建队时间*/
 	@Excel(name = "建队时间", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")

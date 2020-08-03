@@ -1,6 +1,6 @@
 <template>
   <j-modal
-    :title="title"
+    title="球员能力值设置"
     :width="800"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -13,12 +13,12 @@
       <a-form :form="form">
 
         <a-row >
-          <a-col :span="6" v-for="(item, i) in abilityValueList" :key="i">
+          <a-col :span="8" v-for="(item, i) in abilityValueList" :key="i">
             <a-form-item
               :labelCol="labelCol"
               :wrapperCol="wrapperCol"
               :label="item.avName">
-              <a-input-number v-model="item.value"/>
+              <a-input-number style="width:80px" :min="1" :max="100" v-model="item.value"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -51,7 +51,7 @@
         model: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 6 },
         },
         wrapperCol: {
           xs: { span: 24 },

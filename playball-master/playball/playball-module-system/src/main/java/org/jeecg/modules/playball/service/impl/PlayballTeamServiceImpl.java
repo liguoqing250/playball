@@ -6,6 +6,7 @@ import org.jeecg.common.playball.entity.PlayballTeam;
 import org.jeecg.common.playball.vo.PlayballTeamModel;
 import org.jeecg.modules.playball.mapper.PlayballTeamMapper;
 import org.jeecg.modules.playball.service.IPlayballTeamService;
+import org.jeecg.modules.playball.service.IPlayballScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ public class PlayballTeamServiceImpl extends ServiceImpl<PlayballTeamMapper, Pla
 	@Autowired
 	private PlayballTeamMapper teamMapper;
 	
+	@Autowired
+	private IPlayballScheduleService scheduleService;
+	
 	@Override
 	public IPage<PlayballTeamModel> queryTeamList(IPage page, PlayballTeamModel playballTeam){
 		List<PlayballTeamModel> list = teamMapper.getTeamList(page, playballTeam);
@@ -35,4 +39,5 @@ public class PlayballTeamServiceImpl extends ServiceImpl<PlayballTeamMapper, Pla
 		
 		return result;
 	}
+
 }

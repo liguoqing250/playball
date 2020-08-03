@@ -423,6 +423,29 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody PlayballSchedule playballSchedule) {
 		playballScheduleService.updateById(playballSchedule);
+		if(playballSchedule.getGameStatus() == 1) {
+			PlayballTeam team = teamService.getById(playballSchedule.getTeamId());
+			PlayballTeam opponent = teamService.getById(playballSchedule.getOpponentId());
+			//更新球队胜平负场次，可以直接提供接口获取，无需字段存储
+			//1胜利，2平，3输
+			if(playballSchedule.getGameResult()==1) {
+				team.setTWinTotal(team.getTWinTotal()+1);
+				teamService.updateById(team);
+				opponent.setTLostTotal(opponent.getTLostTotal()+1);
+				teamService.updateById(opponent);
+			}else if(playballSchedule.getGameResult()==2) {
+				team.setTDivideTotal(team.getTDivideTotal()+1);
+				teamService.updateById(team);
+				opponent.setTDivideTotal(opponent.getTDivideTotal()+1);
+				teamService.updateById(opponent);
+			}else if(playballSchedule.getGameResult()==3) {
+				team.setTLostTotal(team.getTLostTotal()+1);
+				teamService.updateById(team);
+				opponent.setTWinTotal(opponent.getTWinTotal()+1);
+				teamService.updateById(opponent);
+			}
+		}
+			
 		return Result.ok("编辑成功!");
 	}
 	

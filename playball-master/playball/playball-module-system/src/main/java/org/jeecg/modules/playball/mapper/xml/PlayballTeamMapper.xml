@@ -37,6 +37,9 @@
 			pt.t_district AS tDistrict,
 			pt.t_createTeamTime AS tCreateteamtime,
 			pt.t_captain AS tCaptain,
+			pt.attack_value AS attackValue,
+			pt.defense_value AS defenseValue,
+			pt.unite_value AS uniteValue,
 			pst.sports_name AS sportsName,
 			pu.u_nickName AS userName,
 			puex.u_nickName AS captainName

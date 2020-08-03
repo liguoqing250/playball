@@ -29,7 +29,28 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="当前球队最大人数">
-          <a-input-number v-decorator="[ 'tPlayersMax', {}]" />
+          <a-input-number :min="1" :max="100" v-decorator="[ 'tPlayersMax', {}]" />
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="进攻能力">
+          <a-input-number :min="1" :max="100" v-decorator="[ 'attackValue', {}]" />
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="防守能力">
+          <a-input-number :min="1" :max="100" v-decorator="[ 'defenseValue', {}]" />
+        </a-form-item>
+
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="综合能力">
+          <a-input-number :min="1" :max="100" v-decorator="[ 'uniteValue', {}]" />
         </a-form-item>
 
       </a-form>
@@ -80,7 +101,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'tName','tUnitname','tPlayersMax'))
+          this.form.setFieldsValue(pick(this.model,'tName','tUnitname','tPlayersMax','attackValue','defenseValue','uniteValue'))
         });
 
       },

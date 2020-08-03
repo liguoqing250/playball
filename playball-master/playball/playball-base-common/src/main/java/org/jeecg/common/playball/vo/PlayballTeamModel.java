@@ -84,5 +84,11 @@ public class PlayballTeamModel {
 	/**运动类型名*/
 	@JsonProperty("sportsName")
 	private java.lang.String sportsName;
+	/**进攻能力*/
+	private java.lang.Integer attackValue;
+	/**防守能力*/
+	private java.lang.Integer defenseValue;
+	/**综合能力*/
+	private java.lang.Integer uniteValue;
 
 }

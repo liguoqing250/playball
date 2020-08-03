@@ -15,12 +15,13 @@
         <a-tabs defaultActiveKey="1" >
           <a-tab-pane :tab="teamName" key="1">
             <div>
-              <a-table :pagination="pagination" :columns="columns" :data-source="data" >
+              <a-table :pagination="pagination" :columns="columns" :data-source="data" :scroll="{ x: 500, y: 300 }">
                 <template v-for="col in colData" :slot="col" slot-scope="text, record, index">
                   <div :key="col">
                     <a-input
                       v-if="record.editable"
                       style="margin: -5px 0"
+                      :max-length="3"
                       :value="text"
                       @change="e => handleChange(e.target.value, record.key, col)"
                     />
@@ -183,6 +184,7 @@
         getAction(that.url.getGamePlayersList,{teamId:teamId,gameId:record.gamesId,scheduleId:record.id}).then((res)=>{
           if(res.success){
             that.playersDataList = res.result
+            console.log("----加载球员数据----",res.result)
             for(let i in that.playersDataList){
               let data = that.playersDataList[i]
               data.key = i.toString()
@@ -204,8 +206,15 @@
         });
       },
       handleChange(value, key, column) {
+        const reg = /^-?[0-9]*(\.[0-9]*)?$/;
         const newData = [...this.data];
         const target = newData.filter(item => key === item.key)[0];
+
+        let temp = target[column]
+        if (!reg.test(value)) {
+          value = temp
+        }
+
         if (target) {
           target[column] = value;
           this.data = newData;
@@ -235,7 +244,6 @@
 
         let httpurl = '';
         let method = '';
-        console.log("-----save--target--",target)
         if(!target.scheduleUserDataId){
           httpurl+=this.url.savePlayersData;
           method = 'post';

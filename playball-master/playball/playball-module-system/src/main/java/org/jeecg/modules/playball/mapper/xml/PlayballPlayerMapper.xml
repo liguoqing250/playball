@@ -70,8 +70,8 @@
 		LEFT JOIN playball.playball_enroll pe ON pe.team_id = ptp.team_id
 		LEFT JOIN playball.playball_enroll_player pep ON pe.id = pep.enroll_id
 		LEFT JOIN playball.playball_users pu on ptp.u_id = pu.u_id
-		LEFT JOIN playball.playball_sports_position psp on ptp.tp_position = psp.id
-		LEFT JOIN playball.playball_schedule_userdata psu on psu.schedule_id = #{scheduleId}
+		LEFT JOIN playball.playball_sports_position psp ON ptp.tp_position = psp.id
+		LEFT JOIN playball.playball_schedule_userdata psu ON pep.player_id = psu.player_id AND psu.schedule_id = #{scheduleId}
 		WHERE ptp.tp_id = pep.player_id AND
 		pe.games_id=#{gameId} AND ptp.team_id=#{teamId}
 	</select>

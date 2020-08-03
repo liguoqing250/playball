@@ -164,7 +164,7 @@
             dataIndex: 'tUnitname'
            },
 		   {
-            title: '球队类型(关联运动类型表)',
+            title: '球队类型',
             align:"center",
             dataIndex: 'stId',
              customRender: (text, record, index) => {
@@ -195,20 +195,35 @@
             scopedSlots: {customRender: "showIntroduce"}
            },
 		   {
-            title: '胜 次数',
+            title: '胜',
             align:"center",
             dataIndex: 'tWinTotal'
            },
 		   {
-            title: '平 次数',
+            title: '平',
             align:"center",
             dataIndex: 'tDivideTotal'
            },
 		   {
-            title: '负 次数',
+            title: '负',
             align:"center",
             dataIndex: 'tLostTotal'
            },
+          {
+            title: '进攻能力',
+            align:"center",
+            dataIndex: 'attackValue'
+          },
+          {
+            title: '防守能力',
+            align:"center",
+            dataIndex: 'defenseValue'
+          },
+          {
+            title: '综合能力',
+            align:"center",
+            dataIndex: 'uniteValue'
+          },
 		   {
             title: '球队创建人',
             align:"center",
