@@ -38,4 +38,5 @@ public interface IPlayballScheduleService extends IService<PlayballSchedule> {
 	public JSONObject createMacthList(Integer gameId, String nextStage);
 	
 	public void addMatch(List<PlayballScheduleInfoPage> matchList, Integer gameId, Integer finished);
+	public void addLoopMatch(List<List<PlayballScheduleInfoPage>> matchList, Integer gameId, Integer finished);
 }

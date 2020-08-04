@@ -70,7 +70,9 @@
          </span>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">设置比赛时间和比赛结果</a>
+          <a v-if="bshow(record) == 1" @click="handleEdit(record)">设置比赛时间</a>
+          <a v-if="bshow(record) == 2" @click="handleEdit(record)">设置比赛结果</a>
+          <a v-if="bshow(record) == 3" @click="handleEdit(record)">查看比赛结果</a>
         </span>
 
       </a-table>
@@ -88,6 +90,8 @@
   import PlayballScheduleModal from './modules/PlayballScheduleModal'
   import PlayballScheduleUserDataModal from './modules/PlayballScheduleUserDataModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import moment from "moment"
+
 
   export default {
     name: "PlayballScheduleList",
@@ -96,6 +100,7 @@
       PlayballScheduleModal,
       PlayballScheduleUserDataModal
     },
+
     data () {
       return {
         description: '赛程表管理页面',
@@ -191,18 +196,31 @@
   computed: {
     importExcelUrl: function(){
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-    }
+    },
   },
     methods: {
       handleEditTeamUserData(text,record){
-        console.log(text)
-        console.log(record)
         this.$refs.PlayballScheduleUserDataModal.show(text,record.teamName,record);
       },
       handleEditOpponentUserData(text,record){
         this.$refs.PlayballScheduleUserDataModal.show(text,record.opponentName,record);
+      },
+      bshow(record){
+        let now = new Date()
+        if(record.matchTime == null){
+          return 1
+        }
+        if(record.gameStatus == 1){
+          return 3
+        }
+        let matchTime = new Date(moment(record.matchTime))
+        if(now.getTime() > matchTime){
+          return 2
+        }else{
+          return 1
+        }
       }
-    }
+    },
   }
 </script>
 <style scoped>

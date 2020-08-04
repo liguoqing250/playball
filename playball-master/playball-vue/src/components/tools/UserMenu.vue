@@ -38,6 +38,15 @@
         <span v-if="isDesktop()">欢迎您，{{ nickname() }}</span>
       </span>
       <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
+        <a-menu-item key="0" @click="updatePassword">
+          <a-icon type="setting"/>
+          <span>密码修改</span>
+        </a-menu-item>
+        <a-menu-item key="1"  @click="systemSetting">
+          <a-icon type="tool"/>
+          <span>系统设置</span>
+        </a-menu-item>
+        <!--
         <a-menu-item key="0">
           <router-link :to="{ name: 'account-center' }">
             <a-icon type="user"/>
@@ -62,6 +71,7 @@
           <a-icon type="cluster"/>
           <span>切换部门</span>
         </a-menu-item>
+        -->
        <!-- <a-menu-item key="2" disabled>
           <a-icon type="setting"/>
           <span>测试</span>
@@ -168,7 +178,7 @@
           content: '真的要注销登录吗 ?',
           onOk() {
             return that.Logout({}).then(() => {
-                window.location.href="/";
+                window.location.href="/pb/";
               //window.location.reload()
             }).catch(err => {
               that.$message.error({

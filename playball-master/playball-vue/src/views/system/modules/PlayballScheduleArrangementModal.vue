@@ -26,9 +26,7 @@
       <!-- 球队展示区域 -->
       <template v-if="toggleSearchStatus">
         <a-row type="flex" style="margin-bottom:10px" :gutter="16" >
-          <a-col :span="6"
-                 @click="selectField(item,index)"
-                 v-for="(item, index) in enrollTeamList" :key="index">
+          <a-col :span="6" v-for="(item, index) in enrollTeamList" :key="index">
             <a-form-item>
               <a-card hoverable style="width:240px">
                 <a-card-meta :title="item.tName">
@@ -101,6 +99,7 @@
           bCustom:false
         },
 
+        customMatchList:{},
         url: {
           enrollTeamList: "/playball/playballEnroll/listByGameId",
           getGameInfoById: "/playball/playballGame/getGameById",
@@ -125,6 +124,25 @@
       },
       handleOk () {
         let that = this
+        if(this.$refs.custom){
+          this.$refs.custom.getSuccess(function (bOk) {
+            that.gameTypeShow.bGroup = false
+            that.gameTypeShow.bLoop = false
+            that.gameTypeShow.bOut = false
+            that.gameTypeShow.bCustom = false
+            that.visible = false
+            that.close()
+          })
+        }else{
+          that.gameTypeShow.bGroup = false
+          that.gameTypeShow.bLoop = false
+          that.gameTypeShow.bOut = false
+          that.gameTypeShow.bCustom = false
+          that.visible = false
+          that.close()
+        }
+        //this.handleCancel()
+        /*let that = this
 
         if(this.$refs.out){
           this.$refs.out.getSuccess(function (bOk) {
@@ -149,7 +167,7 @@
           that.gameTypeShow.bCustom = false
           that.visible = false
           that.close()
-        }
+        }*/
       },
       handleCancel () {
         this.gameTypeShow.bGroup = false
@@ -202,21 +220,6 @@
             }
           }
         })
-
-        //获取比赛阶段，是否生成比赛
-        /*getAction(this.url.getGameInfoById, params).then((re)=> {
-          if (re.success) {
-            this.gamesInfo = re.result
-            console.log("重新获取",this.gamesInfo)
-            if(this.gamesInfo.stage == 0){
-              this.bCreate = true
-            }else{
-              this.bCreate = false
-            }
-          }
-        })*/
-
-
       },
       showTeam(){
         console.log("showteam")

@@ -223,6 +223,17 @@
       edit(key) {
         const newData = [...this.data];
         const target = newData.filter(item => key === item.key)[0];
+
+        if(!this.model.matchTime){
+          this.$message.warning("比赛未开始，暂无法设置相关数据");
+          return
+        }
+        let now = new Date()
+        let matchTime = new Date(moment(this.model.matchTime))
+        if(now.getTime() < matchTime.getTime()){
+          this.$message.warning("比赛未开始，暂无法设置相关数据");
+          return
+        }
         this.editingKey = key;
         if (target) {
           target.editable = true;
