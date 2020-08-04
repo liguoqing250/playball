@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-07-30
  */
 public interface NewsMapper extends BaseMapper<PlayballNews> {
-
+	int updateNewsBrowse(PlayballNews news);
 }
