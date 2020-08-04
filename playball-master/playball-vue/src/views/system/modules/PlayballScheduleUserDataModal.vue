@@ -99,6 +99,9 @@
         cacheData : [],
         editingKey: '',
         columns:[],
+        record:{},
+        id:"",
+        teamName:"",
 
         url: {
           //add: "/playball/playballAbilityValue/add",
@@ -134,6 +137,10 @@
         this.close()
       },
       show(id,teamName,record){
+        this.id = id
+        this.record = record
+        this.teamName = teamName
+        this.editingKey = '';
         this.colData=[];
         this.data=[];
         this.cacheData=[];
@@ -253,6 +260,7 @@
         }
         this.editingKey = '';
 
+        let formData={}
         let httpurl = '';
         let method = '';
         if(!target.scheduleUserDataId){
@@ -261,9 +269,8 @@
         }else{
           httpurl+=this.url.editPlayersData;
           method = 'put';
+          formData.id = target.scheduleUserDataId
         }
-        let formData={}
-        formData.id = target.scheduleUserDataId
         formData.scheduleId = this.model.id
         formData.sportsId = this.model.sportsId
 
@@ -283,6 +290,8 @@
         httpAction(httpurl,formData,method).then((res)=>{
           if(res.success){
             this.$message.success(res.message);
+            //保存成功，重新载入，不载入，再次编辑会因获取不到id而变成添加
+            this.show(this.id,this.teamName,this.record);
           }else{
             this.$message.warning(res.message);
           }

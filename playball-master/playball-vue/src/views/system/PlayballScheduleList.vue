@@ -70,9 +70,11 @@
          </span>
 
         <span slot="action" slot-scope="text, record">
-          <a v-if="bshow(record) == 1" @click="handleEdit(record)">设置比赛时间</a>
-          <a v-if="bshow(record) == 2" @click="handleEdit(record)">设置比赛结果</a>
-          <a v-if="bshow(record) == 3" @click="handleEdit(record)">查看比赛结果</a>
+          <template v-if="record.opponentId">
+            <a v-if="bshow(record) == 1" @click="handleEdit(record)">设置比赛时间</a>
+            <a v-if="bshow(record) == 2" @click="handleEdit(record)">设置比赛结果</a>
+            <a v-if="bshow(record) == 3" @click="handleEdit(record)">查看比赛结果</a>
+          </template>
         </span>
 
       </a-table>
