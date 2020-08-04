@@ -3,6 +3,8 @@ package org.jeecg.modules.appapi.service;
 import org.jeecg.modules.appapi.entity.SportsData;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 球员能力值
  * @Author: jeecg-boot
@@ -11,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISportsDataService extends IService<SportsData> {
 
+    List<SportsData> queryByStId(Integer stId);
 }

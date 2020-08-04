@@ -157,7 +157,20 @@ public class AppTeamController {
         }
         return result;
     }
-
+    @PostMapping(value = "/selectTeamScoreInfoById")
+    public Result<JSONObject> selectTeamScoreInfoById(Integer id) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            JSONObject obj = new JSONObject();
+            obj.put("data", appTeamService.selectTeamScoreInfoById(id));
+            result.success("查询成功");
+            result.setResult(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("查询失败");
+        }
+        return result;
+    }
     @PostMapping(value = "/selectTeamById")
     public Result<JSONObject> selectTeamById(@RequestBody AppTeam appTeam) {
         Result<JSONObject> result = new Result<JSONObject>();

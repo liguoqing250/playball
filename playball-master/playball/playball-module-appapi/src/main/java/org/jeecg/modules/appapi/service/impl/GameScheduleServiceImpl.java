@@ -46,4 +46,9 @@ public class GameScheduleServiceImpl extends ServiceImpl<GameScheduleMapper, Gam
     public List<GameScheduleVo> queryTeamGameScore(Integer team_id) {
         return gameScheduleMapper.queryTeamGameScore(team_id);
     }
+
+    @Override
+    public GameScheduleVo queryTeamGameInfoById(Integer id) {
+        return gameScheduleMapper.queryTeamGameInfoById(id);
+    }
 }

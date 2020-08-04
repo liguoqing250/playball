@@ -121,7 +121,19 @@ public class ScheduleUserdataController extends JeecgController<ScheduleUserdata
 		this.scheduleUserdataService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功！");
 	}
-	
+	 /**
+	  * 通过team_id和schedule_id查询
+	  *
+	  * @param team_id
+	  * @param schedule_id
+	  * @return
+	  */
+	 @ApiOperation(value="赛程球员数据-通过id查询", notes="赛程球员数据-通过id查询")
+	 @PostMapping(value = "/queryPlayerGameDataByTeam")
+	 public Result<?> queryPlayerGameDataByTeam(Integer team_id,Integer schedule_id) {
+		 List<ScheduleUserdata> scheduleUserdata = scheduleUserdataService.queryPlayerGameDataByTeam(team_id,schedule_id);
+		 return Result.ok(scheduleUserdata);
+	 }
 	/**
 	 * 通过id查询
 	 *

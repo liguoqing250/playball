@@ -15,4 +15,6 @@ import java.util.List;
 public interface IScheduleUserdataService extends IService<ScheduleUserdata> {
 
     List<PlayerScoreInfo> queryPlayerInfoByTpId(Integer tpId);
+
+    List<ScheduleUserdata> queryPlayerGameDataByTeam(Integer team_id, Integer schedule_id);
 }

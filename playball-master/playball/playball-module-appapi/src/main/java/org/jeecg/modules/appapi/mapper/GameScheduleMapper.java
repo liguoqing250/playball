@@ -15,4 +15,5 @@ import org.jeecg.modules.appapi.entity.vo.GameScheduleVo;
  */
 public interface GameScheduleMapper extends BaseMapper<GameSchedule> {
     List<GameScheduleVo> queryTeamGameScore(Integer team_id);
+    GameScheduleVo queryTeamGameInfoById(Integer id);
 }

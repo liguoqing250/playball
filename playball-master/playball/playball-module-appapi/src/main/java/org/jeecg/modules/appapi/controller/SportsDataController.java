@@ -121,7 +121,18 @@ public class SportsDataController extends JeecgController<SportsData, ISportsDat
 		this.sportsDataService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功！");
 	}
-	
+	 /**
+	  * 通过stId查询
+	  *
+	  * @param stId
+	  * @return
+	  */
+	 @ApiOperation(value="球员能力值-通过id查询", notes="球员能力值-通过id查询")
+	 @PostMapping(value = "/queryByStId")
+	 public Result<?> queryByStId(@RequestParam(name="stId",required=true) Integer stId) {
+		 List<SportsData> sportsData = sportsDataService.queryByStId(stId);
+		 return Result.ok(sportsData);
+	 }
 	/**
 	 * 通过id查询
 	 *
