@@ -8,6 +8,7 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.mapper.AppTeamPlayersMapper;
 import org.jeecg.modules.appapi.mapper.TeamRecruitsMapper;
@@ -170,4 +171,8 @@ public class AppTeamServiceImpl  implements AppTeamService {
         return null;
     }
 
+    @Override
+    public TeamScoreInfoVo selectTeamScoreInfoById(Integer id) {
+        return appTeamMapper.selectTeamScoreInfoById(id);
+    }
 }

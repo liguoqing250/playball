@@ -32,4 +32,14 @@ FROM
 WHERE
 	ptp.tp_id = #{tpId,jdbcType=INTEGER}
     </select>
+
+	<!--查询比赛比分-->
+	<select id="queryPlayerGameDataByTeam" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.ScheduleUserdata">
+		SELECT pu.u_name as name,pu.u_nickName as nickName,psu.* FROM playball_schedule_userdata psu LEFT JOIN playball_team_players ptp ON ptp.tp_id=psu.player_id LEFT JOIN playball_users pu ON pu.u_id=psu.user_id
+		WHERE  1=1
+		<if test="params.schedule_id!='' and params.schedule_id!=null">
+			AND psu.schedule_id=#{params.schedule_id}
+		</if>
+		AND ptp.team_id=#{params.team_id}
+	</select>
 </mapper>

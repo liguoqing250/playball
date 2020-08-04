@@ -37,6 +37,8 @@ public class GameScheduleVo {
 	@Excel(name = "比赛阶段，用来表示该比赛处于赛事的阶段，便于后面对比赛管控", width = 15)
     @ApiModelProperty(value = "比赛阶段，用来表示该比赛处于赛事的阶段，便于后面对比赛管控")
 	private Integer stage;
+	/**运动类型*/
+	private Integer stId;
 	/**赛事id*/
 	@Excel(name = "赛事id", width = 15)
     @ApiModelProperty(value = "赛事id")

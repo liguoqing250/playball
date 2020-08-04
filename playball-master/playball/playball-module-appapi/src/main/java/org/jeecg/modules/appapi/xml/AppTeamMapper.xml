@@ -100,6 +100,24 @@
         from playball_team
         where team_id = #{team_id,jdbcType=INTEGER}
     </select>
+    <!--根据ID查询-->
+    <select id="selectTeamScoreInfoById" parameterType="java.lang.Integer"  resultType="org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo" >
+        SELECT
+	b.team_id as teamId,
+	b.rownum,
+	round(b.t_win_total / ( b.t_win_total + b.t_divide_total + b.t_lost_total ),2) AS win
+FROM
+	(
+	SELECT
+		t.*,
+		@rownum := @rownum + 1 AS rownum
+	FROM
+		( SELECT @rownum := 0 ) r,
+		( SELECT * FROM playball_team ORDER BY t_win_total / ( t_win_total + t_divide_total + t_lost_total ) DESC ) AS t
+	) AS b
+WHERE
+	b.team_id = #{id,jdbcType=INTEGER}
+    </select>
     <!--删 根据ID-->
     <delete id="deleteById" parameterType="java.lang.Integer">
         delete from playball_team where team_id = #{team_id,jdbcType=INTEGER}

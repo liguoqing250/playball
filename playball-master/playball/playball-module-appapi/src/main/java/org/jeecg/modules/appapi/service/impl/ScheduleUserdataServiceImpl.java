@@ -1,5 +1,6 @@
 package org.jeecg.modules.appapi.service.impl;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.modules.appapi.entity.ScheduleUserdata;
 import org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo;
 import org.jeecg.modules.appapi.mapper.ScheduleUserdataMapper;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 赛程球员数据
@@ -24,5 +27,13 @@ public class ScheduleUserdataServiceImpl extends ServiceImpl<ScheduleUserdataMap
     @Override
     public List<PlayerScoreInfo> queryPlayerInfoByTpId(Integer tpId) {
         return scheduleUserdataMapper.queryPlayerInfoByTpId(tpId);
+    }
+
+    @Override
+    public List<ScheduleUserdata> queryPlayerGameDataByTeam(Integer team_id, Integer schedule_id) {
+        Map<String,Object> map =new HashedMap();
+        map.put("team_id",team_id);
+        map.put("schedule_id",schedule_id);
+        return scheduleUserdataMapper.queryPlayerGameDataByTeam(map);
     }
 }

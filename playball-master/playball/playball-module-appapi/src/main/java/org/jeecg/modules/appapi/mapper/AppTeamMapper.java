@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.AppTeam;
+import org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,4 +33,5 @@ public interface AppTeamMapper {
 
     List<AppTeam> queryTeamByGameid(Integer id);
 
+    TeamScoreInfoVo selectTeamScoreInfoById(Integer id);
 }

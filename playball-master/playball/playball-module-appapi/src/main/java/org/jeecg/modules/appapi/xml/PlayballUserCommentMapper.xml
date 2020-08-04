@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.PlayballUserCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.appapi.entity.PlayballUserComment">
+        <id column="uco_id" property="ucoId" />
+        <result column="uco_becom_id" property="ucoBecomId" />
+        <result column="user_id" property="userId" />
+        <result column="uco_content" property="ucoContent" />
+        <result column="uco_sort" property="ucoSort" />
+        <result column="uco_reply_num" property="ucoReplyNum" />
+        <result column="uco_support" property="ucoSupport" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+    </resultMap>
+    
+    <!-- 查询评论 -->
+    <select id="selectCommentList" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserCommentVo" resultMap="ResultMap">
+    	SELECT c.*,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_comment c
+		INNER JOIN  playball_users u
+		ON c.user_id = u.u_id
+		WHERE 1
+		<if test="vo.ucoSort!=null and vo.ucoSort!=''">
+			and c.uco_sort = #{vo.ucoSort}
+		</if>
+		<if test="vo.ucoBecomId!=null and vo.ucoBecomId!=''">
+			and c.uco_becom_id = #{vo.ucoBecomId}
+		</if>
+		ORDER BY c.create_time DESC 
+    </select>
+    
+    <!-- 更新评论点赞数 -->
+    <update id="updateSupport" parameterType="org.jeecg.modules.appapi.entity.PlayballUserComment">
+    	<if test="ucoSupport!=null and ucoSupport==1">
+    		UPDATE playball_user_comment SET uco_support = uco_support + 1 WHERE uco_id = #{ucoId}
+    	</if>
+    	<if test="ucoSupport!=null and ucoSupport==0">
+    		UPDATE playball_user_comment SET uco_support = uco_support - 1 WHERE uco_id = #{ucoId}
+    	</if>
+    	<if test="ucoReplyNum!=null">
+    		UPDATE playball_user_comment SET uco_reply_num = uco_reply_num + 1 WHERE uco_id = #{ucoId}
+    	</if>
+    </update>
+    
+    <!-- 连表查询映射结果 -->
+    <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserCommentBo">
+        <id column="uco_id" property="ucoId" />
+        <result column="uco_becom_id" property="ucoBecomId" />
+        <result column="user_id" property="userId" />
+        <result column="uco_content" property="ucoContent" />
+        <result column="uco_sort" property="ucoSort" />
+        <result column="uco_reply_num" property="ucoReplyNum" />
+        <result column="uco_support" property="ucoSupport" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+        
+        <result column="u_id" property="uId" />
+        <result column="u_headImage" property="uHeadImage" />
+        <result column="u_nickName" property="uNickName" />
+    </resultMap>
+    
+
+</mapper>

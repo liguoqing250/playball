@@ -160,6 +160,18 @@ public class GameScheduleController extends JeecgController<GameSchedule, IGameS
 	 * @return
 	 */
 	@ApiOperation(value="比赛-通过id查询", notes="比赛-通过id查询")
+	@PostMapping(value = "/queryTeamGameInfoById")
+	public Result<?> queryTeamGameInfoById(@RequestParam(name="id",required=true) Integer id) {
+		GameScheduleVo gameSchedulevo = gameScheduleService.queryTeamGameInfoById(id);
+		return Result.ok(gameSchedulevo);
+	}
+	/**
+	 * 通过id查询
+	 *
+	 * @param id
+	 * @return
+	 */
+	@ApiOperation(value="比赛-通过id查询", notes="比赛-通过id查询")
 	@PostMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
 		GameSchedule gameSchedule = gameScheduleService.getById(id);

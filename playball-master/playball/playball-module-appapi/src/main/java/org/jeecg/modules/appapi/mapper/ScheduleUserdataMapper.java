@@ -1,6 +1,7 @@
 package org.jeecg.modules.appapi.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.ScheduleUserdata;
@@ -16,4 +17,6 @@ import org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo;
 public interface ScheduleUserdataMapper extends BaseMapper<ScheduleUserdata> {
 
     List<PlayerScoreInfo> queryPlayerInfoByTpId(Integer tpId);
+
+    List<ScheduleUserdata> queryPlayerGameDataByTeam(@Param("params") Map<String, Object> params);
 }

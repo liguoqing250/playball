@@ -5,6 +5,7 @@
     <resultMap type="org.jeecg.modules.appapi.entity.vo.GameScheduleVo" id="GameScheduleMap">
         <id property="id" column="id"/>
         <result column="stage" property="stage"/>
+        <result column="st_id" property="stId"/>
         <result column="games_id" property="gamesId"/>
         <result column="match_time" property="matchTime"/>
         <result column="group_id" property="groupId"/>
@@ -36,6 +37,7 @@
     <select id="queryTeamGameScore" parameterType="java.lang.Integer" resultMap="GameScheduleMap">
         SELECT
 	pgs.*,
+	teaminfoa.st_id as st_id,
 	teaminfoa.team_id AS team_a_id,
 	teaminfoa.t_name AS team_a_tName,
 	teaminfoa.u_name AS team_a_uName,
@@ -51,6 +53,7 @@ FROM
 	LEFT JOIN (
 	SELECT
 		pt.team_id,
+		pt.st_id,
 		pt.t_name,
 		pu.u_name,
 		pu.u_nickName,
@@ -77,6 +80,50 @@ FROM
 		AND pgs.team_id = #{team_id} or pgs.opponent_id = #{team_id}
     </select>
 
-
+	<select id="queryTeamGameInfoById" parameterType="java.lang.Integer" resultMap="GameScheduleMap">
+        SELECT
+	pgs.*,
+	teaminfoa.st_id as st_id,
+	teaminfoa.team_id AS team_a_id,
+	teaminfoa.t_name AS team_a_tName,
+	teaminfoa.u_name AS team_a_uName,
+	teaminfoa.u_nickName AS team_a_nickName,
+	teaminfoa.t_image AS team_a_tImage,
+	teaminfob.team_id AS team_b_id,
+	teaminfob.t_name AS team_b_tName,
+	teaminfob.u_name AS team_b_uName,
+	teaminfob.u_nickName AS team_b_nickName,
+	teaminfob.t_image AS team_b_tImage
+FROM
+	playball_game_schedule pgs
+	LEFT JOIN (
+	SELECT
+		pt.team_id,
+		pt.st_id,
+		pt.t_name,
+		pu.u_name,
+		pu.u_nickName,
+		pt.t_image
+	FROM
+		playball_team pt
+		LEFT JOIN playball_users pu ON pu.u_id = pt.t_captain
+	) teaminfoa ON pgs.team_id = teaminfoa.team_id
+	LEFT JOIN (
+	SELECT
+		pt.team_id,
+		pt.t_name,
+		pu.u_name,
+		pu.u_nickName,
+		pt.t_image
+	FROM
+		playball_team pt
+	LEFT JOIN playball_users pu ON pu.u_id = pt.t_captain
+	) teaminfob ON pgs.opponent_id = teaminfob.team_id
+	WHERE
+	pgs.game_status = 1
+		AND ! ISNULL( pgs.opponent_id )
+		AND ! ISNULL( pgs.team_id )
+		AND pgs.id=#{id}
+    </select>
 
 </mapper>

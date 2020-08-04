@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo;
 
 import java.util.List;
 import java.util.Map;
@@ -40,4 +41,6 @@ public interface AppTeamService  {
     void disbandTeam();
 
     AppTeam setlectByTeamName(String t_name);
+
+    TeamScoreInfoVo selectTeamScoreInfoById(Integer id);
 }

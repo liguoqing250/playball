@@ -27,7 +27,8 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 @Accessors(chain = true)
 @ApiModel(value="playball_schedule_userdata对象", description="赛程球员数据")
 public class ScheduleUserdata {
-    
+    private String name;
+    private String nickName;
 	/**主键*/
 	@TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "主键")
@@ -72,4 +73,6 @@ public class ScheduleUserdata {
 	@Excel(name = "version", width = 15)
     @ApiModelProperty(value = "version")
 	private Integer version;
+
+
 }
