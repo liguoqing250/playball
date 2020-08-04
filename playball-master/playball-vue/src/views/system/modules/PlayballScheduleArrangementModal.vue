@@ -99,6 +99,7 @@
           bCustom:false
         },
 
+        customMatchList:{},
         url: {
           enrollTeamList: "/playball/playballEnroll/listByGameId",
           getGameInfoById: "/playball/playballGame/getGameById",
@@ -122,7 +123,25 @@
 
       },
       handleOk () {
-        this.handleCancel()
+        let that = this
+        if(this.$refs.custom){
+          this.$refs.custom.getSuccess(function (bOk) {
+            that.gameTypeShow.bGroup = false
+            that.gameTypeShow.bLoop = false
+            that.gameTypeShow.bOut = false
+            that.gameTypeShow.bCustom = false
+            that.visible = false
+            that.close()
+          })
+        }else{
+          that.gameTypeShow.bGroup = false
+          that.gameTypeShow.bLoop = false
+          that.gameTypeShow.bOut = false
+          that.gameTypeShow.bCustom = false
+          that.visible = false
+          that.close()
+        }
+        //this.handleCancel()
         /*let that = this
 
         if(this.$refs.out){
@@ -201,21 +220,6 @@
             }
           }
         })
-
-        //获取比赛阶段，是否生成比赛
-        /*getAction(this.url.getGameInfoById, params).then((re)=> {
-          if (re.success) {
-            this.gamesInfo = re.result
-            console.log("重新获取",this.gamesInfo)
-            if(this.gamesInfo.stage == 0){
-              this.bCreate = true
-            }else{
-              this.bCreate = false
-            }
-          }
-        })*/
-
-
       },
       showTeam(){
         console.log("showteam")

@@ -93,8 +93,6 @@
 
         confirmLoading: false,
         form: this.$form.createForm(this),
-        validatorRules:{
-        },
         url: {
           edit: "/playball/playballSchedule/edit",
         },

@@ -407,6 +407,56 @@ public class PlayballScheduleController extends JeecgController<PlayballSchedule
     * */
    
    
+   /**
+    * 
+    * 自定义比赛
+    * */
+   @GetMapping(value="/getCustomMatchList")
+	public Result<?> getCustomMatchList(HttpServletRequest req) {
+		PlayballGame gameInfo = gameService.getById(Integer.valueOf(req.getParameter("gameId")));
+		
+		Result<JSONObject> result = new Result<JSONObject>();
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("gameInfo", gameInfo);
+		try {
+			List<PlayballScheduleInfoPage> matchList = playballScheduleService.getMacthListByGameId(Integer.valueOf(req.getParameter("gameId")));
+			jsonObj.put("matchList", matchList);
+			
+			result.setSuccess(true);
+			result.setMessage("查找成功");
+			result.setResult(jsonObj);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			result.setSuccess(false);
+			result.setMessage("查找过程中出现了异常: " + e.getMessage());
+			return result;
+		}
+	}
+   	
+   /**
+    * 添加自定义比赛
+    * 
+    * */
+   @RequestMapping(value = "/addCustomMacth", method = RequestMethod.POST)
+   public Result<?> addCustomMacth(@RequestBody List<PlayballSchedule> scheduleList, HttpServletRequest request) {
+	   log.info("addCustomMacth-------获取addCustomMacth="+scheduleList);
+	   //Integer gameId = jsonObject.getIntValue("gamesId");
+	   //Integer finished = jsonObject.getIntValue("finished");
+	   //List<PlayballSchedule> scheduleList = JSON.parseArray(jsonObject.getString("matchList"), PlayballSchedule.class);
+	   //PlayballSchedule schedule = new PlayballSchedule();
+	  // BeanUtils.copyProperties(scheduleInfo, schedule);
+	   scheduleService.saveBatch(scheduleList);
+	   
+	   return Result.ok("添加成功！");
+   }
+   
+   /**
+    * 
+    * 自定义比赛end
+    * */
+   
+   
 	/**
 	 * 添加
 	 *
