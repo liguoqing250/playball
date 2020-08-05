@@ -41,6 +41,9 @@ public class PlayballUserReply implements Serializable {
 
     @ApiModelProperty(value = "回复内容")
     private String ureContent;
+    
+    @ApiModelProperty(value = "回复类型 1、资讯  2、教程 3...")
+    private Integer ureSort;
 
     @ApiModelProperty(value = "纪录创建时间")
     @TableField(fill = FieldFill.INSERT)

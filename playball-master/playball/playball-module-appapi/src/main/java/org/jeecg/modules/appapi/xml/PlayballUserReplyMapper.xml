@@ -8,10 +8,37 @@
         <result column="ure_ucoid" property="ureUcoid" />
         <result column="user_id" property="userId" />
         <result column="ure_content" property="ureContent" />
+        <result column="ure_sort" property="ureSort" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
         <result column="version" property="version" />
+    </resultMap>
+    
+    <!-- 查询回复 -->
+    <select id="selectReplyList" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserReplyVo" resultMap="ResultMap">
+		SELECT r.*,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_reply r
+		INNER JOIN playball_users u
+		ON r.user_id = u.u_id
+		WHERE r.ure_ucoid = #{vo.ureUcoid}
+		ORDER BY r.create_time DESC 
+    </select>
+    
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserReplyBo">
+        <id column="ure_id" property="ureId" />
+        <result column="ure_ucoid" property="ureUcoid" />
+        <result column="user_id" property="userId" />
+        <result column="ure_content" property="ureContent" />
+        <result column="ure_sort" property="ureSort" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+        
+        <result column="u_id" property="uId" />
+        <result column="u_headImage" property="uHeadImage" />
+        <result column="u_nickName" property="uNickName" />
     </resultMap>
 
 </mapper>

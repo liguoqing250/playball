@@ -51,17 +51,20 @@ public class PlayballUserCommentController {
 	@PostMapping("/addPlayballUserComment")
 	public Result<?> addPlayballUserComment(PlayballUserComment user_com){
 		if(user_com.getUcoBecomId()==null){
+			return Result.error(0, "评论主键id错误");
+		}else if(user_com.getUserId() == null){
 			return Result.error(0, "用户id错误");
+		}else{
+			int insert = mapper.insert(user_com);
+			//插入数据成功更新资讯评论数
+			if(insert>0){
+				PlayballNews news = new PlayballNews();
+				news.setId(user_com.getUcoBecomId());
+				news.setCommentTotal(1);
+				newMapper.updateNewsBrowse(news);
+			}
+			return Result.ok(user_com);
 		}
-		int insert = mapper.insert(user_com);
-		//插入数据成功更新资讯评论数
-		if(insert>0){
-			PlayballNews news = new PlayballNews();
-			news.setId(user_com.getUcoBecomId());
-			news.setCommentTotal(1);
-			newMapper.updateNewsBrowse(news);
-		}
-		return Result.ok(user_com);
 	}
 	
 	//更新用户点赞

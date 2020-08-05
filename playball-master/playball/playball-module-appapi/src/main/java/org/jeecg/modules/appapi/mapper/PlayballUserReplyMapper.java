@@ -1,7 +1,12 @@
 package org.jeecg.modules.appapi.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.PlayballUserReply;
+import org.jeecg.modules.appapi.entity.bo.PlayballUserReplyBo;
+import org.jeecg.modules.appapi.entity.vo.PlayballUserReplyVo;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * <p>
@@ -12,5 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-08-03
  */
 public interface PlayballUserReplyMapper extends BaseMapper<PlayballUserReply> {
-
+	IPage<PlayballUserReplyBo> selectReplyList(IPage<PlayballUserReply> page,@Param("vo") PlayballUserReplyVo vo);
 }
