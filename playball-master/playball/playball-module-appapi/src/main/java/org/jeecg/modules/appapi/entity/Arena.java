@@ -148,6 +148,18 @@ public class Arena {
 	@Excel(name = "商家定位维度", width = 15)
     @ApiModelProperty(value = "商家定位维度")
 	private String locationLat;
+	/**商家平均评分*/
+	@Excel(name = "商家平均评分", width = 15)
+    @ApiModelProperty(value = "商家平均评分")
+	private String avgscore;
+
+	public String getAvgscore() {
+		return avgscore;
+	}
+
+	public void setAvgscore(String avgscore) {
+		this.avgscore = avgscore;
+	}
 
 	public String getId() {
 		return id;

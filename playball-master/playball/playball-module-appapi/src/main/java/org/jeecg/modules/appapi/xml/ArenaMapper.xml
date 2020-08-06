@@ -32,6 +32,7 @@
 		<result column="district" jdbcType="VARCHAR" property="district" />
 		<result column="location_lon" jdbcType="VARCHAR" property="location_lon" />
 		<result column="location_lat" jdbcType="VARCHAR" property="location_lat" />
+		<result column="avgscore" jdbcType="FLOAT" property="avgscore" />
 	</resultMap>
     <select id="queryPageList" parameterType="java.util.Map" resultMap="ArenaVoMap">
      SELECT

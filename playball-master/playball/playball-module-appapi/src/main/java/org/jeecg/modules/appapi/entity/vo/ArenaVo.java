@@ -66,6 +66,16 @@ public class ArenaVo {
     private String location_lon;
     /**商家定位维度*/
     private String location_lat;
+    /**商家平均评分*/
+    private Float avgscore;
+
+    public Float getAvgscore() {
+        return avgscore;
+    }
+
+    public void setAvgscore(Float avgscore) {
+        this.avgscore = avgscore;
+    }
 
     public String getPrice() {
         return price;
