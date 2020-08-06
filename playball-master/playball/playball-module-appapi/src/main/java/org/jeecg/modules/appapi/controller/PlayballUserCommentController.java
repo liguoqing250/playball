@@ -4,11 +4,13 @@ package org.jeecg.modules.appapi.controller;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.PlayballNews;
 import org.jeecg.modules.appapi.entity.PlayballUserComment;
+import org.jeecg.modules.appapi.entity.PlayballUserDynamic;
 import org.jeecg.modules.appapi.entity.bo.PlayballUserCommentBo;
 import org.jeecg.modules.appapi.entity.vo.PlayballNewsVo;
 import org.jeecg.modules.appapi.entity.vo.PlayballUserCommentVo;
 import org.jeecg.modules.appapi.mapper.NewsMapper;
 import org.jeecg.modules.appapi.mapper.PlayballUserCommentMapper;
+import org.jeecg.modules.appapi.mapper.PlayballUserDynamicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +37,10 @@ public class PlayballUserCommentController {
 	private PlayballUserCommentMapper mapper;
 	
 	@Autowired
-	private NewsMapper newMapper;
+	private NewsMapper newMapper;//资讯
+	
+	@Autowired
+	private PlayballUserDynamicMapper dynMapper; //动态
 	
 	//获取评论数据(连表查询)
 	@GetMapping("/getPlayballUserComment")
@@ -58,10 +63,7 @@ public class PlayballUserCommentController {
 			int insert = mapper.insert(user_com);
 			//插入数据成功更新资讯评论数
 			if(insert>0){
-				PlayballNews news = new PlayballNews();
-				news.setId(user_com.getUcoBecomId());
-				news.setCommentTotal(1);
-				newMapper.updateNewsBrowse(news);
+				updateComment(user_com.getUcoBecomId(),user_com.getUcoSort());
 			}
 			return Result.ok(user_com);
 		}
@@ -73,6 +75,23 @@ public class PlayballUserCommentController {
 		System.err.println("更新用户点赞" +user_com );
 		mapper.updateSupport(user_com);
 		return Result.ok();
+	}
+	
+	//更新评论数
+	public void updateComment(int id,int type){
+		if(type == 1){
+			PlayballNews news = new PlayballNews();
+			news.setId(id);//id
+			news.setCommentTotal(1);//评论字段不为空
+			newMapper.updateNewsBrowse(news);
+		}else if(type == 2){
+			
+		}else if(type == 3){
+			PlayballUserDynamic dynamic = new PlayballUserDynamic();
+			dynamic.setUdyId(id);//id
+			dynamic.setUdyComment(1);//评论字段不为空
+			dynMapper.updateDynamicBrowse(dynamic);
+		}
 	}
 
 }

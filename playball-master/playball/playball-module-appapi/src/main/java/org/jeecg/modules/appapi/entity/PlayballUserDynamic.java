@@ -53,6 +53,12 @@ public class PlayballUserDynamic implements Serializable {
 
     @ApiModelProperty(value = "预编辑 1、已完成 2、草稿")
     private Integer udyDraft;
+    
+    @ApiModelProperty(value = "用户点赞数")
+    private Integer udySupport;
+    
+    @ApiModelProperty(value = "用户评论数")
+    private Integer udyComment;
 
     @ApiModelProperty(value = "纪录创建时间")
     @TableField(fill = FieldFill.INSERT)

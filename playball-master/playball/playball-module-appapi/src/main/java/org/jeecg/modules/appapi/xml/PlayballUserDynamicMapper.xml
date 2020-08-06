@@ -12,6 +12,8 @@
         <result column="udy_position" property="udyPosition" />
         <result column="udy_visible" property="udyVisible" />
         <result column="udy_draft" property="udyDraft" />
+        <result column="udy_support" property="udySupport" />
+        <result column="udy_comment" property="udyComment" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
@@ -25,6 +27,19 @@
 		ORDER BY d.update_time DESC  
     </select>
     
+    <!-- 更新动态浏览量/评论量 -->
+    <update id="updateDynamicBrowse" parameterType="org.jeecg.modules.appapi.entity.PlayballNews">
+    	<if test="udySupport!=null and udySupport!=1">
+    		UPDATE playball_user_dynamic SET udy_support = udy_support + 1 WHERE udy_id = #{udyId}
+    	</if>
+    	<if test="udySupport!=null and udySupport!=0">
+    		UPDATE playball_user_dynamic SET udy_support = udy_support - 1 WHERE udy_id = #{udyId}
+    	</if>
+    	<if test="udyComment!=null and udyComment!=''">
+    		UPDATE playball_user_dynamic SET udy_comment = udy_comment + 1 WHERE udy_id = #{udyId}
+    	</if>
+    </update>
+    
     <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserDynamicBo">
         <id column="udy_id" property="udyId" />
         <result column="udy_user_id" property="udyUserId" />
@@ -34,6 +49,8 @@
         <result column="udy_position" property="udyPosition" />
         <result column="udy_visible" property="udyVisible" />
         <result column="udy_draft" property="udyDraft" />
+        <result column="udy_support" property="udySupport" />
+        <result column="udy_comment" property="udyComment" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />

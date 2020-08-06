@@ -51,5 +51,13 @@ public class PlayballUserDynamicController {
 		IPage<PlayballUserDynamicBo> selectPage = mapper.selectDynList(page, null);
 		return Result.ok(selectPage);
 	}
+	
+	//更新用户点赞
+	@PostMapping("/updateFabulous")
+	public Result<?> updateFabulous(PlayballUserDynamic u_dyn){
+		mapper.updateDynamicBrowse(u_dyn);
+		return Result.ok();	
+	}
+	
 }
 
