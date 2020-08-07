@@ -14,6 +14,7 @@
         <result column="udy_draft" property="udyDraft" />
         <result column="udy_support" property="udySupport" />
         <result column="udy_comment" property="udyComment" />
+        <result column="udy_share" property="udyShare" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
@@ -38,6 +39,9 @@
     	<if test="udyComment!=null and udyComment!=''">
     		UPDATE playball_user_dynamic SET udy_comment = udy_comment + 1 WHERE udy_id = #{udyId}
     	</if>
+    	<if test="udyShare!=null and udyShare!=''">
+    		UPDATE playball_user_dynamic SET udy_share = udy_share + 1 WHERE udy_id = #{udyId}
+    	</if>
     </update>
     
     <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserDynamicBo">
@@ -51,6 +55,7 @@
         <result column="udy_draft" property="udyDraft" />
         <result column="udy_support" property="udySupport" />
         <result column="udy_comment" property="udyComment" />
+        <result column="udy_share" property="udyShare" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />

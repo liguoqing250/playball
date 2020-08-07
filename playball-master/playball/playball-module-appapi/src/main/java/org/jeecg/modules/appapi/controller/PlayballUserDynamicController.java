@@ -52,9 +52,10 @@ public class PlayballUserDynamicController {
 		return Result.ok(selectPage);
 	}
 	
-	//更新用户点赞
+	//更新用户点赞、转发
 	@PostMapping("/updateFabulous")
 	public Result<?> updateFabulous(PlayballUserDynamic u_dyn){
+		System.err.println("更新用户点赞、转发" + u_dyn);
 		mapper.updateDynamicBrowse(u_dyn);
 		return Result.ok();	
 	}
