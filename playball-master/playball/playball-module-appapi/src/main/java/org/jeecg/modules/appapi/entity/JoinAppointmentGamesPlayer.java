@@ -2,6 +2,16 @@ package org.jeecg.modules.appapi.entity;
 
 public class JoinAppointmentGamesPlayer {
 
+    private Integer uId;
+
+    public Integer getuId() {
+        return uId;
+    }
+
+    public void setuId(Integer uId) {
+        this.uId = uId;
+    }
+
     private String name;
 
     private String nickName;

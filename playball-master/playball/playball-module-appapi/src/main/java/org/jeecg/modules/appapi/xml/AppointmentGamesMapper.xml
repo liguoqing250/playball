@@ -3,16 +3,17 @@
 <mapper namespace="org.jeecg.modules.appapi.mapper.AppointmentGamesMapper">
 
     <resultMap id="JoinAppointmentGamesPlayerResultMap" type="org.jeecg.modules.appapi.entity.JoinAppointmentGamesPlayer">
+        <result column="u_id" jdbcType="INTEGER" property="uId" />
         <result column="u_name" jdbcType="VARCHAR" property="name" />
         <result column="u_nickName" jdbcType="VARCHAR" property="nickName" />
         <result column="u_headImage" jdbcType="VARCHAR" property="headImage" />
     </resultMap>
 
     <select id="queryJoinPlayersByUsers"  parameterType="java.lang.Integer" resultMap="JoinAppointmentGamesPlayerResultMap">
-       SELECT pu.u_name ,pu.u_nickName,pu.u_headImage FROM playball_users pu LEFT JOIN playball_accept_appointment paa ON paa.aa_accept_subject_id= pu.u_id WHERE paa.ag_id=#{id,jdbcType=INTEGER}
+       SELECT pu.u_id , pu.u_name ,pu.u_nickName,pu.u_headImage FROM playball_users pu LEFT JOIN playball_accept_appointment paa ON paa.aa_accept_subject_id= pu.u_id WHERE paa.ag_id=#{id,jdbcType=INTEGER}
     </select>
 
     <select id="queryJoinPlayersByTeam"  parameterType="java.lang.Integer" resultMap="JoinAppointmentGamesPlayerResultMap">
-        SELECT pt.t_name as u_name,pt.t_image as u_headImage FROM playball_team pt LEFT JOIN playball_accept_appointment paa ON paa.aa_accept_subject_id= pt.team_id WHERE paa.ag_id=#{id,jdbcType=INTEGER}
+        SELECT  pu.u_id , pt.t_name as u_name,pt.t_image as u_headImage FROM playball_team pt LEFT JOIN playball_accept_appointment paa ON paa.aa_accept_subject_id= pt.team_id WHERE paa.ag_id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

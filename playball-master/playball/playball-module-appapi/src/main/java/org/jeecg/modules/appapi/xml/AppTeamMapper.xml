@@ -40,13 +40,17 @@
         from playball_team
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
-            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' and key !='searchValue'">
                 <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
             </if>
         </foreach>
+        <if test="params.searchValue !=null">
+            and t_name  like concat(concat('%',#{params.searchValue}),'%')
+        </if>
         <if test="params.sortField != null">
             order by ${params.sortField} ${params.sortRule}
         </if>
+
         LIMIT #{params.PageNum},#{params.PageSize}
     </select>
 
@@ -57,10 +61,13 @@
         from playball_team
         where 1=1
         <foreach collection="params.keys" item="key" open=" " close=" " separator=" " >
-            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' ">
+            <if test="key != 'PageSize' and key != 'PageNum' and key !='sortField' and key !='sortRule' and key !='searchValue'">
                 <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
             </if>
         </foreach>
+        <if test="params.searchValue !=null">
+            and t_name  like concat(concat('%',#{params.searchValue}),'%')
+        </if>
     </select>
 
     <!--条件查询-->
