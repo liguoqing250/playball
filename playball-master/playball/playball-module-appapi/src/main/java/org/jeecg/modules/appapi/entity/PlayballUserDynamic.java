@@ -60,6 +60,9 @@ public class PlayballUserDynamic implements Serializable {
     @ApiModelProperty(value = "用户评论数")
     private Integer udyComment;
 
+    @ApiModelProperty(value = "用户转发数")
+    private Integer udyShare;
+    
     @ApiModelProperty(value = "纪录创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
