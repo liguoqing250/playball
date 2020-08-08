@@ -49,6 +49,9 @@ public class PlayballNews implements Serializable {
 
     @ApiModelProperty(value = "浏览量")
     private Integer pageView;
+    
+    @ApiModelProperty(value = "用户收藏量")
+    private Integer userColls;
 
     @ApiModelProperty(value = "新闻的类型，对应运动类型")
     private Integer newsType;

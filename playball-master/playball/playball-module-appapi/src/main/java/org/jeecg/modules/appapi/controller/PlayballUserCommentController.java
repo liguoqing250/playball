@@ -82,14 +82,14 @@ public class PlayballUserCommentController {
 		if(type == 1){
 			PlayballNews news = new PlayballNews();
 			news.setId(id);//id
-			news.setCommentTotal(1);//评论字段不为空
+			news.setCommentTotal(1);//评论量字段不为空
 			newMapper.updateNewsBrowse(news);
 		}else if(type == 2){
 			
 		}else if(type == 3){
 			PlayballUserDynamic dynamic = new PlayballUserDynamic();
 			dynamic.setUdyId(id);//id
-			dynamic.setUdyComment(1);//评论字段不为空
+			dynamic.setUdyComment(1);//评论量字段不为空
 			dynMapper.updateDynamicBrowse(dynamic);
 		}
 	}

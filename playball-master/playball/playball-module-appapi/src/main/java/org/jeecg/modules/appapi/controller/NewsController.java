@@ -51,8 +51,6 @@ public class NewsController {
 	@PostMapping("/updateBrowse")
 	public Result<?> updateBrowse(PlayballNews news){
 		System.err.println("更新浏览量" + news);
-		//更新资讯浏览量
-		news.setPageView(1);
 		int browse = mapper.updateNewsBrowse(news);
 		return Result.ok(browse);
 	}

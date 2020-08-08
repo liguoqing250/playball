@@ -11,6 +11,7 @@
         <result column="introduction" property="introduction" />
         <result column="comment_total" property="commentTotal" />
         <result column="page_view" property="pageView" />
+        <result column="user_colls" property="userColls" />
         <result column="news_type" property="newsType" />
         <result column="label" property="label" />
         <result column="create_time" property="createTime" />
@@ -26,6 +27,12 @@
     	</if>
     	<if test="commentTotal!=null and commentTotal!=''">
     		UPDATE playball_news SET comment_total = comment_total + 1 WHERE id = #{id}
+    	</if>
+    	<if test="userColls!=null and userColls==1">
+    		UPDATE playball_news SET user_colls = user_colls + 1 WHERE id = #{id}
+    	</if>
+    	<if test="userColls!=null and userColls==0">
+    		UPDATE playball_news SET user_colls = user_colls - 1 WHERE id = #{id}
     	</if>
     </update>
 
