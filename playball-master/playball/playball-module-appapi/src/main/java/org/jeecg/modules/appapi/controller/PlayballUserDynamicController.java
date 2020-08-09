@@ -60,5 +60,13 @@ public class PlayballUserDynamicController {
 		return Result.ok();	
 	}
 	
+	//全文搜索查询
+	@GetMapping("/findFulltextDynamic")
+	public Result<?> findFulltextDynamic(PlayballUserDynamicVo u_dynVo){
+		Page<PlayballUserDynamic> page = new Page<PlayballUserDynamic>(u_dynVo.getPage(), u_dynVo.getLimit());
+		IPage<PlayballUserDynamicBo> fulltext = mapper.findDynListFulltext(page, u_dynVo.getUdyContent());
+		return Result.ok(fulltext);	
+	}
+	
 }
 

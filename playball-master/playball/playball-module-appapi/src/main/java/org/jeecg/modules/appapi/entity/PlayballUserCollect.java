@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -50,8 +51,9 @@ public class PlayballUserCollect implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+    @TableLogic
     @ApiModelProperty(value = "逻辑删除")
-    private Integer isDelete;
+    private Integer deleted;
 
     @ApiModelProperty(value = "版本号（用作乐观锁）")
     @Version

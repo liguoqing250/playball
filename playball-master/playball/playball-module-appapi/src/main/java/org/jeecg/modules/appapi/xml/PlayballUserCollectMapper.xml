@@ -10,8 +10,18 @@
         <result column="uco_sort" property="ucoSort" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
-        <result column="is_delete" property="isDelete" />
+        <result column="deleted" property="deleted" />
         <result column="version" property="version" />
     </resultMap>
+    
+    <!-- 更新收藏删除状态 -->
+    <update id="updateStart" parameterType="java.lang.Integer">
+    	UPDATE playball_user_collect SET deleted = 0 WHERE uco_id = #{id}
+    </update>
+    
+    <select id="selectIsEntity" parameterType="org.jeecg.modules.appapi.entity.PlayballUserCollect" resultMap="BaseResultMap">
+    	SELECT * FROM playball_user_collect WHERE uco_collected_id = #{ucoCollectedId}
+    	 AND uco_u_id = #{ucoUId} AND uco_sort = #{ucoSort}
+    </select>
 
 </mapper>

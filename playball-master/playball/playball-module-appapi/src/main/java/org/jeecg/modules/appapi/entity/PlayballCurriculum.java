@@ -65,6 +65,13 @@ public class PlayballCurriculum implements Serializable {
 
     @ApiModelProperty(value = "浏览数（后面根据这个查询热门视频）")
     private Integer cBrowse;
+    
+    @ApiModelProperty(value = "评论数")
+    private Integer cComment;
+    
+    @ApiModelProperty(value = "用户收藏数")
+    private Integer userColls;
+    
 
     @ApiModelProperty(value = "优先级（后期扩展根据级别查询热门）")
     private Integer cFirst;

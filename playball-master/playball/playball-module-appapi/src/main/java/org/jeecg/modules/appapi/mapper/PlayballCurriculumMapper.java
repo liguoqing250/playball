@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PlayballCurriculumMapper extends BaseMapper<PlayballCurriculum> {
 	int updateHots(Integer id); //更新浏览量
+	
+	int updateCurriculumBrowse(PlayballCurriculum cur); //更新点赞/评论/收藏数
 }

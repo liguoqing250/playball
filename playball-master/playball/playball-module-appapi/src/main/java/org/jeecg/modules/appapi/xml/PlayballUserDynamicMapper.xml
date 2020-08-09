@@ -15,12 +15,14 @@
         <result column="udy_support" property="udySupport" />
         <result column="udy_comment" property="udyComment" />
         <result column="udy_share" property="udyShare" />
+        <result column="user_colls" property="userColls" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />
         <result column="version" property="version" />
     </resultMap>
     
+    <!-- 连表查询 -->
     <select id="selectDynList" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserDynamicVo" resultMap="ResultMap">
     	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
 		INNER JOIN playball_users u
@@ -28,19 +30,38 @@
 		ORDER BY d.update_time DESC  
     </select>
     
-    <!-- 更新动态浏览量/评论量 -->
-    <update id="updateDynamicBrowse" parameterType="org.jeecg.modules.appapi.entity.PlayballNews">
+    <!-- 连表查询全文索引  -->
+    <select id="findDynListFulltext" parameterType="java.lang.String" resultMap="ResultMap">
+    	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
+		INNER JOIN playball_users u
+		ON d.udy_user_id = u.u_id
+		WHERE MATCH(d.udy_content) AGAINST(#{fullText})
+		ORDER BY d.update_time DESC  
+    </select>
+    
+    <!-- 更新动态浏览量/评论量 /收藏数-->
+    <update id="updateDynamicBrowse" parameterType="org.jeecg.modules.appapi.entity.PlayballUserDynamic">
+    	<!-- 点赞数 -->
     	<if test="udySupport!=null and udySupport!=1">
     		UPDATE playball_user_dynamic SET udy_support = udy_support + 1 WHERE udy_id = #{udyId}
     	</if>
     	<if test="udySupport!=null and udySupport!=0">
     		UPDATE playball_user_dynamic SET udy_support = udy_support - 1 WHERE udy_id = #{udyId}
     	</if>
+    	<!-- 评论数 -->
     	<if test="udyComment!=null and udyComment!=''">
     		UPDATE playball_user_dynamic SET udy_comment = udy_comment + 1 WHERE udy_id = #{udyId}
     	</if>
+    	<!-- 转发数 -->
     	<if test="udyShare!=null and udyShare!=''">
     		UPDATE playball_user_dynamic SET udy_share = udy_share + 1 WHERE udy_id = #{udyId}
+    	</if>
+    	<!-- 收藏数 -->
+    	<if test="userColls!=null and userColls==1">
+    		UPDATE playball_user_dynamic SET user_colls = user_colls + 1 WHERE udy_id = #{udyId}
+    	</if>
+    	<if test="userColls!=null and userColls==0">
+    		UPDATE playball_user_dynamic SET user_colls = user_colls - 1 WHERE udy_id = #{udyId}
     	</if>
     </update>
     
@@ -56,6 +77,7 @@
         <result column="udy_support" property="udySupport" />
         <result column="udy_comment" property="udyComment" />
         <result column="udy_share" property="udyShare" />
+        <result column="user_colls" property="userColls" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="is_delete" property="isDelete" />

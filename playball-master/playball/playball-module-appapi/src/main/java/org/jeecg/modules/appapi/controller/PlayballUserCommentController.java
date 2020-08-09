@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.controller;
 
 
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.modules.appapi.entity.PlayballCurriculum;
 import org.jeecg.modules.appapi.entity.PlayballNews;
 import org.jeecg.modules.appapi.entity.PlayballUserComment;
 import org.jeecg.modules.appapi.entity.PlayballUserDynamic;
@@ -9,6 +10,7 @@ import org.jeecg.modules.appapi.entity.bo.PlayballUserCommentBo;
 import org.jeecg.modules.appapi.entity.vo.PlayballNewsVo;
 import org.jeecg.modules.appapi.entity.vo.PlayballUserCommentVo;
 import org.jeecg.modules.appapi.mapper.NewsMapper;
+import org.jeecg.modules.appapi.mapper.PlayballCurriculumMapper;
 import org.jeecg.modules.appapi.mapper.PlayballUserCommentMapper;
 import org.jeecg.modules.appapi.mapper.PlayballUserDynamicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +39,13 @@ public class PlayballUserCommentController {
 	private PlayballUserCommentMapper mapper;
 	
 	@Autowired
-	private NewsMapper newMapper;//资讯
+	private NewsMapper newMapper;//资讯 mapper
 	
 	@Autowired
-	private PlayballUserDynamicMapper dynMapper; //动态
+	private PlayballCurriculumMapper curMapper;// 教程 mapper
+	
+	@Autowired
+	private PlayballUserDynamicMapper dynMapper; //动态 mapper
 	
 	//获取评论数据(连表查询)
 	@GetMapping("/getPlayballUserComment")
@@ -78,14 +83,19 @@ public class PlayballUserCommentController {
 	}
 	
 	//更新评论数
-	public void updateComment(int id,int type){
-		if(type == 1){
+	public void updateComment(int id,Integer type){
+		if(type == null){
+			return ;
+		}else if(type == 1){
 			PlayballNews news = new PlayballNews();
 			news.setId(id);//id
 			news.setCommentTotal(1);//评论量字段不为空
 			newMapper.updateNewsBrowse(news);
 		}else if(type == 2){
-			
+			PlayballCurriculum curriculum = new PlayballCurriculum();
+			curriculum.setCId(id);
+			curriculum.setCComment(1);
+			curMapper.updateCurriculumBrowse(curriculum);
 		}else if(type == 3){
 			PlayballUserDynamic dynamic = new PlayballUserDynamic();
 			dynamic.setUdyId(id);//id

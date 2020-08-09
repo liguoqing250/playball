@@ -12,5 +12,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-08-08
  */
 public interface PlayballUserCollectMapper extends BaseMapper<PlayballUserCollect> {
-
+	//更新收藏删除状态
+	int updateStart(Integer id);
+	
+	PlayballUserCollect selectIsEntity(PlayballUserCollect coll);
 }
