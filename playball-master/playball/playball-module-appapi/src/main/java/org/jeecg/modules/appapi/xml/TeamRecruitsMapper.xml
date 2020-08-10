@@ -63,4 +63,8 @@
         </if>
     </select>
 
+
+    <delete id="deleteByTeamId" parameterType="java.lang.Integer">
+        delete from playball_team_recruits where team_id = #{team_id,jdbcType=INTEGER}
+    </delete>
 </mapper>

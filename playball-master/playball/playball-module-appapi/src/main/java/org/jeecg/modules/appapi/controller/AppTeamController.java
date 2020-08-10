@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
+import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
@@ -14,7 +16,10 @@ import org.jeecg.modules.appapi.service.AppTeamService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +37,35 @@ public class AppTeamController {
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
 
+    //个人退队
+    @PostMapping(value = "/quitTeam")
+    public Result<?> quitTeam() {
+        try{
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String token=request.getHeader("X-Access-Token");
+            AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+            AppTeamPlayers appTeamPlayers= appTeamPlayersService.selectByuId(appUsers.getU_id());
+            AppTeam appTeam=appTeamService.selectById(appTeamPlayers.getTeam_id());
+            appTeam.setTeam_id(appTeamPlayers.getTeam_id());
+            appTeam.setT_players_total(appTeam.getT_players_total()-1);
+            appTeamService.update(appTeam);
+            appTeamPlayersService.deleteById(appTeamPlayers.getTp_id());
+            return Result.ok("退队成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return  Result.error("查询失败");
+        }
+    }
+    //根据uid查询球员信息
+    @PostMapping(value = "/selectTeamPlayerByUId")
+    public Result<?> selectTeamPlayerByUId(@RequestParam Integer uId) {
+        try{
+            return Result.ok(appTeamPlayersService.selectByuId(uId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return  Result.error("查询失败");
+        }
+    }
     //查询入队、退队申请
     @PostMapping(value = "/selectTeamPlayerByTpId")
     public Result<?> selectTeamPlayerByTpId(@RequestParam Integer tpId) {
@@ -42,7 +76,7 @@ public class AppTeamController {
             return  Result.error("查询失败");
         }
     }
-    //查询入队、退队申请
+    //解散球队
     @PostMapping(value = "/disbandTeam")
     public Result<JSONObject> disbandTeam() {
         Result<JSONObject> result = new Result<JSONObject>();
@@ -120,7 +154,10 @@ public class AppTeamController {
     @PostMapping(value = "/updateJoinTeamApply")
     public Result<?> updateJoinTeamApply(@RequestBody JoinQuitTeamApply joinQuitTeamApply) {
         try{
-            System.err.println(joinQuitTeamApply.getJqta_type());
+            AppTeamPlayers atp=appTeamPlayersService.selectByuId(joinQuitTeamApply.getU_id());
+            if(atp!=null){
+                return Result.ok("该用户已加入其他球队");
+            }
             joinQuitTeamApply.setJqta_handleTime(new Date());
             joinQuitTeamApplyService.update(joinQuitTeamApply);
             if(joinQuitTeamApply.getJqta_result()==1){
@@ -196,6 +233,7 @@ public class AppTeamController {
                 result.success("重复球队名，请换一个");
                 obj.put("data",null);
             }else{
+
                 appTeamService.createTeam(appTeam);
                 obj.put("data",appTeam);
                 result.success("创建成功");

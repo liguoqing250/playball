@@ -34,4 +34,6 @@ public interface AppTeamPlayersMapper {
     void kickPlayer(AppTeamPlayers appTeamPlayers);
 
     void removePlayer(Integer team_id);
+
+    void deleteByUId(Integer u_id);
 }

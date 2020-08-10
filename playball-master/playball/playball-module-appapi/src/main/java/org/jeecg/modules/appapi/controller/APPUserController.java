@@ -6,6 +6,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.AboutMe;
 import org.jeecg.modules.appapi.service.AppOpenService;
 import org.jeecg.modules.appapi.service.AppUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,16 @@ public class APPUserController {
         }
 
         return result;
+    }
+    //获取我的个人信息
+    @PostMapping(value = "/queryAboutMe")
+    public Result<?> queryAboutMe(AboutMe aboutMe) {
+
+        try{
+           return Result.ok(appUsersService.queryAboutMe(aboutMe));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("请求失败");
+        }
     }
 }

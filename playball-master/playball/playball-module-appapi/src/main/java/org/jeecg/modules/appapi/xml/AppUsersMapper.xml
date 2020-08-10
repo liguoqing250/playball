@@ -343,5 +343,30 @@
         </set>
         where u_id = #{u_id,jdbcType=INTEGER}
     </update>
-
+    <select id="queryAboutMe" parameterType="org.jeecg.modules.appapi.entity.vo.AboutMe" resultType="org.jeecg.modules.appapi.entity.vo.AboutMe">
+        SELECT
+	( SELECT COUNT( * ) FROM playball_user_dynamic WHERE udy_user_id = #{uId} ) dynamicNum,
+	( SELECT COUNT( * ) FROM playball_user_collect WHERE uco_sort = 3 AND uco_u_id = #{uId} ) mycollect,
+	(
+	SELECT
+		COUNT( * )
+	FROM
+		playball_user_collect puc
+		LEFT JOIN playball_user_dynamic pud ON pud.udy_id = puc.uco_collected_id
+	WHERE
+		puc.uco_sort = 3
+		AND pud.udy_user_id = #{uId}
+	) collectme,
+	( SELECT COUNT( * ) FROM playball_orders WHERE ord_user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryNewOrdersTime} ) ) newOrders,
+	(
+	SELECT
+		(
+			( SELECT COUNT( * ) FROM playball_appointment_games WHERE ag_user_id = #{uId} AND unix_timestamp( createTime ) > unix_timestamp( #{queryMyAPpointmentGameTime} ) ) +
+			( SELECT COUNT(*) FROM playball_appointment_games pag LEFT JOIN playball_accept_appointment paa ON paa.ag_id=pag.id
+			WHERE paa.aa_accept_subject_id=#{uId} AND unix_timestamp( paa.createTime ) > unix_timestamp(#{queryMyAPpointmentGameTime})
+			)
+		)
+	) myAPpointmentGame,
+	( SELECT COUNT( * ) FROM playball_enroll_player pep WHERE pep.user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryMyJoinGameTime} ) ) myJoinGame
+    </select>
 </mapper>

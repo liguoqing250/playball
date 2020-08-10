@@ -3,6 +3,7 @@ package org.jeecg.modules.appapi.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.AboutMe;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +23,5 @@ public interface AppUsersService {
     //多条件分页查询
     Page selectByPage(Map<String,Object> params);
 
+    AboutMe queryAboutMe(AboutMe u_id);
 }

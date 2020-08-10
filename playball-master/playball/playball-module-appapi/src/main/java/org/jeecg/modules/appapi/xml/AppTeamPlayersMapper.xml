@@ -107,7 +107,11 @@
     <delete id="deleteById" parameterType="java.lang.Integer">
         delete from playball_team_players where tp_id = #{tp_id,jdbcType=INTEGER}
     </delete>
-    <!--删 根据ID-->
+    <!--删 根据UID-->
+    <delete id="deleteByUId" parameterType="java.lang.Integer">
+        delete from playball_team_players where u_id = #{u_id,jdbcType=INTEGER}
+    </delete>
+    <!--删 根据team_id-->
     <delete id="removePlayer" parameterType="java.lang.Integer">
        delete from playball_team_players where team_id = #{team_id,jdbcType=INTEGER}
     </delete>

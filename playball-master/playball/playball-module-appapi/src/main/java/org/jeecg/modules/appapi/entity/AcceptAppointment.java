@@ -10,8 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.jeecgframework.poi.excel.annotation.Excel;
+
+import javax.persistence.PreUpdate;
 
 /**
  * @Description: 应约
@@ -39,6 +42,7 @@ public class AcceptAppointment {
     @ApiModelProperty(value = "应约主体id")
 	private String aaAcceptSubjectId;
 	/**createtime*/
+	@CreatedDate
 	@Excel(name = "createtime", width = 20, format = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")

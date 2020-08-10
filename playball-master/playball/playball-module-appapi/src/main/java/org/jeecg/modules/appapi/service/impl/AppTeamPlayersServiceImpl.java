@@ -54,4 +54,14 @@ public class AppTeamPlayersServiceImpl implements AppTeamPlayersService {
         appTeamPlayers.setU_id(uid);
         appTeamPlayersMapper.kickPlayer(appTeamPlayers);
     }
+
+    @Override
+    public AppTeamPlayers selectByuId(Integer uId) {
+        return appTeamPlayersMapper.selectByUserId(uId);
+    }
+
+    @Override
+    public void deleteByUId(Integer u_id) {
+        appTeamPlayersMapper.deleteByUId(u_id);
+    }
 }

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.AboutMe;
 import org.jeecg.modules.appapi.mapper.AppUsersMapper;
 import org.jeecg.modules.appapi.service.AppUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,11 @@ public class AppUsersServiceImpl implements AppUsersService {
         //Integer totalNum=mapper.getCount(map);
         Page page=new Page();
         return page;
+    }
+
+    @Override
+    public AboutMe queryAboutMe(AboutMe aboutMe) {
+        return mapper.queryAboutMe(aboutMe);
     }
 
 

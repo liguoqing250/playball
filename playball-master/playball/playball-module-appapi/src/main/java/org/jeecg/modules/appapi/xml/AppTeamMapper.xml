@@ -47,6 +47,7 @@
         <if test="params.searchValue !=null">
             and t_name  like concat(concat('%',#{params.searchValue}),'%')
         </if>
+        and ISNULL(is_delete)
         <if test="params.sortField != null">
             order by ${params.sortField} ${params.sortRule}
         </if>
@@ -68,6 +69,7 @@
         <if test="params.searchValue !=null">
             and t_name  like concat(concat('%',#{params.searchValue}),'%')
         </if>
+        and ISNULL(is_delete)
     </select>
 
     <!--条件查询-->
@@ -98,15 +100,10 @@
     <select id="isCaptain" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
         select
         <include refid="AppTeam_Column_List" />
-        from playball_team where t_captain = #{u_id,jdbcType=INTEGER}
+        from playball_team where t_captain = #{u_id,jdbcType=INTEGER} and ISNULL(is_delete)
     </select>
-    <!--根据ID查询-->
-    <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
-        select
-        <include refid="AppTeam_Column_List" />
-        from playball_team
-        where team_id = #{team_id,jdbcType=INTEGER}
-    </select>
+
+
     <!--根据ID查询-->
     <select id="selectTeamScoreInfoById" parameterType="java.lang.Integer"  resultType="org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo" >
         SELECT

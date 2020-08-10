@@ -3,6 +3,7 @@ package org.jeecg.modules.appapi.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.vo.AboutMe;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface AppUsersMapper {
     List<AppUsers> selectByKey(@Param("params") Map<String, Object> params);
     //获取总条数
     int getCount(@Param("params") Map<String, Object> params);
+
+    AboutMe queryAboutMe(AboutMe aboutMe);
 }

@@ -97,6 +97,11 @@ public class AcceptAppointmentController extends JeecgController<AcceptAppointme
 		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 
 		AppointmentGames appointmentGames=iAppointmentGamesService.getById(acceptAppointment.getAgId());
+		List<AcceptAppointment> list=acceptAppointmentService.selectByAgId(appointmentGames.getId());
+		System.err.println(list.size());
+		if(list.size()>=appointmentGames.getAgMaxplayers()){
+			return Result.error("报名人数已达上限，不能报名");
+		}
 		if(!acceptAppointmentService.isJoinAppointment(acceptAppointment.getAgId())){
 			if(appointmentGames.getTpId()!=null){
 				//球队约球
@@ -105,7 +110,6 @@ public class AcceptAppointmentController extends JeecgController<AcceptAppointme
 					if(appTeamService.isCaptain()){
 						acceptAppointment.setAaAcceptSubjectId(appTeam.getTeam_id().toString());
 						acceptAppointmentService.save(acceptAppointment);
-
 						return Result.ok("约球成功！");
 					}else{
 						return Result.error("您不是队长不能参与球队约球");

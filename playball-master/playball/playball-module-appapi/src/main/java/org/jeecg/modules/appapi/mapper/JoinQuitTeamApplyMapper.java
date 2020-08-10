@@ -28,4 +28,8 @@ public interface JoinQuitTeamApplyMapper {
 
 
     List<JQTeamApplyVo> queryJoinQuitTeamApply(@Param("params") Map<String,Object> params);
+
+    void deleteByTeamId(Integer team_id);
+
+    void deleteByUId(Integer u_id);
 }

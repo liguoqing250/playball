@@ -18,4 +18,6 @@ public interface AppointmentGamesMapper extends BaseMapper<AppointmentGames> {
     List<JoinAppointmentGamesPlayer> queryJoinPlayersByTeam(Integer id);
 
     List<JoinAppointmentGamesPlayer> queryJoinPlayersByUsers(Integer id);
+
+    void deleteByTeamId(Integer team_id);
 }

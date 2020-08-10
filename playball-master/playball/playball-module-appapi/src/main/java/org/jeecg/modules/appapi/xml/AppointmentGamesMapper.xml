@@ -16,4 +16,8 @@
     <select id="queryJoinPlayersByTeam"  parameterType="java.lang.Integer" resultMap="JoinAppointmentGamesPlayerResultMap">
         SELECT  pu.u_id , pt.t_name as u_name,pt.t_image as u_headImage FROM playball_team pt LEFT JOIN playball_accept_appointment paa ON paa.aa_accept_subject_id= pt.team_id WHERE paa.ag_id=#{id,jdbcType=INTEGER}
     </select>
+
+    <delete id="deleteByTeamId" parameterType="java.lang.Integer">
+        DELETE pag,paa FROM playball_appointment_games pag LEFT JOIN playball_accept_appointment paa ON paa.ag_id=pag.id WHERE pag.tp_id= #{team_id,jdbcType=INTEGER}
+    </delete>
 </mapper>

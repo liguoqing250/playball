@@ -24,4 +24,8 @@ public interface AppTeamPlayersService {
     List<AppTeamPlayersVo> selectByTeamId(int id,String playerName);
 
     void kickPlayer(Integer uid,Integer teamId);
+
+    AppTeamPlayers selectByuId(Integer uId);
+
+    void deleteByUId(Integer u_id);
 }

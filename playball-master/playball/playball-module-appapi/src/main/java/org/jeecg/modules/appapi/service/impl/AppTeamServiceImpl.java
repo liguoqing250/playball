@@ -9,9 +9,7 @@ import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo;
-import org.jeecg.modules.appapi.mapper.AppTeamMapper;
-import org.jeecg.modules.appapi.mapper.AppTeamPlayersMapper;
-import org.jeecg.modules.appapi.mapper.TeamRecruitsMapper;
+import org.jeecg.modules.appapi.mapper.*;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,13 +33,47 @@ public class AppTeamServiceImpl  implements AppTeamService {
 
     @Autowired
     AppTeamPlayersMapper appTeamPlayersMapper;
+    @Autowired
+    AppointmentGamesMapper appointmentGamesMapper;
+    @Autowired
+    EnrollMapper enrollMapper;
+    @Autowired
+    EnrollPlayerMapper enrollPlayerMapper;
+    @Autowired
+    JoinQuitTeamApplyMapper joinQuitTeamApplyMapper;
+    //解散球队
+    @Override
+    public void disbandTeam() {
+        //获取当前用户信息
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token=request.getHeader("X-Access-Token");
+        AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 
+        AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
+        //删除球队表
+        appTeam.setIs_delete(1);
+        appTeamMapper.update(appTeam);
+        //删除队员表
+        appTeamPlayersMapper.removePlayer(appTeam.getTeam_id());
+        //删除招募信息
+        teamRecruitsMapper.deleteByTeamId(appTeam.getTeam_id());
+        //删除招募申请
+        joinQuitTeamApplyMapper.deleteByTeamId(appTeam.getTeam_id());
+        //删除比赛报报名
+        enrollMapper.deleteByTeamId(appTeam.getTeam_id());
+        //删除报名球员
+        enrollPlayerMapper.deleteByTeamId(appTeam.getTeam_id());
+        //删除约球
+        appointmentGamesMapper.deleteByTeamId(appTeam.getTeam_id());
+    }
     @Override
     public void createTeam(AppTeam record) {
         //获取当前用户信息
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=request.getHeader("X-Access-Token");
         AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+        //删除删除申请
+        joinQuitTeamApplyMapper.deleteByUId(appUsers.getU_id());
         //创建球队
         record.setU_id(appUsers.getU_id());
         record.setT_players_total(1);
@@ -146,19 +178,7 @@ public class AppTeamServiceImpl  implements AppTeamService {
         return appTeamMapper.queryTeamByEnroll(id);
     }
 
-    @Override
-    public void disbandTeam() {
-        //获取当前用户信息
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token=request.getHeader("X-Access-Token");
-        AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
-        AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
-        appTeamMapper.deleteById(appTeam.getTeam_id());
-        appTeamPlayersMapper.removePlayer(appTeam.getTeam_id());
-        Map<String,Object> map=new HashedMap();
-        map.put("team_id",appTeam.getTeam_id());
-        teamRecruitsMapper.deleteByMap(map);
-    }
+
 
     @Override
     public AppTeam setlectByTeamName(String t_name) {

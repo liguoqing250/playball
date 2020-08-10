@@ -21,4 +21,6 @@ public interface TeamRecruitsMapper extends BaseMapper<TeamRecruits> {
     int getCount(@Param("params") Map<String, Object> params);
 
     void removeRecruitsByTeam(Integer team_id);
+
+    void deleteByTeamId(Integer team_id);
 }

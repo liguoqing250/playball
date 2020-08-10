@@ -3,6 +3,8 @@ package org.jeecg.modules.appapi.service;
 import org.jeecg.modules.appapi.entity.AcceptAppointment;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 应约
  * @Author: jeecg-boot
@@ -12,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IAcceptAppointmentService extends IService<AcceptAppointment> {
 
     boolean isJoinAppointment(Integer id);
+
+    List<AcceptAppointment> selectByAgId(Integer id);
 }

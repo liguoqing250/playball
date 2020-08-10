@@ -14,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface EnrollPlayerMapper extends BaseMapper<EnrollPlayer> {
 
+    void deleteByTeamId(Integer team_id);
 }

@@ -1,6 +1,8 @@
 package org.jeecg.modules.appapi.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.poi.hmef.attribute.MAPIAttribute;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AcceptAppointment;
 import org.jeecg.modules.appapi.entity.AppTeam;
@@ -56,5 +58,12 @@ public class AcceptAppointmentServiceImpl extends ServiceImpl<AcceptAppointmentM
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<AcceptAppointment> selectByAgId(Integer id) {
+        Map<String,Object> map =new HashedMap();
+        map.put("ag_id",id);
+        return acceptAppointmentMapper.selectByMap(map);
     }
 }

@@ -92,6 +92,13 @@ WHERE
     <delete id="deleteById" parameterType="java.lang.Integer">
         delete from playball_join_quit_team_apply where jqta_id = #{jqta_id,jdbcType=INTEGER}
     </delete>
+    <!--删 根据ID-->
+    <delete id="deleteByTeamId" parameterType="java.lang.Integer">
+        delete from playball_join_quit_team_apply where team_id = #{team_id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByUId" parameterType="java.lang.Integer">
+        delete from playball_join_quit_team_apply where u_id = #{u_id,jdbcType=INTEGER}
+    </delete>
     <!--增 返回ID-->
     <insert id="insert"  useGeneratedKeys="true" keyProperty="jqta_id" parameterType="org.jeecg.modules.appapi.entity.JoinQuitTeamApply">
         insert into playball_join_quit_team_apply
