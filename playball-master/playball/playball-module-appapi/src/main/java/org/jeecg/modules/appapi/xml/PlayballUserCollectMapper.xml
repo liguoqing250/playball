@@ -23,5 +23,50 @@
     	SELECT * FROM playball_user_collect WHERE uco_collected_id = #{ucoCollectedId}
     	 AND uco_u_id = #{ucoUId} AND uco_sort = #{ucoSort}
     </select>
+    
+    <!-- 链表查询 -->
+    <select id="selectUserCollect" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserCollectVo" resultMap="ResultMap">
+    	<if test="vo.ucoSort == 1">
+    		SELECT c.*,n.title AS title,n.image AS resources,n.page_view AS browse,page_view AS support,label AS `type`,n.* FROM playball_user_collect c
+			INNER JOIN playball_news n
+			ON c.uco_collected_id = n.id
+			WHERE c.uco_u_id = #{vo.ucoUId}
+			ORDER BY c.create_time DESC 
+    	</if>
+    	<if test="vo.ucoSort == 2">
+    		SELECT c.*,c_title AS title,c_video AS resources,c_browse AS browse,c_comment AS support,2 AS `type` FROM playball_user_collect c
+			INNER JOIN playball_curriculum cu
+			ON c.uco_collected_id = cu.c_id
+			WHERE c.uco_u_id = #{vo.ucoUId}
+			ORDER BY c.create_time DESC 
+    	</if>
+    	<if test="vo.ucoSort == 3">
+    		SELECT c.*,udy_content AS title,udy_resources AS resources,udy_support AS browse,udy_comment AS support,udy_res_type AS `type` FROM playball_user_collect c
+			INNER JOIN playball_user_dynamic d
+			ON c.uco_collected_id = d.udy_id
+			WHERE c.uco_u_id = #{vo.ucoUId}
+			ORDER BY c.create_time DESC 
+    	</if>
+    </select>
+    
+    <!-- 连表查询映射结果 -->
+    <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserCollectBo">
+        <id column="uco_id" property="ucoId" />
+        <result column="uco_collected_id" property="ucoCollectedId" />
+        <result column="uco_u_id" property="ucoUId" />
+        <result column="uco_sort" property="ucoSort" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+        <result column="version" property="version" />
+        
+        <result column="title" property="title" />
+        <result column="resources" property="resources" />
+        <result column="browse" property="browse" />
+        <result column="support" property="support" />
+        <result column="type" property="type" />
+        
+        <association property="obj" javaType="java.lang.Object" autoMapping="true"></association>
+    </resultMap>
 
 </mapper>

@@ -5,6 +5,8 @@ import org.jeecg.modules.appapi.entity.PlayballCurriculum;
 import org.jeecg.modules.appapi.entity.PlayballNews;
 import org.jeecg.modules.appapi.entity.PlayballUserCollect;
 import org.jeecg.modules.appapi.entity.PlayballUserDynamic;
+import org.jeecg.modules.appapi.entity.bo.PlayballUserCollectBo;
+import org.jeecg.modules.appapi.entity.vo.PlayballUserCollectVo;
 import org.jeecg.modules.appapi.mapper.NewsMapper;
 import org.jeecg.modules.appapi.mapper.PlayballCurriculumMapper;
 import org.jeecg.modules.appapi.mapper.PlayballUserCollectMapper;
@@ -44,9 +46,15 @@ public class PlayballUserCollectController {
 	
 	//查询用户收藏数据
 	@GetMapping("getCollection")
-	public Result<?> getCollection (PlayballUserCollect coll){
-		Page<PlayballUserCollect> page = new Page<PlayballUserCollect>(1, 10);
-		IPage<PlayballUserCollect> selectPage = mapper.selectPage(page, null);
+	public Result<?> getCollection (PlayballUserCollectVo collVo){
+		Page<PlayballUserCollect> page = new Page<PlayballUserCollect>(collVo.getPage(), collVo.getLimit());
+		/*QueryWrapper<PlayballUserCollect> wrapper = new QueryWrapper<PlayballUserCollect>();
+		if(collVo.getUcoSort()!=0){
+			wrapper.eq("uco_sort", collVo.getUcoSort());
+		}
+		wrapper.eq("uco_u_id", collVo.getUcoUId());
+		wrapper.orderByDesc("update_time");*/
+		IPage<PlayballUserCollectBo> selectPage = mapper.selectUserCollect(page, collVo);
 		return Result.ok(selectPage);
 	}
 	
