@@ -34,6 +34,14 @@
 		ORDER BY d.update_time DESC  
     </select>
     
+     <!-- 根据ID连表查询 -->
+    <select id="selectDynById" parameterType="org.jeecg.modules.appapi.entity.PlayballUserDynamic" resultMap="ResultMap">
+    	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
+		INNER JOIN playball_users u
+		ON d.udy_user_id = u.u_id
+		WHERE udy_id = #{udyId}
+    </select>
+    
     <!-- 连表查询全文索引  -->
     <select id="findDynListFulltext" parameterType="java.lang.String" resultMap="ResultMap">
     	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
@@ -42,6 +50,7 @@
 		WHERE MATCH(d.udy_content) AGAINST(#{fullText})
 		ORDER BY d.update_time DESC  
     </select>
+    
     
     <!-- 更新动态浏览量/评论量 /收藏数-->
     <update id="updateDynamicBrowse" parameterType="org.jeecg.modules.appapi.entity.PlayballUserDynamic">

@@ -51,7 +51,11 @@ public class PlayballUserDynamicController {
 		IPage<PlayballUserDynamicBo> selectPage = mapper.selectDynList(page, u_dynVo);
 		return Result.ok(selectPage);
 	}
-	
+	//根据id查询动态数据
+	@GetMapping("/findUserDynamic")
+	public Result<?> findUserDynamic(PlayballUserDynamic dyn){
+		return Result.ok(mapper.selectDynById(dyn));
+	}
 	//更新用户点赞、转发
 	@PostMapping("/updateFabulous")
 	public Result<?> updateFabulous(PlayballUserDynamic u_dyn){
