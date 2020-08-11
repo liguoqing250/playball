@@ -13,6 +13,4 @@ public class PlayballUserCollectBo extends PlayballUserCollect{
 	private String support;//评论量
 	private String type;//资源类型 1 图片 2 视频
 	
-	private Object obj;
-	
 }

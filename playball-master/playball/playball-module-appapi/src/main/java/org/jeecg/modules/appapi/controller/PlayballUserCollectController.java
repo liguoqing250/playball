@@ -48,12 +48,6 @@ public class PlayballUserCollectController {
 	@GetMapping("getCollection")
 	public Result<?> getCollection (PlayballUserCollectVo collVo){
 		Page<PlayballUserCollect> page = new Page<PlayballUserCollect>(collVo.getPage(), collVo.getLimit());
-		/*QueryWrapper<PlayballUserCollect> wrapper = new QueryWrapper<PlayballUserCollect>();
-		if(collVo.getUcoSort()!=0){
-			wrapper.eq("uco_sort", collVo.getUcoSort());
-		}
-		wrapper.eq("uco_u_id", collVo.getUcoUId());
-		wrapper.orderByDesc("update_time");*/
 		IPage<PlayballUserCollectBo> selectPage = mapper.selectUserCollect(page, collVo);
 		return Result.ok(selectPage);
 	}

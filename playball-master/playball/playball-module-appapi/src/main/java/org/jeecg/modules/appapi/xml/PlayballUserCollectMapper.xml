@@ -27,7 +27,7 @@
     <!-- 链表查询 -->
     <select id="selectUserCollect" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserCollectVo" resultMap="ResultMap">
     	<if test="vo.ucoSort == 1">
-    		SELECT c.*,n.title AS title,n.image AS resources,n.page_view AS browse,page_view AS support,label AS `type`,n.* FROM playball_user_collect c
+    		SELECT c.*,n.title AS title,n.image AS resources,n.page_view AS browse,page_view AS support,label AS `type` FROM playball_user_collect c
 			INNER JOIN playball_news n
 			ON c.uco_collected_id = n.id
 			WHERE c.uco_u_id = #{vo.ucoUId}
@@ -65,8 +65,6 @@
         <result column="browse" property="browse" />
         <result column="support" property="support" />
         <result column="type" property="type" />
-        
-        <association property="obj" javaType="java.lang.Object" autoMapping="true"></association>
     </resultMap>
 
 </mapper>

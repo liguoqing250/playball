@@ -47,6 +47,13 @@ public class NewsController {
 		return Result.ok(selectPage);
 	}
 	
+	//根据id查询资讯数据
+	@GetMapping("/findPlayballNews")
+	public Result<?> findPlayballNews(PlayballNews news){
+		/*PlayballNews selectById = mapper.selectById(news.getId());*/
+		return Result.ok(mapper.selectById(news.getId()));
+	}
+	
 	//更新浏览量
 	@PostMapping("/updateBrowse")
 	public Result<?> updateBrowse(PlayballNews news){
