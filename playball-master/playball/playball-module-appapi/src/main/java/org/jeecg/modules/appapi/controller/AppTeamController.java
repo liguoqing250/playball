@@ -36,6 +36,21 @@ public class AppTeamController {
     AppTeamPlayersService appTeamPlayersService;
     @Autowired
     JoinQuitTeamApplyService joinQuitTeamApplyService;
+    //更具uid查询球队
+    @PostMapping(value = "/getTeamByUid")
+    public Result<?> getTeamByUid(Integer uId) {
+        try{
+           AppTeamPlayers appTeamPlayers= appTeamPlayersService.selectByuId(uId);
+           if(appTeamPlayers!=null){
+               return Result.ok(appTeamService.selectById(appTeamPlayers.getTeam_id()));
+           }else{
+               return Result.error("没有数据");
+           }
+        }catch (Exception e){
+            e.printStackTrace();
+            return  Result.error("查询失败");
+        }
+    }
 
     //个人退队
     @PostMapping(value = "/quitTeam")

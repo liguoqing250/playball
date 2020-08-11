@@ -48,7 +48,7 @@ public class PlayballUserDynamicController {
 		//设置分页数据
 		IPage<PlayballUserDynamic> page = new Page<PlayballUserDynamic>(u_dynVo.getPage(), u_dynVo.getLimit());
 		
-		IPage<PlayballUserDynamicBo> selectPage = mapper.selectDynList(page, null);
+		IPage<PlayballUserDynamicBo> selectPage = mapper.selectDynList(page, u_dynVo);
 		return Result.ok(selectPage);
 	}
 	

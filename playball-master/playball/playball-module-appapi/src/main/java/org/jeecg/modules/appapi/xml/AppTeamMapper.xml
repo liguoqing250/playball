@@ -96,6 +96,12 @@
         pt.*
         FROM playball_team pt LEFT JOIN playball_game_schedule pgs ON pgs.team_id=pt.team_id WHERE pgs.games_id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        select
+        <include refid="AppTeam_Column_List" />
+        from playball_team where team_id = #{team_id,jdbcType=INTEGER} and ISNULL(is_delete)
+    </select>
+
     <!--isCaptain-->
     <select id="isCaptain" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
         select
