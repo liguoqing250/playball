@@ -27,6 +27,10 @@
     	SELECT d.* ,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_dynamic d
 		INNER JOIN playball_users u
 		ON d.udy_user_id = u.u_id
+		<if test="vo.uId!=null and vo.uId!=''">
+		where
+            u.u_id=#{vo.uId}
+        </if>
 		ORDER BY d.update_time DESC  
     </select>
     

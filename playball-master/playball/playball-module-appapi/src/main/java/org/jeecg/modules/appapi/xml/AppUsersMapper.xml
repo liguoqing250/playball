@@ -356,8 +356,13 @@
 	WHERE
 		puc.uco_sort = 3
 		AND pud.udy_user_id = #{uId}
-	) collectme,
-	( SELECT COUNT( * ) FROM playball_orders WHERE ord_user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryNewOrdersTime} ) ) newOrders,
+	) collectme
+	<if test="queryNewOrdersTime!=null ">
+        ,
+        ( SELECT COUNT( * ) FROM playball_orders WHERE ord_user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryNewOrdersTime} ) ) newOrders
+    </if>
+    <if test="queryMyAPpointmentGameTime!=null ">
+        ,
 	(
 	SELECT
 		(
@@ -366,7 +371,11 @@
 			WHERE paa.aa_accept_subject_id=#{uId} AND unix_timestamp( paa.createTime ) > unix_timestamp(#{queryMyAPpointmentGameTime})
 			)
 		)
-	) myAPpointmentGame,
+	) myAPpointmentGame
+    </if>
+    <if test="queryMyJoinGameTime!=null ">
+        ,
 	( SELECT COUNT( * ) FROM playball_enroll_player pep WHERE pep.user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryMyJoinGameTime} ) ) myJoinGame
+    </if>
     </select>
 </mapper>
