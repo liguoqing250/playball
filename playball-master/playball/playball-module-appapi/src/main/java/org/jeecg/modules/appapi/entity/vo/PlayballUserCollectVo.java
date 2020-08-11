@@ -13,6 +13,9 @@ public class PlayballUserCollectVo extends PlayballUserCollect{
 	private Integer page = 1;
 	private Integer limit = 6;
 	
+	private String lat ="";
+	private String lon ="";
+	
 	//接收多个 id 数组批量删除
 	private List<Integer> ids;
 }

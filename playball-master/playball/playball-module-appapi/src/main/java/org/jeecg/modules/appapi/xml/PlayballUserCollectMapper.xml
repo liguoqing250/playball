@@ -30,23 +30,35 @@
     		SELECT c.*,n.title AS title,n.image AS resources,n.page_view AS browse,page_view AS support,label AS `type` FROM playball_user_collect c
 			INNER JOIN playball_news n
 			ON c.uco_collected_id = n.id
-			WHERE c.uco_u_id = #{vo.ucoUId}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
 			ORDER BY c.create_time DESC 
     	</if>
     	<if test="vo.ucoSort == 2">
     		SELECT c.*,c_title AS title,c_video AS resources,c_browse AS browse,c_comment AS support,2 AS `type` FROM playball_user_collect c
 			INNER JOIN playball_curriculum cu
 			ON c.uco_collected_id = cu.c_id
-			WHERE c.uco_u_id = #{vo.ucoUId}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
 			ORDER BY c.create_time DESC 
     	</if>
     	<if test="vo.ucoSort == 3">
     		SELECT c.*,udy_content AS title,udy_resources AS resources,udy_support AS browse,udy_comment AS support,udy_res_type AS `type` FROM playball_user_collect c
 			INNER JOIN playball_user_dynamic d
 			ON c.uco_collected_id = d.udy_id
-			WHERE c.uco_u_id = #{vo.ucoUId}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
 			ORDER BY c.create_time DESC 
     	</if>
+    	<if test="vo.ucoSort == 4">
+    	SELECT c.*,( SELECT MIN( pfi.field_price ) FROM playball_field_info pfi WHERE pfi.business_id = sd.id ) AS price,
+		( st_distance ( POINT ( #{vo.lat}, #{vo.lon} ), POINT ( sd.location_lon,sd.location_lat  ) ) * 111195 ) AS distance,
+		sd.depart_name AS title,sd.image_url AS resources,sd.district AS district ,sd.avgscore AS support
+		FROM
+			sys_depart sd
+			LEFT JOIN playball_field_info pfi ON sd.id = pfi.business_id
+			INNER JOIN  playball_user_collect c ON c.uco_collected_id = sd.id
+		WHERE
+			sd.id = pfi.business_id AND c.uco_sort = #{vo.ucoSort}
+			ORDER BY c.create_time DESC 
+		</if>
     </select>
     
     <!-- 连表查询映射结果 -->
@@ -65,6 +77,9 @@
         <result column="browse" property="browse" />
         <result column="support" property="support" />
         <result column="type" property="type" />
+        <result column="price" property="price" />
+        <result column="district" property="district" />
+        <result column="distance" property="distance" />
     </resultMap>
 
 </mapper>

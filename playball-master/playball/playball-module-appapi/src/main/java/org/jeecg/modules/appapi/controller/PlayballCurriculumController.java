@@ -58,6 +58,11 @@ public class PlayballCurriculumController {
 		result.setResult(obj);
 		return result;
 	}
+	//根据id查询教程数据
+	@GetMapping("/findPlayballCurriculum")
+	public Result<?> findPlayballCurriculum(PlayballCurriculum cur){
+		return Result.ok(mapper.selectById(cur.getCId()));
+	}
 	
 	/* APP 调用查询热门视频*/
 	@GetMapping("/getHotCurriculum")

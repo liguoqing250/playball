@@ -35,7 +35,7 @@ public class PlayballUserCollect implements Serializable {
     private Integer ucoId;
 
     @ApiModelProperty(value = "收藏id")
-    private Integer ucoCollectedId;
+    private String ucoCollectedId;
 
     @ApiModelProperty(value = "用户id")
     private Integer ucoUId;

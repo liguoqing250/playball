@@ -18,11 +18,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @since 2020-07-23
  */
 public interface PlayballUserDynamicMapper extends BaseMapper<PlayballUserDynamic> {
-
+	//连表查询列表
 	IPage<PlayballUserDynamicBo> selectDynList(IPage<PlayballUserDynamic> page,@Param("vo") PlayballUserDynamicVo vo);
 	
 	int updateDynamicBrowse(PlayballUserDynamic dynamic);
 	
 	//查询全文索引动态数据
 	IPage<PlayballUserDynamicBo> findDynListFulltext(IPage<PlayballUserDynamic> page,@Param("fullText") String fullText);
+	
+	//根据id连表查询
+	PlayballUserDynamicBo selectDynById ( PlayballUserDynamic dyn);
 }

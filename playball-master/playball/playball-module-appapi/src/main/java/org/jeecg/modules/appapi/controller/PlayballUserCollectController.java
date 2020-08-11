@@ -47,6 +47,7 @@ public class PlayballUserCollectController {
 	//查询用户收藏数据
 	@GetMapping("getCollection")
 	public Result<?> getCollection (PlayballUserCollectVo collVo){
+		System.out.println(collVo.getUcoCollectedId() + "---" + collVo.getUcoSort() +"----"+ collVo.getLat()+ collVo.getLon());
 		Page<PlayballUserCollect> page = new Page<PlayballUserCollect>(collVo.getPage(), collVo.getLimit());
 		IPage<PlayballUserCollectBo> selectPage = mapper.selectUserCollect(page, collVo);
 		return Result.ok(selectPage);
@@ -67,7 +68,7 @@ public class PlayballUserCollectController {
 	
 	//删除收藏数据 逻辑删除
 	@PostMapping("/deleteCollection")
-	public Result<?>  deleteCollection(PlayballUserCollect coll){
+	public Result<?> deleteCollection(PlayballUserCollect coll){
 		PlayballUserCollect entity = mapper.selectIsEntity(coll);
 		//用户点击取消收藏 如果是空的不操作
 		if(entity!=null){
@@ -85,22 +86,22 @@ public class PlayballUserCollectController {
 	}
 	
 	//更新评论数
-	public void updateCollect(int id,Integer type,int operation){
+	public void updateCollect(String id,Integer type,int operation){
 		if(type == null){//更新资讯表收藏数据
 			return ;
 		}else if(type == 1){
 			PlayballNews news = new PlayballNews();
-			news.setId(id);
+			news.setId(Integer.parseInt(id));
 			news.setUserColls(operation);
 			newsMapper.updateNewsBrowse(news);
 		}else if(type == 2){
 			PlayballCurriculum curriculum = new PlayballCurriculum();
-			curriculum.setCId(id);
+			curriculum.setCId(Integer.parseInt(id));
 			curriculum.setUserColls(operation);
 			curMapper.updateCurriculumBrowse(curriculum);
 		}else if(type == 3){
 			PlayballUserDynamic dynamic = new PlayballUserDynamic();
-			dynamic.setUdyId(id);
+			dynamic.setUdyId(Integer.parseInt(id));
 			dynamic.setUserColls(operation);
 			dynMapper.updateDynamicBrowse(dynamic);
 		}
