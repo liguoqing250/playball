@@ -13,6 +13,10 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules. appapi.entity.Game;
+import org.jeecg.modules.appapi.entity.PlayballUserComment;
+import org.jeecg.modules.appapi.entity.bo.GameBo;
+import org.jeecg.modules.appapi.entity.vo.GameVo;
+import org.jeecg.modules.appapi.entity.vo.UserCommentVo;
 import org.jeecg.modules.appapi.mapper.GameMapper;
 import org.jeecg.modules. appapi.service.IGameService;
 import java.util.Date;
@@ -57,22 +61,32 @@ public class GameController extends JeecgController<Game, IGameService> {
 	/**
 	 * 分页列表查询
 	 *
-	 * @param game
-	 * @param pageNo
-	 * @param pageSize
-	 * @param req
+	 * @param gamevo
+	 * @return
+	 */
+	@ApiOperation(value="比赛-分页列表查询", notes="比赛-分页列表查询")
+	@PostMapping(value = "/queryPageListByUid")
+	public Result<?> queryPageListByUid(GameVo gamevo) {
+		//分页
+		Page<GameVo> page = new Page<>(gamevo.getPage(), gamevo.getLimit());
+		//查询条件
+		IPage<GameBo> selectPage = mapper.queryPageListByUid(page, gamevo);
+		return Result.ok(selectPage);
+	}
+	/**
+	 * 分页列表查询
+	 *
+	 * @param gamevo
 	 * @return
 	 */
 	@ApiOperation(value="比赛-分页列表查询", notes="比赛-分页列表查询")
 	@PostMapping(value = "/list")
-	public Result<?> queryPageList(Game game,
-								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-								   HttpServletRequest req) {
-		QueryWrapper<Game> queryWrapper = QueryGenerator.initQueryWrapper(game, req.getParameterMap());
-		Page<Game> page = new Page<Game>(pageNo, pageSize);
-		IPage<Game> pageList = gameService.page(page, queryWrapper);
-		return Result.ok(pageList);
+	public Result<?> queryPageList(GameVo gamevo) {
+		//分页
+		Page<GameVo> page = new Page<>(gamevo.getPage(), gamevo.getLimit());
+		//查询条件
+		IPage<GameBo> selectPage = mapper.queryPageList(page, gamevo);
+		return Result.ok(selectPage);
 	}
 	
 	/**

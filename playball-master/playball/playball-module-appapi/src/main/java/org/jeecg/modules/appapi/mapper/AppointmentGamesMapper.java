@@ -2,10 +2,14 @@ package org.jeecg.modules.appapi.mapper;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.AppointmentGames;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.appapi.entity.JoinAppointmentGamesPlayer;
+import org.jeecg.modules.appapi.entity.bo.AppointmentGamesBo;
+import org.jeecg.modules.appapi.entity.vo.AppointmentGamesVo;
 
 /**
  * @Description: 约球
@@ -20,4 +24,6 @@ public interface AppointmentGamesMapper extends BaseMapper<AppointmentGames> {
     List<JoinAppointmentGamesPlayer> queryJoinPlayersByUsers(Integer id);
 
     void deleteByTeamId(Integer team_id);
+
+    IPage<AppointmentGamesBo> listByUid(Page<AppointmentGamesVo> page, @Param("uId")Integer uId);
 }

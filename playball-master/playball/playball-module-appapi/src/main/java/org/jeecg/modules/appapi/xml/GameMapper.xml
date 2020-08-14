@@ -9,4 +9,24 @@
     <select id="queryByBid"  parameterType="java.lang.String" resultType="org.jeecg.modules.appapi.entity.Game">
         SELECT pg.* FROM playball_games pg LEFT JOIN playball_field_info pfi ON pfi.id=pg.field_id WHERE pfi.business_id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="queryPageList" parameterType="org.jeecg.modules.appapi.entity.vo.GameVo" resultType="org.jeecg.modules.appapi.entity.bo.GameBo">
+        SELECT pg.*,sd.district FROM playball_games pg LEFT JOIN playball_field_info pfi ON pfi.id=pg.field_id LEFT JOIN sys_depart sd ON sd.id=pfi.business_id
+        where 1=1
+        <if test="vo.sportsId!='' and vo.sportsId!=null ">
+            AND pg.sports_id!=#{vo.sportsId}
+        </if>
+    </select>
+
+    <select id="queryPageListByUid" parameterType="org.jeecg.modules.appapi.entity.vo.GameVo" resultType="org.jeecg.modules.appapi.entity.bo.GameBo">
+
+        SELECT
+	    sd.district ,pg.*
+FROM
+	playball_games pg
+	LEFT JOIN playball_field_info pfi ON pfi.id = pg.field_id
+	LEFT JOIN sys_depart sd ON sd.id = pfi.business_id
+	LEFT JOIN playball_enroll pe ON pe.games_id=pg.id
+	LEFT JOIN playball_enroll_player pep ON pep.enroll_id=pe.id
+	WHERE pep.user_id=#{vo.uId}
+    </select>
 </mapper>

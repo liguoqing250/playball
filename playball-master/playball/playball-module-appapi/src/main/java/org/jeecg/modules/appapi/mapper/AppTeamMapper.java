@@ -33,5 +33,7 @@ public interface AppTeamMapper {
 
     List<AppTeam> queryTeamByGameid(Integer id);
 
+    List<AppTeam> querTeamByMyApply(Integer uId);
+
     TeamScoreInfoVo selectTeamScoreInfoById(Integer id);
 }

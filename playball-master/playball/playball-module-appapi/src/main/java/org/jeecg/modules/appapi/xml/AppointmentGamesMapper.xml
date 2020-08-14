@@ -20,4 +20,21 @@
     <delete id="deleteByTeamId" parameterType="java.lang.Integer">
         DELETE pag,paa FROM playball_appointment_games pag LEFT JOIN playball_accept_appointment paa ON paa.ag_id=pag.id WHERE pag.tp_id= #{team_id,jdbcType=INTEGER}
     </delete>
+
+    <select id="listByUid" parameterType="org.jeecg.modules.appapi.entity.vo.AppointmentGamesVo" resultType="org.jeecg.modules.appapi.entity.bo.AppointmentGamesBo">
+        SELECT
+	pu.u_id uId,
+	pu.u_name name,
+	pu.u_nickName nickName,
+	pu.u_headImage headImage,
+	pag.*
+FROM
+	playball_appointment_games pag
+	LEFT JOIN playball_accept_appointment paa ON paa.ag_id = pag.id
+	LEFT JOIN playball_users pu ON pu.u_id = pag.ag_user_id
+WHERE
+	paa.aa_accept_subject_id = #{uId} or pag.ag_user_id=#{uId}
+GROUP BY
+	pag.id
+    </select>
 </mapper>

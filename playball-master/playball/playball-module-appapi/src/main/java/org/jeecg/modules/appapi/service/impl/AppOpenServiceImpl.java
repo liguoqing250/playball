@@ -35,6 +35,7 @@ public class AppOpenServiceImpl implements AppOpenService {
         //登录
         try {
             if(appUsers.getU_registerWay()!=1){
+
                 //第三方登录或者注册
                 if(selectAppUsers!=null){
                 	appUsers.setU_id(selectAppUsers.getU_id());
@@ -42,8 +43,8 @@ public class AppOpenServiceImpl implements AppOpenService {
                     out.put("msg","登录成功");
                     out.put("appUsers",selectAppUsers);
                 }else{
+                    appUsers.setU_name(appUsers.getU_nickName());
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
-
                     appUsersMapper.insert(appUsers);
                     PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
                     playballUsersBalance.setUbUserId(appUsers.getU_id());

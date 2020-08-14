@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.service.impl;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.modules.appapi.entity.ScheduleUserdata;
+import org.jeecg.modules.appapi.entity.bo.TeamRankBo;
 import org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo;
 import org.jeecg.modules.appapi.mapper.ScheduleUserdataMapper;
 import org.jeecg.modules.appapi.service.IScheduleUserdataService;
@@ -35,5 +36,15 @@ public class ScheduleUserdataServiceImpl extends ServiceImpl<ScheduleUserdataMap
         map.put("team_id",team_id);
         map.put("schedule_id",schedule_id);
         return scheduleUserdataMapper.queryPlayerGameDataByTeam(map);
+    }
+
+    @Override
+    public List<ScheduleUserdata> queryAll() {
+        return scheduleUserdataMapper.queryAll();
+    }
+
+    @Override
+    public List<TeamRankBo> queryAllAsTeam() {
+        return scheduleUserdataMapper.queryAllAsTeam();
     }
 }

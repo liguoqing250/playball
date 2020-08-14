@@ -334,4 +334,8 @@ WHERE
         where team_id = #{team_id,jdbcType=INTEGER}
 
     </update>
+
+    <select id="querTeamByMyApply" parameterType="java.lang.Integer" resultMap="AppTeamResultMap">
+        SELECT pt.*  FROM playball_team pt LEFT JOIN playball_join_quit_team_apply pjqt ON pjqt.team_id=pt.team_id WHERE pjqt.u_id=#{uId} AND ISNULL(pt.is_delete)
+    </select>
 </mapper>

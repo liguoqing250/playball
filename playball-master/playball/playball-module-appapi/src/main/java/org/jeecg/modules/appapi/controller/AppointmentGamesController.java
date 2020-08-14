@@ -21,7 +21,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.modules.appapi.entity.bo.AppointmentGamesBo;
+import org.jeecg.modules.appapi.entity.vo.AppointmentGamesVo;
+import org.jeecg.modules.appapi.entity.vo.UserCommentVo;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
+import org.jeecg.modules.appapi.mapper.AppointmentGamesMapper;
 import org.jeecg.modules.appapi.service.*;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
@@ -49,8 +53,10 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/AppointmentGames")
 public class AppointmentGamesController extends JeecgController<AppointmentGames, IAppointmentGamesService> {
-	@Autowired
-	private IAppointmentGamesService appointmentGamesService;
+	 @Autowired
+	 private IAppointmentGamesService appointmentGamesService;
+	 @Autowired
+	 private AppointmentGamesMapper appointmentGamesMapper;
 	 @Autowired
 	 private IAcceptAppointmentService iAcceptAppointmentService;
 	 @Autowired
@@ -63,7 +69,20 @@ public class AppointmentGamesController extends JeecgController<AppointmentGames
 
 	@Autowired
 	private HttpServletRequest request;
-
+	 /**
+	  * 分页查询用户已参加约球
+	  *
+	  * @return
+	  */
+	 @ApiOperation(value="约球-分页查询用户已参加约球", notes="约球-分页查询用户已参加约球")
+	 @PostMapping(value = "/listByUid")
+	 public Result<?> listByUid(AppointmentGamesVo appointmentGamesVo) {
+		 //分页
+		 Page<AppointmentGamesVo> page = new Page<>(appointmentGamesVo.getPage(), appointmentGamesVo.getLimit());
+		 //查询条件
+		 IPage<AppointmentGamesBo> selectPage = appointmentGamesMapper.listByUid(page, appointmentGamesVo.getUId());
+		 return Result.ok(selectPage);
+	 }
 
 	/**
 	 * 分页列表查询

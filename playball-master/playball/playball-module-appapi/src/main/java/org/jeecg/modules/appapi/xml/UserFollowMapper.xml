@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.appapi.mapper.UserFollowMapper">
+    <select id="isFllow" parameterType="org.jeecg.modules.appapi.entity.UserFollow" resultType="org.jeecg.modules.appapi.entity.UserFollow">
+        SELECT * FROM playball_user_follow WHERE u_id=#{uId} and follow_u_id=#{followUId}
+    </select>
+</mapper>

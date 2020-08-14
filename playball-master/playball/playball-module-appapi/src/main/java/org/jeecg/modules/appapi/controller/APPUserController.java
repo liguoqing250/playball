@@ -7,6 +7,7 @@ import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.vo.AboutMe;
+import org.jeecg.modules.appapi.mapper.AppUsersMapper;
 import org.jeecg.modules.appapi.service.AppOpenService;
 import org.jeecg.modules.appapi.service.AppUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class APPUserController {
     @Autowired
     AppUsersService appUsersService;
+    @Autowired
+    AppUsersMapper appUsersMapper;
     //更新
     @PostMapping(value = "/updateMyUserInfo")
     public Result<JSONObject> updateMyUserInfo(@RequestBody AppUsers appUsers) {
@@ -84,6 +87,28 @@ public class APPUserController {
 
         try{
            return Result.ok(appUsersService.queryAboutMe(aboutMe));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("请求失败");
+        }
+    }
+    //获取我关注的
+    @PostMapping(value = "/queryMyFllow")
+    public Result<?> queryMyFllow(Integer uId) {
+
+        try{
+            return Result.ok(appUsersMapper.queryMyFllow(uId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("请求失败");
+        }
+    }
+    //获取关注我的
+    @PostMapping(value = "/queryFllowMe")
+    public Result<?> queryFllowMe(Integer uId) {
+
+        try{
+            return Result.ok(appUsersMapper.queryFllowMe(uId));
         }catch (Exception e){
             e.printStackTrace();
             return Result.error("请求失败");

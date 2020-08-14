@@ -7,8 +7,8 @@ import org.jeecg.modules.appapi.entity.PlayballNews;
 import org.jeecg.modules.appapi.entity.PlayballUserComment;
 import org.jeecg.modules.appapi.entity.PlayballUserDynamic;
 import org.jeecg.modules.appapi.entity.bo.PlayballUserCommentBo;
-import org.jeecg.modules.appapi.entity.vo.PlayballNewsVo;
 import org.jeecg.modules.appapi.entity.vo.PlayballUserCommentVo;
+import org.jeecg.modules.appapi.entity.vo.UserCommentVo;
 import org.jeecg.modules.appapi.mapper.NewsMapper;
 import org.jeecg.modules.appapi.mapper.PlayballCurriculumMapper;
 import org.jeecg.modules.appapi.mapper.PlayballUserCommentMapper;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -47,6 +46,15 @@ public class PlayballUserCommentController {
 	@Autowired
 	private PlayballUserDynamicMapper dynMapper; //动态 mapper
 	
+	//获取评论数据(连表查询)
+	@GetMapping("/selectDynamicByCommentUid")
+	public Result<?> selectDynamicByCommentUid(PlayballUserCommentVo u_comVo){
+		//分页
+		Page<PlayballUserComment> page = new Page<PlayballUserComment>(u_comVo.getPage(), u_comVo.getLimit());
+		//查询条件
+		IPage<UserCommentVo> selectPage = mapper.selectDynamicByCommentUid(page, u_comVo.getUserId());
+		return Result.ok(selectPage);
+	}
 	//获取评论数据(连表查询)
 	@GetMapping("/getPlayballUserComment")
 	public Result<?> getPlayballUserComment(PlayballUserCommentVo u_comVo){

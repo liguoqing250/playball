@@ -63,6 +63,74 @@
         <result column="u_headImage" property="uHeadImage" />
         <result column="u_nickName" property="uNickName" />
     </resultMap>
-    
 
+
+    <!-- 根据用户回复查动态 -->
+    <resultMap id="userCommentVoMap" type="org.jeecg.modules.appapi.entity.vo.UserCommentVo">
+        <id column="udy_id" property="udyId" />
+        <result column="udy_user_id" property="udyUserId" />
+        <result column="udy_content" property="udyContent" />
+        <result column="udy_resources" property="udyResources" />
+        <result column="udy_res_type" property="udyResType" />
+        <result column="udy_position" property="udyPosition" />
+        <result column="udy_visible" property="udyVisible" />
+        <result column="udy_draft" property="udyDraft" />
+        <result column="udy_support" property="udySupport" />
+        <result column="udy_comment" property="udyComment" />
+        <result column="udy_share" property="udyShare" />
+        <result column="user_colls" property="userColls" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+
+        <result column="u_id" property="uId" />
+        <result column="u_headImage" property="uHeadImage" />
+        <result column="u_nickName" property="uNickName" />
+        <association property="playballUserCommentBoList" column="udy_id" select="selectComment"/>
+    </resultMap>
+    
+    <!-- 根据用户回复查动态 -->
+    <resultMap id="CommentMap" type="org.jeecg.modules.appapi.entity.bo.PlayballUserCommentBo">
+        <id column="uco_id" property="ucoId" />
+        <result column="uco_becom_id" property="ucoBecomId" />
+        <result column="user_id" property="userId" />
+        <result column="uco_content" property="ucoContent" />
+        <result column="uco_sort" property="ucoSort" />
+        <result column="uco_reply_num" property="ucoReplyNum" />
+        <result column="uco_support" property="ucoSupport" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_delete" property="isDelete" />
+        <result column="version" property="version" />
+
+        <result column="u_id" property="uId" />
+        <result column="u_headImage" property="uHeadImage" />
+        <result column="u_nickName" property="uNickName" />
+    </resultMap>
+
+    <select id="selectComment" resultMap="CommentMap">
+        SELECT c.*,u.u_id ,u.u_nickName,u.u_headImage FROM playball_user_comment c
+        INNER JOIN  playball_users u
+        ON c.user_id = u.u_id
+        WHERE c.uco_becom_id=#{udy_id} and c.uco_sort=3
+        ORDER BY c.create_time DESC
+    </select>
+    <select id="selectDynamicByCommentUid" resultType="java.lang.Integer" resultMap="userCommentVoMap">
+        SELECT
+	pud.*,
+	pu.u_id,
+	pu.u_nickName,
+	pu.u_headImage,
+	puc.uco_id
+FROM
+	playball_user_comment puc
+	LEFT JOIN playball_user_dynamic pud ON pud.udy_id = puc.uco_becom_id
+	LEFT JOIN playball_users pu ON pu.u_id = pud.udy_user_id
+WHERE
+	puc.uco_sort = 3
+	AND puc.user_id = #{uId}
+        GROUP BY pud.udy_id
+        ORDER BY pud.update_time asc
+    </select>
 </mapper>

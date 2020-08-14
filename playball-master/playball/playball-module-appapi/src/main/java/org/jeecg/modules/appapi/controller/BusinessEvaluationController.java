@@ -8,10 +8,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
+import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.BusinessEvaluation;
 import org.jeecg.modules.appapi.service.IBusinessEvaluationService;
 import java.util.Date;
@@ -28,6 +32,8 @@ import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -69,6 +75,10 @@ public class BusinessEvaluationController extends JeecgController<BusinessEvalua
 	@ApiOperation(value="商家评价-添加", notes="商家评价-添加")
 	@PostMapping(value = "/add")
 	public Result<?> add(@RequestBody BusinessEvaluation businessEvaluation) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		String token=request.getHeader("X-Access-Token");
+		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+		businessEvaluation.setUid(appUsers.getU_id());
 		businessEvaluationService.save(businessEvaluation);
 		return Result.ok("添加成功！");
 	}

@@ -42,4 +42,23 @@ WHERE
 		</if>
 		AND ptp.team_id=#{params.team_id}
 	</select>
+
+
+	<select id="queryAll" resultType="org.jeecg.modules.appapi.entity.ScheduleUserdata">
+		SELECT pu.u_name name ,pu.u_nickName nickName ,pu.u_headImage headImage,psu.* FROM playball_schedule_userdata psu LEFT JOIN playball_users pu ON pu.u_id=psu.user_id ORDER BY psu.sports_id
+	</select>
+	<select id="queryAllAsTeam" resultType="org.jeecg.modules.appapi.entity.bo.TeamRankBo">
+		SELECT
+	pt.team_id teamId,
+	pt.t_name tName,
+	pt.t_image tImage,
+	psu.*
+FROM
+	playball_schedule_userdata psu
+	LEFT JOIN playball_team_players ptp ON ptp.tp_id= psu.player_id
+	LEFT JOIN playball_team pt ON pt.team_id =ptp.team_id
+	WHERE ptp.tp_id= psu.player_id
+ORDER BY
+	psu.sports_id
+	</select>
 </mapper>

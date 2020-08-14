@@ -29,6 +29,7 @@ import org.jeecgframework.poi.excel.annotation.Excel;
 public class ScheduleUserdata {
     private String name;
     private String nickName;
+    private String headImage;
 	/**主键*/
 	@TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "主键")

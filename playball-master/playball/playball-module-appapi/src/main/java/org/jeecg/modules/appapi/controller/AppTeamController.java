@@ -11,6 +11,7 @@ import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
 import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
+import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
@@ -29,7 +30,8 @@ import java.util.Map;
 @Slf4j
 public class AppTeamController {
 
-
+    @Autowired
+    AppTeamMapper appTeamMapper;
     @Autowired
     AppTeamService appTeamService;
     @Autowired
@@ -351,5 +353,15 @@ public class AppTeamController {
             result.error500("请求失败");
         }
         return result;
+    }
+    //转让队长
+    @PostMapping(value = "/querTeamByMyApply")
+    public Result<?> querTeamByMyApply(Integer uId) {
+        try{
+             return  Result.ok( appTeamMapper.querTeamByMyApply(uId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.error("请求失败");
+        }
     }
 }

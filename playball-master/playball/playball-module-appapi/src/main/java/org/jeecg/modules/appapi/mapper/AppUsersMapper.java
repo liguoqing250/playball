@@ -29,4 +29,9 @@ public interface AppUsersMapper {
     int getCount(@Param("params") Map<String, Object> params);
 
     AboutMe queryAboutMe(AboutMe aboutMe);
+
+    //查询我关注的
+    List<AppUsers> queryMyFllow(Integer uId);
+    //查询关注我的
+    List<AppUsers> queryFllowMe(Integer uId);
 }

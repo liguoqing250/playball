@@ -29,7 +29,12 @@
         <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
         <result column="version" jdbcType="VARCHAR" property="version" />
     </resultMap>
-
+    <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.AppUsers">
+        <result column="u_id" jdbcType="INTEGER" property="u_id" />
+        <result column="u_name" jdbcType="VARCHAR" property="u_name" />
+        <result column="u_nickName" jdbcType="VARCHAR" property="u_nickName" />
+        <result column="u_headImage" jdbcType="VARCHAR" property="u_headImage" />
+    </resultMap>
     <!-- 查询字段-->
     <sql id="AppUsers_Column_List">
         u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_profile,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version
@@ -345,18 +350,9 @@
     </update>
     <select id="queryAboutMe" parameterType="org.jeecg.modules.appapi.entity.vo.AboutMe" resultType="org.jeecg.modules.appapi.entity.vo.AboutMe">
         SELECT
-	( SELECT COUNT( * ) FROM playball_user_dynamic WHERE udy_user_id = #{uId} ) dynamicNum,
-	( SELECT COUNT( * ) FROM playball_user_collect WHERE uco_sort = 3 AND uco_u_id = #{uId} ) mycollect,
-	(
-	SELECT
-		COUNT( * )
-	FROM
-		playball_user_collect puc
-		LEFT JOIN playball_user_dynamic pud ON pud.udy_id = puc.uco_collected_id
-	WHERE
-		puc.uco_sort = 3
-		AND pud.udy_user_id = #{uId}
-	) collectme
+	    ( SELECT COUNT( * ) FROM playball_user_dynamic WHERE udy_user_id = #{uId} ) dynamicNum,
+        ( SELECT COUNT( * ) FROM playball_user_follow WHERE u_id = #{uId} ) mycollect,
+        ( SELECT COUNT( * ) FROM playball_user_follow WHERE follow_u_id = #{uId} ) collectme
 	<if test="queryNewOrdersTime!=null ">
         ,
         ( SELECT COUNT( * ) FROM playball_orders WHERE ord_user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryNewOrdersTime} ) ) newOrders
@@ -377,5 +373,15 @@
         ,
 	( SELECT COUNT( * ) FROM playball_enroll_player pep WHERE pep.user_id = #{uId} AND unix_timestamp( create_time ) > unix_timestamp( #{queryMyJoinGameTime} ) ) myJoinGame
     </if>
+    </select>
+
+
+    <select id="queryMyFllow" parameterType="java.lang.Integer" resultMap="ResultMap" >
+        SELECT pu.u_id u_id,pu.u_name u_name,pu.u_nickName u_nickName,pu.u_headImage u_headImage FROM playball_users pu LEFT JOIN playball_user_follow puf on puf.follow_u_id=pu.u_id
+        WHERE puf.u_id=#{uId}
+    </select>
+    <select id="queryFllowMe" parameterType="java.lang.Integer" resultMap="ResultMap">
+        SELECT pu.u_id u_id,pu.u_name u_name,pu.u_nickName u_nickName,pu.u_headImage u_headImage FROM playball_users pu LEFT JOIN playball_user_follow puf on puf.u_id=pu.u_id
+        WHERE puf.follow_u_id=#{uId}
     </select>
 </mapper>

@@ -1,8 +1,12 @@
 package org.jeecg.modules.appapi.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.appapi.entity.AppointmentGames;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.appapi.entity.JoinAppointmentGamesPlayer;
+import org.jeecg.modules.appapi.entity.bo.AppointmentGamesBo;
+import org.jeecg.modules.appapi.entity.vo.AppointmentGamesVo;
 
 import java.util.List;
 
@@ -15,4 +19,5 @@ import java.util.List;
 public interface IAppointmentGamesService extends IService<AppointmentGames> {
 
     List<JoinAppointmentGamesPlayer> queryJoinAppointmentGamesPlayers(String id);
+
 }

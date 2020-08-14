@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.service;
 
 import org.jeecg.modules.appapi.entity.ScheduleUserdata;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.appapi.entity.bo.TeamRankBo;
 import org.jeecg.modules.appapi.entity.vo.PlayerScoreInfo;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface IScheduleUserdataService extends IService<ScheduleUserdata> {
     List<PlayerScoreInfo> queryPlayerInfoByTpId(Integer tpId);
 
     List<ScheduleUserdata> queryPlayerGameDataByTeam(Integer team_id, Integer schedule_id);
+
+    List<ScheduleUserdata> queryAll();
+
+    List<TeamRankBo> queryAllAsTeam();
 }
