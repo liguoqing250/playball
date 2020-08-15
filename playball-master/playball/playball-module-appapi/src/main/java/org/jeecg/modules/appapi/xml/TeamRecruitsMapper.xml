@@ -17,6 +17,9 @@
         pt.t_province province,
         pt.t_city city,
         pt.t_district district,
+        pt.t_win_total winTotal,
+        pt.t_divide_total divideTotal,
+        pt.t_lost_total lostTotal,
         pst.sports_name sportsName
         FROM
         playball_team_recruits ptr
@@ -32,8 +35,8 @@
         </if>
         <if test="params.searchValue != null">
             and (
-            pt.t_name=LIKE concat('%',#{params.searchValue},'%') or
-            psp.text=LIKE concat('%',#{params.searchValue},'%')
+            pt.t_name LIKE concat('%',#{params.searchValue},'%') or
+            psp.text LIKE concat('%',#{params.searchValue},'%')
             )
         </if>
         LIMIT #{params.PageNum},#{params.PageSize}
@@ -57,8 +60,8 @@
         </if>
         <if test="params.searchValue != null">
             and (
-            pt.t_name=LIKE concat('%',#{params.searchValue},'%') or
-            psp.text=LIKE concat('%',#{params.searchValue},'%')
+            pt.t_name LIKE concat('%',#{params.searchValue},'%') or
+            psp.text LIKE concat('%',#{params.searchValue},'%')
             )
         </if>
     </select>

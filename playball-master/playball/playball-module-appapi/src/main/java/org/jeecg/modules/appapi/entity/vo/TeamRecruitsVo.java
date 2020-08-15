@@ -14,6 +14,33 @@ public class TeamRecruitsVo {
     private  String  district;
     private  String  sportsName;
     private  Integer position;
+    private  Integer winTotal;
+    private  Integer divideTotal;
+    private  Integer lostTotal;
+
+    public Integer getWinTotal() {
+        return winTotal;
+    }
+
+    public void setWinTotal(Integer winTotal) {
+        this.winTotal = winTotal;
+    }
+
+    public Integer getDivideTotal() {
+        return divideTotal;
+    }
+
+    public void setDivideTotal(Integer divideTotal) {
+        this.divideTotal = divideTotal;
+    }
+
+    public Integer getLostTotal() {
+        return lostTotal;
+    }
+
+    public void setLostTotal(Integer lostTotal) {
+        this.lostTotal = lostTotal;
+    }
 
     public Integer getPosition() {
         return position;
