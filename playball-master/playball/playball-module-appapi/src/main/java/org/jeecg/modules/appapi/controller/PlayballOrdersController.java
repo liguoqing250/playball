@@ -3,19 +3,23 @@ package org.jeecg.modules.appapi.controller;
 
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.PlayballOrders;
+import org.jeecg.modules.appapi.entity.bo.PlayballOrdersBo;
+import org.jeecg.modules.appapi.entity.vo.PlayballOrdersVo;
 import org.jeecg.modules.appapi.mapper.PlayballOrdersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * <p>
- *  前端控制器
+ *  订单表前端控制器
  * </p>
  *
  * @author 予之文化传媒公司
@@ -44,6 +48,14 @@ public class PlayballOrdersController {
 			result.setCode(0);
 		}
 		return result;
+	}
+	
+	//查询用户订单数据
+	@GetMapping("/getOrders")
+	public Result<?> getOrders(PlayballOrdersVo ordersVo){
+		Page<PlayballOrders> page = new Page<PlayballOrders>(ordersVo.getPage(), ordersVo.getLimit());
+		IPage<PlayballOrdersBo> ordersList = mapper.getOrdersList(page, ordersVo);
+		return Result.ok(ordersList);
 	}
 }
 
