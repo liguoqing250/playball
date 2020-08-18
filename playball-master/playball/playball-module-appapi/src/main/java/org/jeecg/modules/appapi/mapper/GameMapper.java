@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules. appapi.entity.Game;
+import org.jeecg.modules.appapi.entity.PlayballNews;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.appapi.entity.PlayballUserComment;
 import org.jeecg.modules.appapi.entity.bo.GameBo;
@@ -26,4 +28,8 @@ public interface GameMapper extends BaseMapper<Game> {
     IPage<GameBo> queryPageList(Page<GameVo> page, @Param("vo") GameVo gamevo);
 
     IPage<GameBo> queryPageListByUid(Page<GameVo> page,  @Param("vo")GameVo gamevo);
+    
+    //查询全文索引比赛数据
+  	IPage<GameBo> findGameFulltext(IPage<Game> page,@Param("fullText") String fullText);
+
 }

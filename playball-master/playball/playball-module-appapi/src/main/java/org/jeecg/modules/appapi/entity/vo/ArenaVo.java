@@ -1,9 +1,5 @@
 package org.jeecg.modules.appapi.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-import org.jeecgframework.poi.excel.annotation.Excel;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -68,6 +64,13 @@ public class ArenaVo {
     private String location_lat;
     /**商家平均评分*/
     private Float avgscore;
+    
+    private Integer page = 1;
+	private Integer limit = 8;
+	
+	private String lat ="";
+	private String lon ="";
+	
 
     public Float getAvgscore() {
         return avgscore;
@@ -316,4 +319,37 @@ public class ArenaVo {
     public void setLocation_lat(String location_lat) {
         this.location_lat = location_lat;
     }
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
+
+	public String getLat() {
+		return lat;
+	}
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+	public String getLon() {
+		return lon;
+	}
+
+	public void setLon(String lon) {
+		this.lon = lon;
+	}
+    
 }

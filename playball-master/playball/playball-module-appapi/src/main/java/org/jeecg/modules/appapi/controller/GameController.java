@@ -16,6 +16,7 @@ import org.jeecg.modules. appapi.entity.Game;
 import org.jeecg.modules.appapi.entity.PlayballUserComment;
 import org.jeecg.modules.appapi.entity.bo.GameBo;
 import org.jeecg.modules.appapi.entity.vo.GameVo;
+import org.jeecg.modules.appapi.entity.vo.PlayballNewsVo;
 import org.jeecg.modules.appapi.entity.vo.UserCommentVo;
 import org.jeecg.modules.appapi.mapper.GameMapper;
 import org.jeecg.modules. appapi.service.IGameService;
@@ -211,5 +212,13 @@ public class GameController extends JeecgController<Game, IGameService> {
 	  IPage<Game> selectPage = mapper.selectPage(page, queryWrapper);
       return Result.ok(selectPage);
   }
+  
+  	//全文搜索查询资讯
+	@GetMapping("/findFulltextNews")
+	public Result<?> findFulltextDynamic(GameVo gameVo){
+		Page<Game> page = new Page<Game>(gameVo.getPage(), gameVo.getLimit());
+		IPage<GameBo> gameFulltext = mapper.findGameFulltext(page, gameVo.getGamesName());
+		return Result.ok(gameFulltext);
+	}
 
 }
