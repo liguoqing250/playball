@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.FieldInfo;
+import org.jeecg.modules.appapi.entity.Game;
+import org.jeecg.modules.appapi.entity.bo.GameBo;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @Description: 场馆详情

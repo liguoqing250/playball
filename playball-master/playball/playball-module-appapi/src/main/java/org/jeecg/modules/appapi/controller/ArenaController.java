@@ -1,39 +1,35 @@
 package org.jeecg.modules.appapi.controller;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.aspect.annotation.AutoLog;
-import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.appapi.entity.Arena;
+import org.jeecg.modules.appapi.entity.bo.ArenaBo;
+import org.jeecg.modules.appapi.entity.vo.ArenaVo;
+import org.jeecg.modules.appapi.mapper.ArenaMapper;
 import org.jeecg.modules.appapi.service.IArenaService;
-import java.util.Date;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.extern.slf4j.Slf4j;
-import org.jeecg.common.system.base.controller.JeecgController;
-import org.jeecgframework.poi.excel.ExcelImportUtil;
-import org.jeecgframework.poi.excel.def.NormalExcelConstants;
-import org.jeecgframework.poi.excel.entity.ExportParams;
-import org.jeecgframework.poi.excel.entity.ImportParams;
-import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
-import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
  /**
  * @Description: 商家表
@@ -48,7 +44,9 @@ import io.swagger.annotations.ApiOperation;
 public class ArenaController extends JeecgController<Arena, IArenaService> {
 	@Autowired
 	private IArenaService arenaService;
-
+	
+	@Autowired
+	private ArenaMapper mapper;
 
 	/**
 	 * 分页列表查询
@@ -181,5 +179,13 @@ public class ArenaController extends JeecgController<Arena, IArenaService> {
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
       return super.importExcel(request, response, Arena.class);
   }
+  
+  	//全文搜索查询商家球馆
+	@GetMapping("/findFulltextNews")
+	public Result<?> findFulltextDynamic(ArenaVo arenaVo){
+		Page<Arena> page = new Page<Arena>(arenaVo.getPage(), arenaVo.getLimit());
+		IPage<ArenaBo> fieldFulltext = mapper.findFieldFulltext(page, arenaVo);
+		return Result.ok(fieldFulltext);
+	}
 
 }

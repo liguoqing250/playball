@@ -18,15 +18,28 @@
     </select>
 
     <select id="queryPageListByUid" parameterType="org.jeecg.modules.appapi.entity.vo.GameVo" resultType="org.jeecg.modules.appapi.entity.bo.GameBo">
-
         SELECT
 	    sd.district ,pg.*
-FROM
-	playball_games pg
-	LEFT JOIN playball_field_info pfi ON pfi.id = pg.field_id
-	LEFT JOIN sys_depart sd ON sd.id = pfi.business_id
-	LEFT JOIN playball_enroll pe ON pe.games_id=pg.id
-	LEFT JOIN playball_enroll_player pep ON pep.enroll_id=pe.id
-	WHERE pep.user_id=#{vo.uId}
+		FROM
+		playball_games pg
+		LEFT JOIN playball_field_info pfi ON pfi.id = pg.field_id
+		LEFT JOIN sys_depart sd ON sd.id = pfi.business_id
+		LEFT JOIN playball_enroll pe ON pe.games_id=pg.id
+		LEFT JOIN playball_enroll_player pep ON pep.enroll_id=pe.id
+		WHERE pep.user_id=#{vo.uId}
+    </select>
+    
+      <!-- 连表查询全文索引  -->
+    <select id="findGameFulltext" parameterType="java.lang.String" resultType="org.jeecg.modules.appapi.entity.bo.GameBo">
+		SELECT g.*,s.address FROM playball_games  g
+		INNER JOIN (SELECT f.id AS fid,d.*FROM playball_field_info f
+		INNER JOIN sys_depart d 
+		ON f.business_id=d.id) s
+		ON g.field_id = s.fid
+		WHERE 1
+		<if test="fullText!=null and fullText!=''">
+    		and MATCH ( games_name ) AGAINST (#{fullText})
+    	</if>
+		ORDER BY g.update_time DESC 
     </select>
 </mapper>

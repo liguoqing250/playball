@@ -9,5 +9,5 @@ import org.jeecg.modules.appapi.entity.Game;
 public class GameVo extends Game {
     private Integer page = 1; //起始页
     private Integer limit = 5; //每页显示
-    private Integer uId;
+    private Integer uId;//接收多个 id 数组批量删除
 }

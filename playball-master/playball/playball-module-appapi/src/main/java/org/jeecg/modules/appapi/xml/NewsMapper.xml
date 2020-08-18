@@ -35,5 +35,15 @@
     		UPDATE playball_news SET user_colls = user_colls - 1 WHERE id = #{id}
     	</if>
     </update>
+    
+    <!-- 连表查询全文索引  -->
+    <select id="findNewsFulltext" parameterType="java.lang.String" resultMap="BaseResultMap">
+    	SELECT * FROM playball_news 
+    	WHERE 1
+    	<if test="fullText!=null and fullText!=''">
+    		and MATCH ( title ) AGAINST (#{fullText})
+    	</if>
+		ORDER BY update_time DESC  
+    </select>
 
 </mapper>

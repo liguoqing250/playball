@@ -4,6 +4,7 @@ package org.jeecg.modules.appapi.controller;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.PlayballNews;
 import org.jeecg.modules.appapi.entity.vo.PlayballNewsVo;
+import org.jeecg.modules.appapi.entity.vo.PlayballUserDynamicVo;
 import org.jeecg.modules.appapi.mapper.NewsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,5 +63,12 @@ public class NewsController {
 		return Result.ok(browse);
 	}
 
+	//全文搜索查询资讯
+	@GetMapping("/findFulltextNews")
+	public Result<?> findFulltextDynamic(PlayballNewsVo newsVo){
+		Page<PlayballNews> page = new Page<PlayballNews>(newsVo.getPage(), newsVo.getLimit());
+		IPage<PlayballNews> newsFulltext = mapper.findNewsFulltext(page, newsVo.getTitle());
+		return Result.ok(newsFulltext);
+	}
 }
 

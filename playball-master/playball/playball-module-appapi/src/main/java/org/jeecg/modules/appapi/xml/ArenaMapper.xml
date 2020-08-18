@@ -56,4 +56,16 @@ WHERE
 	</if>
 		LIMIT #{params.offSet},#{params.limit}
     </select>
+    
+    <select id="findFieldFulltext" parameterType="org.jeecg.modules.appapi.entity.vo.ArenaVo" resultType="org.jeecg.modules.appapi.entity.bo.ArenaBo">
+    	SELECT sd.*,( SELECT MIN( pfi.field_price ) FROM playball_field_info pfi WHERE pfi.business_id = sd.id ) AS price,
+		( st_distance ( POINT ( #{vo.lat},#{vo.lon} ), POINT ( sd.location_lon,sd.location_lat  ) ) * 111195 ) AS distance
+		FROM sys_depart sd
+		INNER JOIN playball_field_info pfi ON sd.id = pfi.business_id
+		WHERE 1
+		<if test="vo.depart_name!=null and vo.depart_name!=''">
+    		and MATCH ( depart_name ) AGAINST (#{vo.depart_name})
+    	</if>
+		ORDER BY sd.create_time DESC
+    </select>
 </mapper>

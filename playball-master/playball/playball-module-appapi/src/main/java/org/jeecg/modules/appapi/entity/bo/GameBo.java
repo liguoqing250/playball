@@ -7,5 +7,5 @@ import org.jeecg.modules.appapi.entity.Game;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class GameBo extends Game {
-    private String district;
+    private String address;
 }
