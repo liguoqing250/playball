@@ -41,4 +41,14 @@
         <result column="u_nickName" property="uNickName" />
     </resultMap>
 
+    <select id="getReplyMeData" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballUserReplyVo" resultType="org.jeecg.modules.appapi.entity.bo.ReplyMeData">
+        SELECT
+			pu.u_nickName nickName ,pu.u_headImage headImage,pur.*,puc.uco_sort type ,puc.uco_becom_id becomId
+		FROM
+			playball_user_reply pur LEFT JOIN
+			playball_user_comment puc ON pur.ure_ucoid=puc.uco_id LEFT JOIN
+			playball_users pu ON pu.u_id=pur.user_id
+		WHERE
+			puc.user_id = #{vo.uId} ORDER BY createTime desc
+    </select>
 </mapper>

@@ -1,10 +1,12 @@
 package org.jeecg.modules.appapi.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.appapi.entity.UserNotice;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.jeecg.modules.appapi.entity.vo.UserNoticeVo;
 
 /**
  * @Description: 消息
@@ -14,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UserNoticeMapper extends BaseMapper<UserNotice> {
 
+    Integer getCountNotRead(UserNoticeVo userNoticeVo);
 }

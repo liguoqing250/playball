@@ -68,8 +68,4 @@ public class UserNotice {
 	@Excel(name = "verison", width = 15)
     @ApiModelProperty(value = "verison")
 	private Integer verison;
-	/**阅读时间*/
-	@Excel(name = "阅读时间", width = 20)
-    @ApiModelProperty(value = "阅读时间")
-	private Integer readType;
 }

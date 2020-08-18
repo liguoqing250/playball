@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.appapi.mapper.UserNoticeMapper">
 
+    <select id="getCountNotRead" parameterType="org.jeecg.modules.appapi.entity.vo.UserNoticeVo" resultType="java.lang.Integer">
+        SELECT
+        (
+        ( SELECT COUNT( * ) FROM playball_user_notice WHERE receiver_uid = #{uId} AND create_time >= #{readTime}) + (
+        SELECT
+        COUNT( * )
+        FROM
+        playball_user_reply pur LEFT JOIN
+        playball_user_comment puc ON pur.ure_ucoid=puc.uco_id
+        WHERE
+        puc.user_id = #{uId}
+        AND pur.create_time>=#{readTime}
+        )
+        )
+    </select>
 </mapper>

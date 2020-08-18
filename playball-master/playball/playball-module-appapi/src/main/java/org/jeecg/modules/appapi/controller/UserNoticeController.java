@@ -15,11 +15,14 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.appapi.entity.AppTeam;
-import org.jeecg.modules.appapi.entity.AppTeamPlayers;
-import org.jeecg.modules.appapi.entity.AppUsers;
-import org.jeecg.modules.appapi.entity.UserNotice;
+import org.jeecg.modules.appapi.entity.*;
+import org.jeecg.modules.appapi.entity.bo.PlayballUserReplyBo;
+import org.jeecg.modules.appapi.entity.bo.ReplyMeData;
 import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
+import org.jeecg.modules.appapi.entity.vo.PlayballUserReplyVo;
+import org.jeecg.modules.appapi.entity.vo.UserNoticeVo;
+import org.jeecg.modules.appapi.mapper.PlayballUserReplyMapper;
+import org.jeecg.modules.appapi.mapper.UserNoticeMapper;
 import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.jeecg.modules.appapi.service.IUserNoticeService;
@@ -58,6 +61,10 @@ public class UserNoticeController extends JeecgController<UserNotice, IUserNotic
 	@Autowired
 	private IUserNoticeService userNoticeService;
 	@Autowired
+	private PlayballUserReplyMapper playballUserReplyMapper;
+	@Autowired
+	private UserNoticeMapper userNotice;
+	@Autowired
 	private AppTeamService appTeamService;
 	 @Autowired
 	 private AppTeamPlayersService appTeamPlayersService;
@@ -84,7 +91,18 @@ public class UserNoticeController extends JeecgController<UserNotice, IUserNotic
 		IPage<UserNotice> pageList = userNoticeService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
-
+	 //获取回复我的数据(连表查询)
+	 @GetMapping("/getReplyMeData")
+	 public Result<?> getReplyMeData(PlayballUserReplyVo u_replyVo,HttpServletRequest req){
+		 String token=req.getHeader("X-Access-Token");
+		 AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+		 u_replyVo.setUId(appUsers.getU_id());
+		 //分页
+		 Page<PlayballUserReply> page = new Page<>(u_replyVo.getPage(), u_replyVo.getLimit());
+		 //查询条件
+		 IPage<ReplyMeData> selectPage = playballUserReplyMapper.getReplyMeData(page, u_replyVo);
+		 return Result.ok(selectPage);
+	 }
 	 /**
 	  * 添加球队公告
 	  *
@@ -106,7 +124,20 @@ public class UserNoticeController extends JeecgController<UserNotice, IUserNotic
 	 }
 
 
-
+	 /**
+	  * 获取我未读消息数
+	  *
+	  * @param userNoticeVo
+	  * @return
+	  */
+	 @ApiOperation(value="消息-通过id查询", notes="消息-通过id查询")
+	 @GetMapping(value = "/getCountNotRead")
+	 public Result<?> getCountNotRead(UserNoticeVo userNoticeVo, HttpServletRequest req) {
+		 String token=req.getHeader("X-Access-Token");
+		 AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+		 userNoticeVo.setuId(appUsers.getU_id());
+		 return Result.ok( userNotice.getCountNotRead(userNoticeVo));
+	 }
 
 
 

@@ -2,6 +2,7 @@ package org.jeecg.modules.appapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,6 +29,29 @@ public class APPUserController {
     AppUsersService appUsersService;
     @Autowired
     AppUsersMapper appUsersMapper;
+
+    @PostMapping(value = "/bindingPhone")
+    public Result<JSONObject> bindingPhone(String phoneNumber) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            System.err.println(phoneNumber);
+            Map<String,Object> map=new HashedMap();
+            map.put("u_phoneNumber",phoneNumber);
+            List<AppUsers> list=appUsersService.selectByKey(map);
+            if(list.size()>0){
+                result.error500("该手机号已绑定,请勿重复绑定!");
+            }else{
+                AppUsers appUsers=new AppUsers();
+                appUsers.setU_phoneNumber(phoneNumber);
+                appUsersService.update(appUsers);
+                result.success("绑定成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+        return result;
+    }
     //更新
     @PostMapping(value = "/updateMyUserInfo")
     public Result<JSONObject> updateMyUserInfo(@RequestBody AppUsers appUsers) {
@@ -39,7 +64,6 @@ public class APPUserController {
             e.printStackTrace();
             result.error500("请求失败");
         }
-
         return result;
     }
     //根据id查询
