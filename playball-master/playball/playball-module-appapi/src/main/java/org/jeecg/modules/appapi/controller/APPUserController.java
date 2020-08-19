@@ -6,6 +6,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.encryption.AesEncryptUtil;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.vo.AboutMe;
 import org.jeecg.modules.appapi.mapper.AppUsersMapper;
@@ -29,7 +30,24 @@ public class APPUserController {
     AppUsersService appUsersService;
     @Autowired
     AppUsersMapper appUsersMapper;
-
+    //更新
+    @PostMapping(value = "/updateMyPassWorld")
+    public Result<JSONObject> updateMyPassWorld(String newPassword,HttpServletRequest request) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            String token=request.getHeader("X-Access-Token");
+            AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+            AppUsers newUsers=new AppUsers();
+            newUsers.setU_id(appUsers.getU_id());
+            newUsers.setU_passworld(AesEncryptUtil.encrypt(newPassword));
+            appUsersMapper.update(newUsers);
+            result.success("修改成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+        return result;
+    }
     @PostMapping(value = "/bindingPhone")
     public Result<JSONObject> bindingPhone(String phoneNumber) {
         Result<JSONObject> result = new Result<JSONObject>();
