@@ -73,7 +73,7 @@ public class ShiroConfig {
 		//cas验证登录
 		filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");
 
-		filterChainDefinitionMap.put("/**/**","anon");
+		//filterChainDefinitionMap.put("/**/**","anon");
 		//APP 注册登录相关接口 排除
 		filterChainDefinitionMap.put("/appopen/**","anon");
 		// 配置不会被拦截的链接 顺序判断

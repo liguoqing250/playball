@@ -127,7 +127,7 @@ spring:
         connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
       datasource:
         master:
-          url: jdbc:mysql://47.108.52.77:3306/playball?useUnicode=true&characterEncoding=UTF-8
+          url: jdbc:mysql://47.92.114.13:3306/playball?useUnicode=true&characterEncoding=UTF-8
           username: root
           password: yuzhi2018.
           driver-class-name: com.mysql.jdbc.Driver
@@ -140,7 +140,7 @@ spring:
   #redis 配置 XX
   redis:
     database: 0
-    host: 47.108.52.77
+    host: 47.92.114.13
     lettuce:
       pool:
         max-active: 8   #最大连接数据库连接数,设 0 为没有限制
