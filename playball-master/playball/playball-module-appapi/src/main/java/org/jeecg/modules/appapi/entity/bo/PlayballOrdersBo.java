@@ -13,4 +13,5 @@ public class PlayballOrdersBo extends PlayballOrders{
 	private String friTiemRanges;//场地时间
 	
 	private String businessid;//商家id
+	private String isAssess;//是否评价
 }
