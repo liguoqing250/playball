@@ -30,21 +30,21 @@
     		SELECT c.*,n.title AS title,n.image AS resources,n.page_view AS browse,page_view AS support,label AS `type` FROM playball_user_collect c
 			INNER JOIN playball_news n
 			ON c.uco_collected_id = n.id
-			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort} AND c.deleted = 0
 			ORDER BY c.create_time DESC 
     	</if>
     	<if test="vo.ucoSort == 2">
     		SELECT c.*,c_title AS title,c_video AS resources,c_browse AS browse,c_comment AS support,2 AS `type` FROM playball_user_collect c
 			INNER JOIN playball_curriculum cu
 			ON c.uco_collected_id = cu.c_id
-			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort} AND c.deleted = 0
 			ORDER BY c.create_time DESC 
     	</if>
     	<if test="vo.ucoSort == 3">
     		SELECT c.*,udy_content AS title,udy_resources AS resources,udy_support AS browse,udy_comment AS support,udy_res_type AS `type` FROM playball_user_collect c
 			INNER JOIN playball_user_dynamic d
 			ON c.uco_collected_id = d.udy_id
-			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort}
+			WHERE c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort} AND c.deleted = 0
 			ORDER BY c.create_time DESC 
     	</if>
     	<if test="vo.ucoSort == 4">
@@ -53,10 +53,9 @@
 		sd.depart_name AS title,sd.image_url AS resources,sd.district AS district ,sd.avgscore AS support
 		FROM
 			sys_depart sd
-			LEFT JOIN playball_field_info pfi ON sd.id = pfi.business_id
 			INNER JOIN  playball_user_collect c ON c.uco_collected_id = sd.id
 		WHERE
-			sd.id = pfi.business_id AND c.uco_sort = #{vo.ucoSort}
+			c.uco_u_id = #{vo.ucoUId} AND c.uco_sort = #{vo.ucoSort} AND  c.deleted = 0
 			ORDER BY c.create_time DESC 
 		</if>
     </select>

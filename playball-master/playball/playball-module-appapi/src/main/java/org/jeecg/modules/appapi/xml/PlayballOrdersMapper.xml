@@ -20,7 +20,7 @@
     
     <select id="getOrdersList" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballOrdersVo" resultMap="BaseResult">
     	<if test="o.cprState!=null and o.cprState==1">
-	    	SELECT o.*,d.depart_name,f.image_url,fr.fri_tiem_ranges FROM playball_orders o 
+	    	SELECT o.*,d.depart_name,f.image_url,fr.fri_tiem_ranges,f.business_id FROM playball_orders o 
 			INNER JOIN playball_field_info f
 			ON o.ord_goods_id = f.id
 			INNER JOIN sys_depart d
@@ -30,7 +30,7 @@
 			WHERE o.ord_user_id = #{o.ordUserId} AND o.cpr_type = #{o.cprType} AND o.cpr_state = #{o.cprState}
     	</if>
     	<if test="o.cprState!=null and o.cprState==2">
-    		SELECT o.*,d.depart_name,f.image_url FROM playball_orders o 
+    		SELECT o.*,d.depart_name,f.image_url,f.business_id FROM playball_orders o 
 			INNER JOIN playball_field_info f
 			ON o.ord_goods_id = f.id
 			INNER JOIN sys_depart d
@@ -57,6 +57,7 @@
         <result column="depart_name" property="departName" />
         <result column="image_url" property="imageUrl" />
         <result column="fri_tiem_ranges" property="friTiemRanges" />
+        <result column="business_id" property="businessid" />
     </resultMap>
 
 </mapper>

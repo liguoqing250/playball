@@ -11,4 +11,6 @@ public class PlayballOrdersBo extends PlayballOrders{
 	private String departName;//场馆名称
 	private String imageUrl;//场地图片
 	private String friTiemRanges;//场地时间
+	
+	private String businessid;//商家id
 }
