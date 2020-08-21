@@ -17,5 +17,30 @@
         <result column="is_delete" property="isDelete" />
         <result column="version" property="version" />
     </resultMap>
+    
+     <!-- 查询评论 -->
+    <select id="selectBalance" parameterType="org.jeecg.modules.appapi.entity.vo.PlayballBalanceDetaileVo" resultMap="BaseResult">
+    	SELECT DATE_FORMAT(create_time,'%Y-%m') days , p.* FROM playball_balance_detaile p
+		WHERE bde_ub_id = #{vo.bdeUbId} AND bde_number != 'undefined'
+		ORDER BY create_time DESC 
+    </select>
+    
 
+	<resultMap id="BaseResult" type="org.jeecg.modules.appapi.entity.bo.PlayballBalanceDetaileBo">
+       	<result column="days" property="days" />
+       	<collection property="balances" ofType="org.jeecg.modules.appapi.entity.PlayballBalanceDetaile">
+       		<id column="bde_id" property="bdeId" />
+	        <result column="bde_ub_id" property="bdeUbId" />
+	        <result column="bde_consume" property="bdeConsume" />
+	        <result column="bde_number" property="bdeNumber" />
+	        <result column="bde_consume_name" property="bdeConsumeName" />
+	        <result column="bde_pay_method" property="bdePayMethod" />
+	        <result column="bde_pay_state" property="bdePayState" />
+	        <result column="bde_rec_wit" property="bdeRecWit" />
+	        <result column="create_time" property="createTime" />
+	        <result column="update_time" property="updateTime" />
+	        <result column="is_delete" property="isDelete" />
+	        <result column="version" property="version" />
+       	</collection>
+    </resultMap>
 </mapper>
