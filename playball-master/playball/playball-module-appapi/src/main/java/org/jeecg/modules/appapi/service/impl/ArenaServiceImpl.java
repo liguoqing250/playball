@@ -36,4 +36,9 @@ public class ArenaServiceImpl extends ServiceImpl<ArenaMapper, Arena> implements
         map.put("limit",pageSize);
         return page.setRecords( arenaMapper.queryPageList(map));
     }
+
+    @Override
+    public Arena queryByOrdId(String ordId) {
+        return arenaMapper.queryByOrdId(ordId);
+    }
 }

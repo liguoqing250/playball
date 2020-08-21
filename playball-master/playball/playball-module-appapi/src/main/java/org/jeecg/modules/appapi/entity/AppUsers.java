@@ -61,6 +61,15 @@ public class AppUsers {
     private Integer is_delete;
     //版本号（用作乐观锁）
     private String version;
+    private String deliverAddress;
+
+    public String getDeliverAddress() {
+        return deliverAddress;
+    }
+
+    public void setDeliverAddress(String deliverAddress) {
+        this.deliverAddress = deliverAddress;
+    }
 
     public Integer getU_id() {
         return u_id;

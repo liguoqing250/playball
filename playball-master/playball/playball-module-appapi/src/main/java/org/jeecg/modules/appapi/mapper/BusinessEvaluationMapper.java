@@ -15,4 +15,8 @@ import org.jeecg.modules.appapi.entity.bo.PlayballUserEvaluationBo;
  */
 public interface BusinessEvaluationMapper extends BaseMapper<BusinessEvaluation> {
     List<PlayballUserEvaluationBo> QueryBusinessEvaluation(String id);
+
+    BusinessEvaluation QueryBusinessEvaluationByOrdId(String ordId);
+
+    String QueryBusinessEvaluationScore(String bid);
 }

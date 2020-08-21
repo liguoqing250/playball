@@ -156,6 +156,18 @@ public class ArenaController extends JeecgController<Arena, IArenaService> {
 		Arena arena = arenaService.getById(id);
 		return Result.ok(arena);
 	}
+	/**
+	 * 通过id查询
+	 *
+	 * @param ordId
+	 * @return
+	 */
+	@ApiOperation(value="商家表-通过ordId查询", notes="商家表-通过ordId查询")
+	@PostMapping(value = "/queryByOrdId")
+	public Result<?> queryByOrdId(String ordId) {
+		Arena arena = arenaService.queryByOrdId(ordId);
+		return Result.ok(arena);
+	}
 
   /**
    * 导出excel

@@ -32,6 +32,20 @@ WHERE
 ORDER BY
 	pbe.create_time DESC
     </select>
+    <!-- 查询评论 -->
+    <select id="QueryBusinessEvaluationByOrdId" parameterType="java.lang.String" resultType="org.jeecg.modules.appapi.entity.BusinessEvaluation">
+		SELECT
+	*
+FROM
+	playball_business_evaluation
+WHERE
+	ord_id=#{ordId}
+    </select>
+    <!-- 查询评论 -->
+    <select id="QueryBusinessEvaluationScore" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT ROUND(AVG(score),2) FROM playball_business_evaluation WHERE bid=#{bId}
+    </select>
+
 
 
 </mapper>

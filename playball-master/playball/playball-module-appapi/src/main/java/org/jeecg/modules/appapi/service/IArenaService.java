@@ -15,4 +15,6 @@ import java.util.Map;
 public interface IArenaService extends IService<Arena> {
 
     Page<Arena> queryPageList(Page<Arena> page, Map<String, String[]> parameterMap);
+
+    Arena queryByOrdId(String ordId);
 }

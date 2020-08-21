@@ -64,4 +64,5 @@ public class BusinessEvaluation {
 	@Excel(name = "删除状态(0-正常,1-已删除)", width = 15)
     @ApiModelProperty(value = "删除状态(0-正常,1-已删除)")
 	private Integer delFlag;
+	private Integer ordId;
 }

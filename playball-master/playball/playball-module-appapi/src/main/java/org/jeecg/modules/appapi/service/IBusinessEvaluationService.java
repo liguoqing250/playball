@@ -15,4 +15,8 @@ import java.util.List;
 public interface IBusinessEvaluationService extends IService<BusinessEvaluation> {
 
     List<PlayballUserEvaluationBo> QueryBusinessEvaluation(String bid);
+
+    BusinessEvaluation QueryBusinessEvaluationByOrdId(String ordId);
+
+    String QueryBusinessEvaluationScore(String bid);
 }

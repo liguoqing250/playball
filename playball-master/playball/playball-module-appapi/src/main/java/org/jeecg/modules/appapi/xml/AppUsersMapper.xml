@@ -28,6 +28,7 @@
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
         <result column="is_delete" jdbcType="INTEGER" property="is_delete" />
         <result column="version" jdbcType="VARCHAR" property="version" />
+        <result column="deliverAddress" jdbcType="VARCHAR" property="deliverAddress" />
     </resultMap>
     <resultMap id="ResultMap" type="org.jeecg.modules.appapi.entity.AppUsers">
         <result column="u_id" jdbcType="INTEGER" property="u_id" />
@@ -37,7 +38,7 @@
     </resultMap>
     <!-- 查询字段-->
     <sql id="AppUsers_Column_List">
-        u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_profile,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version
+        u_id,u_name,u_nickName,u_phoneNumber,u_passworld,u_sex,u_age,u_height,u_weight,u_headImage,u_profile,u_registerWay,wx_openid,qq_openid,u_alipayid,u_idCard,u_province,u_city,u_district,u_address,u_lastlogin_time,u_invited_user,createTime,updateTime,is_delete,version,deliverAddress
     </sql>
 
     <select id="selectMyRegisterWay" parameterType="org.jeecg.modules.appapi.entity.AppUsers" resultMap="AppUsersResultMap">
@@ -187,6 +188,10 @@
             <if test="version != null">
                 version,
             </if>
+
+            <if test="deliverAddress != null">
+                deliverAddress,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="u_name != null">
@@ -263,6 +268,10 @@
             </if>
             <if test="version != null">
                 #{version,jdbcType=VARCHAR},
+            </if>
+
+            <if test="deliverAddress != null">
+                deliverAddress=#{deliverAddress,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -344,6 +353,9 @@
             </if>
             <if test="version != null">
                 version=#{version,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverAddress != null">
+                deliverAddress=#{deliverAddress,jdbcType=VARCHAR},
             </if>
         </set>
         where u_id = #{u_id,jdbcType=INTEGER}

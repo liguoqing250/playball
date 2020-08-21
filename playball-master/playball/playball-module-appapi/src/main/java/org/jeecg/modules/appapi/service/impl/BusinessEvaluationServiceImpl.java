@@ -27,4 +27,14 @@ public class BusinessEvaluationServiceImpl extends ServiceImpl<BusinessEvaluatio
     public List<PlayballUserEvaluationBo> QueryBusinessEvaluation(String bid) {
         return businessEvaluationMapper.QueryBusinessEvaluation(bid);
     }
+
+    @Override
+    public BusinessEvaluation QueryBusinessEvaluationByOrdId(String ordId) {
+        return businessEvaluationMapper.QueryBusinessEvaluationByOrdId(ordId);
+    }
+
+    @Override
+    public String QueryBusinessEvaluationScore(String bid) {
+        return businessEvaluationMapper.QueryBusinessEvaluationScore(bid);
+    }
 }

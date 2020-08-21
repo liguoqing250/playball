@@ -68,4 +68,8 @@ WHERE
     	</if>
 		ORDER BY sd.create_time DESC
     </select>
+
+	<select id="queryByOrdId" parameterType="java.lang.String" resultType="org.jeecg.modules.appapi.entity.Arena">
+		SELECT sd.* FROM sys_depart sd LEFT JOIN playball_field_info pfi ON pfi.business_id=sd.id LEFT JOIN playball_orders po ON po.ord_goods_id=pfi.id WHERE po.ord_id=#{ordId} GROUP BY sd.id
+	</select>
 </mapper>

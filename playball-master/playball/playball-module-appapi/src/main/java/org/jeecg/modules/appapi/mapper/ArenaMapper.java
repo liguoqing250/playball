@@ -26,4 +26,5 @@ public interface ArenaMapper extends BaseMapper<Arena> {
     
   //查询全文索引场馆数据
     IPage<ArenaBo> findFieldFulltext(IPage<Arena> page,@Param("vo") ArenaVo are);
+    Arena queryByOrdId(String ordId);
 }

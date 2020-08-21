@@ -16,7 +16,10 @@ import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.Arena;
 import org.jeecg.modules.appapi.entity.BusinessEvaluation;
+import org.jeecg.modules.appapi.entity.bo.PlayballUserEvaluationBo;
+import org.jeecg.modules.appapi.mapper.ArenaMapper;
 import org.jeecg.modules.appapi.service.IBusinessEvaluationService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -54,17 +57,29 @@ import io.swagger.annotations.ApiOperation;
 public class BusinessEvaluationController extends JeecgController<BusinessEvaluation, IBusinessEvaluationService> {
 	@Autowired
 	private IBusinessEvaluationService businessEvaluationService;
-
+	@Autowired
+	 ArenaMapper arenaMapper;
 	 /**
 	  * 查询商家评论
 	  *
 	  * @param bid
 	  * @return
 	  */
-	 @ApiOperation(value="商家评价-添加", notes="商家评价-添加")
+	 @ApiOperation(value="商家评价-查询商家评论", notes="商家评价-查询商家评论")
 	 @PostMapping(value = "/QueryBusinessEvaluation")
 	 public Result<?> QueryBusinessEvaluation(String bid) {
 		 return Result.ok( businessEvaluationService.QueryBusinessEvaluation(bid));
+	 }
+	 /**
+	  * 查询评论
+	  *
+	  * @param ordId
+	  * @return
+	  */
+	 @ApiOperation(value="商家评价-查询商家评论", notes="商家评价-查询商家评论")
+	 @PostMapping(value = "/QueryBusinessEvaluationByOrdId")
+	 public Result<?> QueryBusinessEvaluationByOrdId(String ordId) {
+		 return Result.ok( businessEvaluationService.QueryBusinessEvaluationByOrdId(ordId));
 	 }
 	/**
 	 * 添加
@@ -80,7 +95,13 @@ public class BusinessEvaluationController extends JeecgController<BusinessEvalua
 		AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 		businessEvaluation.setUid(appUsers.getU_id());
 		businessEvaluationService.save(businessEvaluation);
-		return Result.ok("添加成功！");
+		Arena arena=new Arena();
+		arena.setId(businessEvaluation.getBid());
+		String value=businessEvaluationService.QueryBusinessEvaluationScore(businessEvaluation.getBid());
+
+		arena.setAvgscore(value);
+		arenaMapper.updateById(arena);
+		return Result.ok("评价成功！");
 	}
 	
 	/**

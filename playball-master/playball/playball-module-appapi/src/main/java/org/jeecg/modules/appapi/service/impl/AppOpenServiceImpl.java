@@ -45,9 +45,11 @@ public class AppOpenServiceImpl implements AppOpenService {
                 }else{
                     appUsers.setU_name(appUsers.getU_nickName());
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
+                    appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
                     appUsersMapper.insert(appUsers);
                     PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
                     playballUsersBalance.setUbUserId(appUsers.getU_id());
+
                     playballUsersBalanceMapper.insert(playballUsersBalance);
                     out.put("appUsers",appUsers);
                     out.put("msg","注册成功");
@@ -77,6 +79,7 @@ public class AppOpenServiceImpl implements AppOpenService {
                         //密码加密
                         appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
                         appUsers.setU_name(appUsers.getU_phoneNumber());
+                        appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
                         appUsersMapper.insert(appUsers);
                         PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
                         playballUsersBalance.setUbUserId(appUsers.getU_id());

@@ -62,10 +62,12 @@ public class AppTeamController {
             String token=request.getHeader("X-Access-Token");
             AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
             AppTeamPlayers appTeamPlayers= appTeamPlayersService.selectByuId(appUsers.getU_id());
+
             AppTeam appTeam=appTeamService.selectById(appTeamPlayers.getTeam_id());
             appTeam.setTeam_id(appTeamPlayers.getTeam_id());
             appTeam.setT_players_total(appTeam.getT_players_total()-1);
             appTeamService.update(appTeam);
+
             appTeamPlayersService.deleteById(appTeamPlayers.getTp_id());
             return Result.ok("退队成功");
         }catch (Exception e){
@@ -347,6 +349,10 @@ public class AppTeamController {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             appTeamPlayersService.kickPlayer(uId,teamId);
+            AppTeam appTeam=appTeamService.selectById(teamId);
+            appTeam.setTeam_id(teamId);
+            appTeam.setT_players_total(appTeam.getT_players_total()-1);
+            appTeamService.update(appTeam);
             result.success("请求成功");
         }catch (Exception e){
             e.printStackTrace();

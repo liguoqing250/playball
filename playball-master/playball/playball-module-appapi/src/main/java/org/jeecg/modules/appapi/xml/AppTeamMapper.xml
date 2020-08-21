@@ -270,6 +270,7 @@ WHERE
     <update id="update" parameterType="org.jeecg.modules.appapi.entity.AppTeam">
         update playball_team
         <set>
+
             <if test="t_name != null">
                 t_name=#{t_name,jdbcType=VARCHAR},
             </if>
@@ -329,6 +330,9 @@ WHERE
             </if>
             <if test="version != null">
                 version=#{version,jdbcType=INTEGER},
+            </if>
+            <if test="deliverAddress != null">
+                deliverAddress=#{deliverAddress,jdbcType=VARCHAR},
             </if>
         </set>
         where team_id = #{team_id,jdbcType=INTEGER}

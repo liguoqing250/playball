@@ -44,7 +44,8 @@ public class AppTeam {
     private Integer attack_value;
     private Integer defense_value;
     private Integer unite_value;
-    
+
+
     //纪录创建时间
     private Date createTime;
     //纪录修改时间
