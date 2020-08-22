@@ -49,6 +49,7 @@ public class AppUsersServiceImpl implements AppUsersService {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=request.getHeader("X-Access-Token");
         AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+
         record.setU_id(appUsers.getU_id());
         mapper.update(record);
     }

@@ -43,9 +43,17 @@ public class AppOpenServiceImpl implements AppOpenService {
                     out.put("msg","登录成功");
                     out.put("appUsers",selectAppUsers);
                 }else{
-                    appUsers.setU_name(appUsers.getU_nickName());
+                    if(appUsers.getU_registerWay()==4){
+                        appUsers.setU_name("新用户");
+                        appUsers.setU_nickName("新用户");
+                        appUsers.setU_sex(1);
+                    }else{
+                        appUsers.setU_name(appUsers.getU_nickName());
+                    }
+
                     appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
                     appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
+                    System.out.println(appUsers.toString());
                     appUsersMapper.insert(appUsers);
                     PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
                     playballUsersBalance.setUbUserId(appUsers.getU_id());
@@ -78,7 +86,8 @@ public class AppOpenServiceImpl implements AppOpenService {
                     }else{
                         //密码加密
                         appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
-                        appUsers.setU_name(appUsers.getU_phoneNumber());
+                        appUsers.setU_name("新用户");
+                        appUsers.setU_nickName("新用户");
                         appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
                         appUsersMapper.insert(appUsers);
                         PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();

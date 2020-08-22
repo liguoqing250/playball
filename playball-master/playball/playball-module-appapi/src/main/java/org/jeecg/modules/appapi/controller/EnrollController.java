@@ -18,6 +18,7 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.Enroll;
+import org.jeecg.modules.appapi.entity.Game;
 import org.jeecg.modules.appapi.service.AppTeamService;
 import org.jeecg.modules.appapi.service.IEnrollService;
 import java.util.Date;
@@ -26,6 +27,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.modules.appapi.service.IGameService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -58,7 +60,8 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 	private IEnrollService enrollService;
 	@Autowired
 	 AppTeamService appTeamService;
-
+	 @Autowired
+	 private IGameService gameService;
 	/**
 	 * 分页列表查询
 	 *
@@ -95,17 +98,23 @@ public class EnrollController extends JeecgController<Enroll, IEnrollService> {
 		if(appTeamService.isJoinTeam()){
 			AppTeam appTeam=appTeamService.selectMyTeamInfo();
 			if(appTeam.getT_captain()==appUsers.getU_id()){
-				enroll.setTeamId(appTeam.getTeam_id());
+				Game game=gameService.getById(enroll.getGamesId());
+				if(game.getSportsId()==appTeam.getSt_id()){
+					enroll.setTeamId(appTeam.getTeam_id());
+				}else{
+					return Result.error("不能报名与球队类型不同的比赛!");
+				}
+
 			}else{
-				return Result.error("只有队长能报名比赛");
+				return Result.error("只有队长能报名比赛!");
 
 			}
 
 		}else{
-			return Result.error("个人不能参与比赛");
+			return Result.error("个人不能参与比赛!");
 		}
 		if(enrollService.hasenroll(enroll)){
-			return Result.error("已报名，请勿重复报名");
+			return Result.error("已报名，请勿重复报名!");
 		}
 		enrollService.save(enroll);
 

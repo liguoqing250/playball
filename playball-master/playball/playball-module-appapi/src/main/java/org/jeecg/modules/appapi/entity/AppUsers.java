@@ -278,4 +278,37 @@ public class AppUsers {
     public void setVersion(String version) {
         this.version = version;
     }
+
+    @Override
+    public String toString() {
+        return "AppUsers{" +
+                "u_id=" + u_id +
+                ", u_name='" + u_name + '\'' +
+                ", u_nickName='" + u_nickName + '\'' +
+                ", u_phoneNumber='" + u_phoneNumber + '\'' +
+                ", u_passworld='" + u_passworld + '\'' +
+                ", u_sex=" + u_sex +
+                ", u_age='" + u_age + '\'' +
+                ", u_height=" + u_height +
+                ", u_weight=" + u_weight +
+                ", u_headImage='" + u_headImage + '\'' +
+                ", u_profile='" + u_profile + '\'' +
+                ", u_registerWay=" + u_registerWay +
+                ", wx_openid='" + wx_openid + '\'' +
+                ", qq_openid='" + qq_openid + '\'' +
+                ", u_alipayid='" + u_alipayid + '\'' +
+                ", u_idCard='" + u_idCard + '\'' +
+                ", u_province=" + u_province +
+                ", u_city=" + u_city +
+                ", u_district=" + u_district +
+                ", u_address='" + u_address + '\'' +
+                ", u_lastlogin_time=" + u_lastlogin_time +
+                ", u_invited_user=" + u_invited_user +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", is_delete=" + is_delete +
+                ", version='" + version + '\'' +
+                ", deliverAddress='" + deliverAddress + '\'' +
+                '}';
+    }
 }

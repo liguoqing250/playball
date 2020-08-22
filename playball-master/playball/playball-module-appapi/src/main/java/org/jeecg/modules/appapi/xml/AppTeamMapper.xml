@@ -331,9 +331,6 @@ WHERE
             <if test="version != null">
                 version=#{version,jdbcType=INTEGER},
             </if>
-            <if test="deliverAddress != null">
-                deliverAddress=#{deliverAddress,jdbcType=VARCHAR},
-            </if>
         </set>
         where team_id = #{team_id,jdbcType=INTEGER}
 

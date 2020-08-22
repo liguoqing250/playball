@@ -33,6 +33,7 @@ public class APPLoginController {
     //注册
     @PostMapping(value = "/loginOrRegister")
     public Result<JSONObject> register(@RequestBody String json) {
+        System.out.println(json);
         Result<JSONObject> result = new Result<JSONObject>();
         JSONObject jsonObject = JSONObject.parseObject(json);
         AppUsers appUsers= jsonObject.getObject("appUsers",AppUsers.class);

@@ -55,6 +55,9 @@
         <if test="u_registerWay == 3">
             wx_openid= #{wx_openid,jdbcType=VARCHAR}
         </if>
+        <if test="u_registerWay == 4">
+            wx_openid= #{wx_openid,jdbcType=VARCHAR}
+        </if>
 
     </select>
     <!--条件分页查询-->
@@ -176,19 +179,6 @@
             <if test="u_invited_user != null">
                 u_invited_user,
             </if>
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="updateTime != null">
-                updateTime,
-            </if>
-            <if test="is_delete != null">
-                is_delete,
-            </if>
-            <if test="version != null">
-                version,
-            </if>
-
             <if test="deliverAddress != null">
                 deliverAddress,
             </if>
@@ -206,7 +196,7 @@
             <if test="u_passworld != null">
                 #{u_passworld,jdbcType=VARCHAR},
             </if>
-            <if test="u_sex != null">
+            <if test="u_sex != null and u_sex!=0">
                 #{u_sex,jdbcType=INTEGER},
             </if>
             <if test="u_age != null">
@@ -257,19 +247,6 @@
             <if test="u_invited_user != null">
                 #{u_invited_user,jdbcType=INTEGER},
             </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="is_delete != null">
-                #{is_delete,jdbcType=INTEGER},
-            </if>
-            <if test="version != null">
-                #{version,jdbcType=VARCHAR},
-            </if>
-
             <if test="deliverAddress != null">
                 deliverAddress=#{deliverAddress,jdbcType=VARCHAR},
             </if>
@@ -291,7 +268,7 @@
             <if test="u_passworld != null">
                 u_passworld=#{u_passworld,jdbcType=VARCHAR},
             </if>
-            <if test="u_sex != null">
+            <if test="u_sex != null and u_sex!=0">
                 u_sex=#{u_sex,jdbcType=INTEGER},
             </if>
             <if test="u_age != null">
