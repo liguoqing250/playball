@@ -3,6 +3,10 @@ package org.jeecg.modules.appapi.controller;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.FieldReserveInfo;
 import org.jeecg.modules.appapi.entity.WxPayment;
@@ -12,13 +16,14 @@ import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
 import org.jeecg.modules.appapi.service.PaymentService;
 import org.jeecg.modules.appapi.service.impl.WxPayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
 
 @RestController
 public class PaymentController {
@@ -32,7 +37,7 @@ public class PaymentController {
 	@Autowired
 	private WxPayServiceImpl wxPayService; //微信提现
 	
-	/*响应预付单*/
+	/*微信响应预付单*/
 	@PostMapping(value="/getAdvancedOrder")
 	public Result<JSONObject> getAdvancedOrder(@RequestBody WxPayment wxPay) throws Exception {
 		Result<JSONObject> result = new Result<JSONObject>();
@@ -103,6 +108,23 @@ public class PaymentController {
 		result.setResult(obj);
 		return result;
 	}
+	
+	 /**支付宝支付
+	 * @throws AlipayApiException */
+	@PostMapping("/alipayPlay")
+    public Result<?> alipayPlay(WxPayment wxPay) throws AlipayApiException{
+    	 Map<String, Object> zhifubaoPrePay = payService.zhifubaoPrePay(wxPay);
+    	 return Result.ok(zhifubaoPrePay);
+    }
+    
+    /** 支付宝异步通知回调 */
+    @ResponseBody
+    @RequestMapping("/notify")
+    public String notify(HttpServletRequest request, HttpServletResponse response) {
+        String notify = payService.notify(request, response);
+        System.err.println("notify" + notify);
+		return notify;
+    }
 	
 	
     //元转分
