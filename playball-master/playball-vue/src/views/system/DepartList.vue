@@ -521,8 +521,10 @@
 
         this.dataTime.defaultStartTime = record.openTime?moment(record.openTime,'HH:mm'):moment('00:00','HH:mm')
         this.dataTime.defaultCloseTime = record.closeTime?moment(record.closeTime,'HH:mm'):moment('00:00','HH:mm')
+        
         if(record.province!=null && record.city && record.district){
           this.areaLinkage = record.province+record.city+record.district
+          console.log(this.areaLinkage)
         }else{
           this.areaLinkage=''
         }
@@ -567,6 +569,7 @@
         this.currSelected.receiptTriggerType = value
       },
       submitCurrForm() {
+        
         const that = this;
         this.form.validateFields((err, values) => {
           if (!err) {
@@ -576,20 +579,17 @@
             }
             let formData = Object.assign(this.currSelected, values)
             console.log('Received values of form: ', formData)
-            console.log('Received values of form: ', that.fileList)
+            console.log('Received values of form: ', that.areaLinkage)
             if(that.fileList != ''){
               formData.imageUrl = that.fileList;
             }else{
               formData.imageUrl = null;
             }
-            formData.province = that.areaLinkage.substring(0,2)
-            formData.city = that.areaLinkage.substring(2,4)
-            formData.district = that.areaLinkage.substring(4,6)
+            formData.district =  that.areaLinkag
             formData.openTime = that.openTime
             formData.closeTime = that.closeTime
             formData.locationLon = that.locationLon
             formData.locationLat = that.locationLat
-
             httpAction(this.url.edit, formData, 'put').then((res) => {
               if (res.success) {
                 this.$message.success('保存成功!')
