@@ -62,6 +62,15 @@ public class AppUsers {
     //版本号（用作乐观锁）
     private String version;
     private String deliverAddress;
+    private String u_wxpayid;
+
+    public String getU_wxpayid() {
+        return u_wxpayid;
+    }
+
+    public void setU_wxpayid(String u_wxpayid) {
+        this.u_wxpayid = u_wxpayid;
+    }
 
     public String getDeliverAddress() {
         return deliverAddress;
