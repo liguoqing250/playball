@@ -1,5 +1,6 @@
 package org.jeecg.modules.appapi.service;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -107,32 +108,33 @@ public class PaymentService {
         //构造下单参数 client
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
         //设置网关地址
-        certAlipayRequest.setServerUrl("https://openapi.alipay.com/gateway.do");
+        certAlipayRequest.setServerUrl(AlipayConfig.url);
         //设置应用Id
-        certAlipayRequest.setAppId("2021001188691525");
+        certAlipayRequest.setAppId(AlipayConfig.app_id);
         //设置应用私钥
-        certAlipayRequest.setPrivateKey("MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCtAjMUUlVbhvOERrlFsWTpjMnHY1wKFUz55QCgtpH04DlIlV+JHfEMOqeydC21wLjngWavsYZ4rPcMXW9imi0LUvtTtSaNYkQ+ItSUaQBI34VlvCw2J78fqiS1Z99XzR6eJuDR/e3KLwd7rqJhAqtwElQ2P56gRs9G0NrfK88TwbhyLQTkTq5//LaHb82IDM6YRii8UJzuigQ8pBTrJYnL4n5gLcBGJVpHkXQgs5lfa941A/wfj/vjzFz+j4yZRzfo/KBQjsGiXAKixHzYJa6zDWUR4eWuFaWuXdXawSRq/uzYGWcBDbZ6nYOUrjChbWQKx/4+t3nTSswSwYJvAJMXAgMBAAECggEAeFtHXaPJbdr8HdF1ol4+bZtb5DHjHcCjxFTjkupvr4MtVqlTxPfncTJ851CbXA2ulJ8Y6LD/c4QgeaGmk1nebDpWTW2AXGs4PmHMsVI6uHeHPbciqqoL8+NRlkGkxlgULMGvNWcJvdXpxsk+fW52BYk6vGKV37pjCEjTet3nOT4r1ddo3JqsWbGw0p9v/lX0wjlEuP2GTbJgS0n7DuxQ0Ni5serGYwD6Fvx7p4UIG9CXMyzmYVeyl3Aa7exeVdJfpvzU8H1zvQzeRjyqfBbphkqFI60yEQoZWWP1Jg0WkxWLVopLpuAZ17GvXorKdOc0LOrhXOjw4ZfNHmrqPNBvAQKBgQDv6PbItbrraOkVsiMbpk5ZPdJpQjWUyQeETnAScv+wII1YB1SSadpkCA4ULzTK/+4WlaJT3UhCXs54iCN0UCTiCirlcrGQiIQwiRhP4g/sK9JF/V06gXhl3XMPrY04ZEJhTE3h7s6/6vP2Io07c9IWXRw7/pXcX4FO3NEqL0iXBwKBgQC4nJlhk/Ewzjon1sfOayqQWW4YC/5gcQRJDRhwHUcjODGPCocEueM2cHBy1Q6ZAMuzBytADdMAAQvN7Hnzh1g1ea3Fkpv9KMDNi8DVuNnZiwbFKP0cvgrXT+vnw/y76nVmgkkDsdOClBbwOVZoOGxPljpYVHeayaurWoxwSF+PcQKBgG7f6622zzwcsBwmx7LvmSYFPEkJIFoyzhaHaaQdIa30XV5hhORlp1izoE4TwwJOZWpqnSrFCbAiwKlTwY7vuxv8NvbzmryBWxZTRbklcNZlKjjOb1eqnkn1nkeQncOCEmuFKDlSdJqdq0IFld/0FxPe1D2l2vyN5uTbiI9GavXhAoGAeJVZHkJa3U0m8VS6J9sZ7zVq0uwqmGXZrbmPB9Qn3hpbTJpMvMqKXcmtuWPu6AN8ChEZr/oXoz4LrtLSiT4TYMJ8vbtYhlBzNw8cwry+FvlXT7rJMVf0jtTWOwlp8HhhfLaG6JHjnLwMC5b4GJUaMhXnQEDT6tfleMRpTQII4RECgYEA2tPDHCXBOpNJAgpjGo11/g4aA6fmM7M00S5BHTKHRMVMK4sad1sH2nzdPYA2kgJgbg6MCCU/a9gv1wji/J3cmVHIvpkZEkR+Anbd/c/pOdlBZBmRbk+ZKxRA5PSjpS+1UJqk/3QAl5/ZzOAp7XukUzMk7E+T43KpKNZcCSINsUk=");
+        certAlipayRequest.setPrivateKey(AlipayConfig.private_key);
         //设置请求格式，固定值json
-        certAlipayRequest.setFormat("json");
+        certAlipayRequest.setFormat(AlipayConfig.format);
         //设置字符集
-        certAlipayRequest.setCharset("utf-8");
+        certAlipayRequest.setCharset(AlipayConfig.charset);
         //设置签名类型
-        certAlipayRequest.setSignType("RSA2");
+        certAlipayRequest.setSignType(AlipayConfig.signtype);
         //设置应用公钥证书路径
-        certAlipayRequest.setCertPath("D:\\桌面\\playball\\appCertPublicKey.crt");
+        certAlipayRequest.setCertPath(AlipayConfig.app_cert_path);
         //设置支付宝公钥证书路径
-        certAlipayRequest.setAlipayPublicCertPath("D:\\桌面\\playball\\alipayCertPublicKey_RSA2.crt");
+        certAlipayRequest.setAlipayPublicCertPath(AlipayConfig.alipay_cert_path);
         //设置支付宝根证书路径
-        certAlipayRequest.setRootCertPath("D:\\桌面\\playball\\alipayRootCert.crt");
+        certAlipayRequest.setRootCertPath(AlipayConfig.alipay_root_cert_path);
         //构造client
         AlipayClient alipayClient = new DefaultAlipayClient(certAlipayRequest);
-        
+        //订单号
+        String out_trade_no = wxPay.getOut_trade_no();
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setSubject(wxPay.getBody());//商品名称
         model.setBody(wxPay.getAttach());//商品信息
-        model.setOutTradeNo(wxPay.getOut_trade_no());//订单号
-        model.setTotalAmount(String.valueOf(0.01));// 支付金额
+        model.setOutTradeNo(out_trade_no);//订单号
+        model.setTotalAmount(String.valueOf(wxPay.getTotal_fee().doubleValue()));// 支付金额
         model.setTimeoutExpress("30m");//支付超时时间
         request.setBizModel(model);
         // 回调地址(充值订单)
@@ -146,6 +148,7 @@ public class PaymentService {
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("payPath", response.getBody());
             map.put("data", dataMap);
+            map.put("orders", out_trade_no);
             return map;
         } catch (AlipayApiException e) {
             e.printStackTrace();
@@ -192,8 +195,6 @@ public class PaymentService {
             e.printStackTrace();
         }
         //对验签进行处理
-        System.err.println("signVerified" + signVerified);
-        System.err.println("tradeStatus" + tradeStatus);
         if (signVerified) {
             //验签通过
             if(tradeStatus.equals("TRADE_SUCCESS")) {
