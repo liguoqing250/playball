@@ -113,8 +113,6 @@ public class PaymentController {
 	 * @throws AlipayApiException */
 	@PostMapping("/alipayPlay")
     public Result<?> alipayPlay(@RequestBody WxPayment wxPay) throws AlipayApiException{
-		System.err.println("支付宝支付.....");
-		System.out.println(wxPay);
     	 Map<String, Object> zhifubaoPrePay = payService.zhifubaoPrePay(wxPay);
     	 return Result.ok(zhifubaoPrePay);
     }
