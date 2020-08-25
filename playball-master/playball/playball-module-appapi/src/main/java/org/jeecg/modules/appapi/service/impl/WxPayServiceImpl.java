@@ -47,7 +47,7 @@ public class WxPayServiceImpl {
 		try {
 			// 指定读取证书格式为PKCS12 
 			KeyStore keyStore = KeyStore.getInstance("PKCS12");
-			//FileInputStream instream = new FileInputStream(new File("D:\\Users\\liuerzxc\\Desktop\\playball_L\\apiclient_cert.p12"));
+			//FileInputStream instream = new FileInputStream(new File("D:\\Users\\playball_L\\apiclient_cert.p12"));
 			FileInputStream instream = new FileInputStream(new File("/usr/local/playball/apiclient_cert.p12"));
 			try {
 				keyStore.load(instream, MCH_ID.toCharArray());

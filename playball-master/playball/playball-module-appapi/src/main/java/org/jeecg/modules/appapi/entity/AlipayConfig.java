@@ -35,13 +35,13 @@ public class AlipayConfig {
     public static String signtype = "RSA2";
     
     //设置应用公钥证书路径
-    public static String app_cert_path = "D:\\PlayBall\\appCertPublicKey.crt";
-    
+   // public static String app_cert_path = "D:\\PlayBall\\appCertPublicKey.crt";
+    public static String app_cert_path = "/usr/local/playball/appCertPublicKey.crt";
     //设置支付宝公钥证书路径
-    public static String alipay_cert_path = "D:\\PlayBall\\alipayCertPublicKey_RSA2.crt";
-    
+    //public static String alipay_cert_path = "D:\\PlayBall\\alipayCertPublicKey_RSA2.crt";
+    public static String alipay_cert_path = "/usr/local/playball/alipayCertPublicKey_RSA2.crt";
     //设置支付宝根证书路径
-    public static String alipay_root_cert_path = "D:\\PlayBall\\alipayRootCert.crt";
-    
+   // public static String alipay_root_cert_path = "D:\\PlayBall\\alipayRootCert.crt";
+    public static String alipay_root_cert_path = "/usr/local/playball/alipayRootCert.crt";
     
 }
