@@ -8,9 +8,11 @@ import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppTeamPlayers;
 import org.jeecg.modules.appapi.entity.AppUsers;
+import org.jeecg.modules.appapi.entity.UserNotice;
 import org.jeecg.modules.appapi.entity.vo.TeamScoreInfoVo;
 import org.jeecg.modules.appapi.mapper.*;
 import org.jeecg.modules.appapi.service.AppTeamService;
+import org.jeecg.modules.appapi.service.IUserNoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +27,8 @@ import java.util.Map;
 
 @Service
 public class AppTeamServiceImpl  implements AppTeamService {
-
+    @Autowired
+    private IUserNoticeService userNoticeService;
     @Autowired
     TeamRecruitsMapper teamRecruitsMapper;
     @Autowired
@@ -50,6 +53,17 @@ public class AppTeamServiceImpl  implements AppTeamService {
         AppUsers appUsers=JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
 
         AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
+
+        Map<String,Object> map =new HashedMap();
+        map.put("team_id",appTeam.getTeam_id());
+        List<AppTeamPlayers> list= appTeamPlayersMapper.selectByKey(map);
+        for (int i = 0; i < list.size(); i++) {
+            UserNotice userNotice=new UserNotice();
+            userNotice.setType(3);
+            userNotice.setReceiverUid(list.get(i).getU_id());
+            userNotice.setContent("已退出 "+appTeam.getT_name());
+            userNoticeService.save(userNotice);
+        }
         //删除球队表
         appTeam.setIs_delete(1);
         appTeamMapper.update(appTeam);

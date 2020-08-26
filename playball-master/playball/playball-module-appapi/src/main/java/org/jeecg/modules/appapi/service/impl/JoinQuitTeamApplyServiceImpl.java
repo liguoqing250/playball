@@ -5,10 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.modules.appapi.entity.AppTeam;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
+import org.jeecg.modules.appapi.entity.UserNotice;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
+import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.mapper.JoinQuitTeamApplyMapper;
+import org.jeecg.modules.appapi.service.IUserNoticeService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +27,10 @@ import java.util.Map;
 
 @Service
 public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
-
+    @Autowired
+    AppTeamMapper appTeamMapper;
+    @Autowired
+    private IUserNoticeService userNoticeService;
     @Autowired
     JoinQuitTeamApplyMapper mapper;
 
@@ -46,6 +53,12 @@ public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
             record.setU_id(appUsers.getU_id());
             mapper.insert(record);
             obj.put("msg","申请成功");
+            AppTeam appTeam=appTeamMapper.selectById(record.getTeam_id());
+            UserNotice userNotice=new UserNotice();
+            userNotice.setType(3);
+            userNotice.setReceiverUid(appUsers.getU_id());
+            userNotice.setContent("已申请加入 "+appTeam.getT_name());
+            userNoticeService.save(userNotice);
         }else{
             obj.put("msg","已申请,请勿重复申请");
         }

@@ -5,15 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.modules.appapi.entity.AppTeam;
-import org.jeecg.modules.appapi.entity.AppTeamPlayers;
-import org.jeecg.modules.appapi.entity.AppUsers;
-import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
+import org.jeecg.modules.appapi.entity.*;
 import org.jeecg.modules.appapi.entity.vo.AppTeamPlayersVo;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.AppTeamService;
+import org.jeecg.modules.appapi.service.IUserNoticeService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,8 @@ import java.util.Map;
 @RequestMapping("/appTeam")
 @Slf4j
 public class AppTeamController {
-
+    @Autowired
+    private IUserNoticeService userNoticeService;
     @Autowired
     AppTeamMapper appTeamMapper;
     @Autowired
@@ -69,6 +68,11 @@ public class AppTeamController {
             appTeamService.update(appTeam);
 
             appTeamPlayersService.deleteById(appTeamPlayers.getTp_id());
+            UserNotice userNotice=new UserNotice();
+            userNotice.setType(3);
+            userNotice.setReceiverUid(appUsers.getU_id());
+            userNotice.setContent("已退出 "+appTeam.getT_name());
+            userNoticeService.save(userNotice);
             return Result.ok("退队成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -144,8 +148,18 @@ public class AppTeamController {
     @PostMapping(value = "/update")
     public Result<JSONObject> update(@RequestBody AppTeam appTeam) {
         Result<JSONObject> result = new Result<JSONObject>();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token=request.getHeader("X-Access-Token");
+        AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
         try{
             appTeamService.update(appTeam);
+            if(appTeam.getT_captain()!=null && !"".equals(appTeam.getT_captain()) && appTeam.getT_captain()!=appUsers.getU_id()){
+                UserNotice userNotice=new UserNotice();
+                userNotice.setType(3);
+                userNotice.setReceiverUid(appTeam.getT_captain());
+                userNotice.setContent("您已成为  "+appTeam.getT_name()+" 队长");
+                userNoticeService.save(userNotice);
+            }
             result.success("编辑成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -192,6 +206,12 @@ public class AppTeamController {
                 appTeamPlayers.setTp_joinTime(new Date());
                 appTeamPlayers.setTp_position(joinQuitTeamApply.getPosition());
                 appTeamPlayersService.insert(appTeamPlayers);
+
+                UserNotice userNotice=new UserNotice();
+                userNotice.setType(3);
+                userNotice.setReceiverUid(joinQuitTeamApply.getU_id());
+                userNotice.setContent("球队申请已通过，已加入  "+appTeam.getT_name());
+                userNoticeService.save(userNotice);
             }
             return Result.ok("操作成功");
         }catch (Exception e){
@@ -244,6 +264,9 @@ public class AppTeamController {
     //创建球队
     @PostMapping(value = "/createTeam")
     public Result<JSONObject> createTeam(@RequestBody AppTeam appTeam) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token=request.getHeader("X-Access-Token");
+        AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             JSONObject obj = new JSONObject();
@@ -252,10 +275,14 @@ public class AppTeamController {
                 result.success("重复球队名，请换一个");
                 obj.put("data",null);
             }else{
-
                 appTeamService.createTeam(appTeam);
                 obj.put("data",appTeam);
                 result.success("创建成功");
+                UserNotice userNotice=new UserNotice();
+                userNotice.setType(3);
+                userNotice.setReceiverUid(appUsers.getU_id());
+                userNotice.setContent("球队创建成功");
+                userNoticeService.save(userNotice);
             }
 
             result.setResult(obj);
@@ -353,6 +380,11 @@ public class AppTeamController {
             appTeam.setTeam_id(teamId);
             appTeam.setT_players_total(appTeam.getT_players_total()-1);
             appTeamService.update(appTeam);
+            UserNotice userNotice=new UserNotice();
+            userNotice.setType(3);
+            userNotice.setReceiverUid(uId);
+            userNotice.setContent("您已被 "+appTeam.getT_name()+" 踢出球队");
+            userNoticeService.save(userNotice);
             result.success("请求成功");
         }catch (Exception e){
             e.printStackTrace();
