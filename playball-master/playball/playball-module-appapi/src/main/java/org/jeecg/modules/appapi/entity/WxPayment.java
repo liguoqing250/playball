@@ -27,7 +27,7 @@ public class WxPayment {
 
 	private String goods_id ; //商品id
 	private Integer goods_type ; //商品交易类型
-	
+	private Integer ub_user_id ; //用户id
 	/** 生成随机订单号。*/
 	private  String getOrderStr() {
 		return System.currentTimeMillis() +""+ ThreadLocalRandom.current().nextInt(100,200);

@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.appapi.entity.FieldReserveInfo;
+import org.jeecg.modules.appapi.entity.PlayballUsersBalance;
 import org.jeecg.modules.appapi.entity.WxPayment;
 import org.jeecg.modules.appapi.entity.WxWithdraw;
 import org.jeecg.modules.appapi.entity.vo.PaymentVo;
 import org.jeecg.modules.appapi.mapper.FieldReserveInfoMapper;
+import org.jeecg.modules.appapi.mapper.PlayballUsersBalanceMapper;
 import org.jeecg.modules.appapi.service.PaymentService;
 import org.jeecg.modules.appapi.service.impl.WxPayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 @RestController
 public class PaymentController {
@@ -36,6 +39,9 @@ public class PaymentController {
 	
 	@Autowired
 	private WxPayServiceImpl wxPayService; //微信提现
+	
+	@Autowired
+	private PlayballUsersBalanceMapper balMapper;
 	
 	/*微信响应预付单*/
 	@PostMapping(value="/getAdvancedOrder")
@@ -144,5 +150,27 @@ public class PaymentController {
 			return replace;
 		}
 	}
+    
+    /*余额支付*/
+   	@PostMapping("/balancePlay")
+       public Result<?> balancePlay(@RequestBody WxPayment wxPay) throws AlipayApiException{
+       	//余额表查询条件
+       	QueryWrapper<PlayballUsersBalance> queryWrapper = new QueryWrapper<PlayballUsersBalance>();
+       		queryWrapper.eq("ub_user_id", wxPay.getUb_user_id());
+       	PlayballUsersBalance selectOne = balMapper.selectOne(queryWrapper);
+       	//余额小于实付款
+       	if(selectOne.getUbBalance().compareTo(wxPay.getTotal_fee())==-1){
+   			return Result.error(0, "余额不足");
+   		}
+       	//支付后余额
+       	BigDecimal payAfterBal = selectOne.getUbBalance().subtract(wxPay.getTotal_fee());
+        //设置当前余额
+       	selectOne.setUbBalance(payAfterBal);
+       	int updateById = balMapper.updateById(selectOne);
+       	if(updateById>0){
+       		return Result.ok(wxPay);
+       	}
+       	return Result.error(0, "系统错误");
+       }
 	
 }
