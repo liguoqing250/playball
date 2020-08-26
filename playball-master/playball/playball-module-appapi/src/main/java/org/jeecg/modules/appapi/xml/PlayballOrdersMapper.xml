@@ -30,6 +30,7 @@
 			LEFT JOIN playball_business_evaluation e
 			ON o.ord_id=e.ord_id
 			WHERE o.ord_user_id = #{o.ordUserId} AND o.cpr_type = #{o.cprType} AND o.cpr_state = #{o.cprState}
+    		ORDER BY o.create_time DESC
     	</if>
     	<if test="o.cprState!=null and o.cprState==2">
     		SELECT o.*,d.depart_name,f.image_url,f.business_id FROM playball_orders o 
@@ -38,6 +39,7 @@
 			INNER JOIN sys_depart d
 			ON f.business_id = d.id
 			WHERE o.ord_user_id = #{o.ordUserId} AND o.cpr_type = #{o.cprType} AND o.cpr_state = #{o.cprState}
+    		ORDER BY o.create_time DESC
     	</if>
     </select>
     
