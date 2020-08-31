@@ -9,5 +9,5 @@ import java.util.Map;
 
 public interface AppOpenService {
     //注册或登录
-    public Map<String,Object> loginOrRegister(AppUsers appUsers,Boolean usePassworld);
+    public Map<String,Object> loginOrRegister(AppUsers appUsers,Boolean usePassworld,String json);
 }

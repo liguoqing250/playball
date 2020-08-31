@@ -40,7 +40,7 @@ public class APPLoginController {
         boolean usePassworld= (boolean) jsonObject.get("usePassworld");
         try{
             //注册或登录
-            Map<String,Object> map=appOpenService.loginOrRegister(appUsers,usePassworld);
+            Map<String,Object> map=appOpenService.loginOrRegister(appUsers,usePassworld,json);
 
             if((boolean)map.get("success")){
                 appUsers= (AppUsers) map.get("appUsers");
@@ -48,7 +48,7 @@ public class APPLoginController {
                 String token =JwtUtil.appSign(JSONObject.toJSONString(appUsers),appUsers.getU_id().toString());
                 // 设置token缓存有效时间
                 redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME);
 
                 JSONObject obj = new JSONObject();
                 obj.put("token", token);
@@ -72,14 +72,11 @@ public class APPLoginController {
     public Result<JSONObject> sendVerificationCode(String phone) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
+            redisUtil.del(phone);
             int code=(int)((Math.random()*9+1)*100000);
-            System.out.println(phone);
-            System.out.println(Integer.toString(code));
             SIMUtils.send(phone,Integer.toString(code));
+            redisUtil.set(phone,code,5*60);
             result.setMessage("发送成功");
-            JSONObject obj = new JSONObject();
-            obj.put("code", code);
-            result.setResult(obj);
             result.setSuccess(false);
         }catch (Exception e){
            e.printStackTrace();

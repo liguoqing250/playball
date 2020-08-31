@@ -5,13 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.modules.appapi.entity.AppTeam;
-import org.jeecg.modules.appapi.entity.AppUsers;
-import org.jeecg.modules.appapi.entity.JoinQuitTeamApply;
-import org.jeecg.modules.appapi.entity.UserNotice;
+import org.jeecg.modules.appapi.entity.*;
 import org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo;
 import org.jeecg.modules.appapi.mapper.AppTeamMapper;
 import org.jeecg.modules.appapi.mapper.JoinQuitTeamApplyMapper;
+import org.jeecg.modules.appapi.service.AppTeamPlayersService;
 import org.jeecg.modules.appapi.service.IUserNoticeService;
 import org.jeecg.modules.appapi.service.JoinQuitTeamApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,8 @@ public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
     @Autowired
     AppTeamMapper appTeamMapper;
     @Autowired
+    AppTeamPlayersService appTeamPlayersService;
+    @Autowired
     private IUserNoticeService userNoticeService;
     @Autowired
     JoinQuitTeamApplyMapper mapper;
@@ -44,18 +44,22 @@ public class JoinQuitTeamApplyServiceImpl implements JoinQuitTeamApplyService {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=request.getHeader("X-Access-Token");
         AppUsers appUsers= JSONObject.parseObject( JwtUtil.getUserInfo(token),AppUsers.class);
+        AppTeamPlayers appTeamPlayers= appTeamPlayersService.selectByuId(appUsers.getU_id());
+        if(appTeamPlayers!=null){
+            obj.put("msg","请先退出当前球队再尝试申请");
+            return  obj;
+        }
         Map<String,Object> parmers=new HashMap<>();
         parmers.put("team_id",record.getTeam_id());
         parmers.put("u_id",appUsers.getU_id());
-        //parmers.put("jqta_handleTime",null);
-        List<JoinQuitTeamApply> oldApply=mapper.selectByKey(parmers);
+        List<JoinQuitTeamApply> oldApply=mapper.selectIsApply(parmers);
         if(oldApply.size()==0){
             record.setU_id(appUsers.getU_id());
             mapper.insert(record);
             obj.put("msg","申请成功");
             AppTeam appTeam=appTeamMapper.selectById(record.getTeam_id());
             UserNotice userNotice=new UserNotice();
-            userNotice.setType(3);
+            userNotice.setType(2);
             userNotice.setReceiverUid(appUsers.getU_id());
             userNotice.setContent("已申请加入 "+appTeam.getT_name());
             userNoticeService.save(userNotice);

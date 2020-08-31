@@ -61,6 +61,11 @@
             <![CDATA[   and ${key} =  #{params[${key}]}  ]]>
         </foreach>
     </select>
+    <!--条件查询-->
+    <select id="selectIsApply" parameterType="java.util.Map" resultMap="JoinQuitTeamApplyResultMap">
+        SELECT * from playball_join_quit_team_apply WHERE is_delete=0 AND jqta_result!=2
+        AND team_id =#{params.team_id} AND u_id=#{params.u_id}
+    </select>
 
     <!--根据ID查询-->
     <select id="queryJoinQuitTeamApply" parameterType="java.util.Map" resultType="org.jeecg.modules.appapi.entity.vo.JQTeamApplyVo">

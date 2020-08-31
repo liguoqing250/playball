@@ -382,14 +382,14 @@
 			<version>3.14.2</version>
 		</dependency>
 		
-		<!-- eclipse 第一行报错 -->
-		<dependency>
-		      <groupId>com.sun</groupId>
-		      <artifactId>tools</artifactId>
-		      <version>1.8.0_191</version>
-		      <scope>system</scope>
-			  <systemPath>C:/Program Files/Java/jdk1.8.0_191/lib/tools.jar</systemPath>
-		</dependency>
+<!--		&lt;!&ndash; eclipse 第一行报错 &ndash;&gt;-->
+<!--		<dependency>-->
+<!--		      <groupId>com.sun</groupId>-->
+<!--		      <artifactId>tools</artifactId>-->
+<!--		      <version>1.8.0_191</version>-->
+<!--		      <scope>system</scope>-->
+<!--			  <systemPath>C:/Program Files/Java/jdk1.8.0_191/lib/tools.jar</systemPath>-->
+<!--		</dependency>-->
 
 	</dependencies>
 

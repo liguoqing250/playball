@@ -6,6 +6,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.encryption.AesEncryptUtil;
 import org.jeecg.modules.appapi.entity.AppUsers;
 import org.jeecg.modules.appapi.entity.vo.AboutMe;
@@ -26,6 +27,8 @@ import java.util.Map;
 @RequestMapping("/appUsers")
 @Slf4j
 public class APPUserController {
+    @Autowired
+    private RedisUtil redisUtil;
     @Autowired
     AppUsersService appUsersService;
     @Autowired
@@ -48,22 +51,54 @@ public class APPUserController {
         }
         return result;
     }
-    @PostMapping(value = "/bindingPhone")
-    public Result<JSONObject> bindingPhone(String phoneNumber) {
+    @PostMapping(value = "/chickCode")
+    public Result<JSONObject> chickCode(String phoneNumber,int code) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
-            System.err.println(phoneNumber);
-            Map<String,Object> map=new HashedMap();
-            map.put("u_phoneNumber",phoneNumber);
-            List<AppUsers> list=appUsersService.selectByKey(map);
-            if(list.size()>0){
-                result.error500("该手机号已绑定,请勿重复绑定!");
+            if(redisUtil.hasKey(phoneNumber)){
+                if(code==(int)redisUtil.get(phoneNumber)){
+                    result.setSuccess(true);
+                }else{
+                    result.error500("验证码错误");
+                }
             }else{
-                AppUsers appUsers=new AppUsers();
-                appUsers.setU_phoneNumber(phoneNumber);
-                appUsersService.update(appUsers);
-                result.success("绑定成功");
+                result.error500("验证码不存在");
             }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            result.error500("请求失败");
+        }
+        return result;
+    }
+    @PostMapping(value = "/bindingPhone")
+    public Result<JSONObject> bindingPhone(String phoneNumber,int code) {
+        Result<JSONObject> result = new Result<JSONObject>();
+        try{
+            if(redisUtil.hasKey(phoneNumber)){
+                System.out.println(code);
+                System.out.println((int)redisUtil.get(phoneNumber));
+                System.out.println(code==(int)redisUtil.get(phoneNumber));
+                if(code==(int)redisUtil.get(phoneNumber)){
+                    Map<String,Object> map=new HashedMap();
+                    map.put("u_phoneNumber",phoneNumber);
+                    List<AppUsers> list=appUsersService.selectByKey(map);
+                    if(list.size()>0){
+                        result.error500("该手机号已绑定,请勿重复绑定!");
+                    }else{
+                        AppUsers appUsers=new AppUsers();
+                        appUsers.setU_phoneNumber(phoneNumber);
+                        appUsersService.update(appUsers);
+                        result.success("绑定成功");
+                    }
+                }else{
+                    result.error500("验证码错误");
+                }
+
+            }else{
+                result.error500("验证码不存在");
+            }
+
         }catch (Exception e){
             e.printStackTrace();
             result.error500("请求失败");

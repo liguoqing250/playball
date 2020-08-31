@@ -69,7 +69,7 @@ public class AppTeamController {
 
             appTeamPlayersService.deleteById(appTeamPlayers.getTp_id());
             UserNotice userNotice=new UserNotice();
-            userNotice.setType(3);
+            userNotice.setType(2);
             userNotice.setReceiverUid(appUsers.getU_id());
             userNotice.setContent("已退出 "+appTeam.getT_name());
             userNoticeService.save(userNotice);
@@ -155,7 +155,7 @@ public class AppTeamController {
             appTeamService.update(appTeam);
             if(appTeam.getT_captain()!=null && !"".equals(appTeam.getT_captain()) && appTeam.getT_captain()!=appUsers.getU_id()){
                 UserNotice userNotice=new UserNotice();
-                userNotice.setType(3);
+                userNotice.setType(2);
                 userNotice.setReceiverUid(appTeam.getT_captain());
                 userNotice.setContent("您已成为  "+appTeam.getT_name()+" 队长");
                 userNoticeService.save(userNotice);
@@ -191,9 +191,11 @@ public class AppTeamController {
             if(atp!=null){
                 return Result.ok("该用户已加入其他球队");
             }
-            joinQuitTeamApply.setJqta_handleTime(new Date());
-            joinQuitTeamApplyService.update(joinQuitTeamApply);
+
             if(joinQuitTeamApply.getJqta_result()==1){
+                joinQuitTeamApply.setJqta_handleTime(new Date());
+                joinQuitTeamApply.setIs_delete(1);
+                joinQuitTeamApplyService.update(joinQuitTeamApply);
                 //审核通过
                 //更新球队数据
                 AppTeam appTeam=appTeamService.selectById(joinQuitTeamApply.getTeam_id());
@@ -206,9 +208,9 @@ public class AppTeamController {
                 appTeamPlayers.setTp_joinTime(new Date());
                 appTeamPlayers.setTp_position(joinQuitTeamApply.getPosition());
                 appTeamPlayersService.insert(appTeamPlayers);
-
+                //发消息
                 UserNotice userNotice=new UserNotice();
-                userNotice.setType(3);
+                userNotice.setType(2);
                 userNotice.setReceiverUid(joinQuitTeamApply.getU_id());
                 userNotice.setContent("球队申请已通过，已加入  "+appTeam.getT_name());
                 userNoticeService.save(userNotice);
@@ -279,7 +281,7 @@ public class AppTeamController {
                 obj.put("data",appTeam);
                 result.success("创建成功");
                 UserNotice userNotice=new UserNotice();
-                userNotice.setType(3);
+                userNotice.setType(2);
                 userNotice.setReceiverUid(appUsers.getU_id());
                 userNotice.setContent("球队创建成功");
                 userNoticeService.save(userNotice);
@@ -372,7 +374,7 @@ public class AppTeamController {
     }
     //转让队长
     @PostMapping(value = "/kickPlayer")
-    public Result<JSONObject> changeLeader(@RequestParam Integer uId,@RequestParam Integer teamId) {
+    public Result<JSONObject> kickPlayer(@RequestParam Integer uId,@RequestParam Integer teamId) {
         Result<JSONObject> result = new Result<JSONObject>();
         try{
             appTeamPlayersService.kickPlayer(uId,teamId);
@@ -381,7 +383,7 @@ public class AppTeamController {
             appTeam.setT_players_total(appTeam.getT_players_total()-1);
             appTeamService.update(appTeam);
             UserNotice userNotice=new UserNotice();
-            userNotice.setType(3);
+            userNotice.setType(2);
             userNotice.setReceiverUid(uId);
             userNotice.setContent("您已被 "+appTeam.getT_name()+" 踢出球队");
             userNoticeService.save(userNotice);

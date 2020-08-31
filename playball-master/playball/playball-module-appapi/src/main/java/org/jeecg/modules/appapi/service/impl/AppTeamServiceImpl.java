@@ -59,7 +59,7 @@ public class AppTeamServiceImpl  implements AppTeamService {
         List<AppTeamPlayers> list= appTeamPlayersMapper.selectByKey(map);
         for (int i = 0; i < list.size(); i++) {
             UserNotice userNotice=new UserNotice();
-            userNotice.setType(3);
+            userNotice.setType(2);
             userNotice.setReceiverUid(list.get(i).getU_id());
             userNotice.setContent("已退出 "+appTeam.getT_name());
             userNoticeService.save(userNotice);

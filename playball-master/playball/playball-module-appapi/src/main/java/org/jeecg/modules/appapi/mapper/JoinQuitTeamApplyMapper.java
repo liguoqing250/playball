@@ -32,4 +32,6 @@ public interface JoinQuitTeamApplyMapper {
     void deleteByTeamId(Integer team_id);
 
     void deleteByUId(Integer u_id);
+
+    List<JoinQuitTeamApply> selectIsApply(@Param("params") Map<String, Object> params);
 }

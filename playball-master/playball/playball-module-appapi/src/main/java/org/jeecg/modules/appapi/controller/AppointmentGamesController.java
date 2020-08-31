@@ -131,7 +131,7 @@ public class AppointmentGamesController extends JeecgController<AppointmentGames
 		FieldInfo fieldInfo = fieldInfoService.getById(appointmentGames.getfId());
 		appointmentGames.setAgUserId(appUsers.getU_id());
 		appointmentGames.setAgStatus(1);
-		appointmentGames.setbId(fieldInfo.getBusinessId());
+		//appointmentGames.setbId(fieldInfo.getBusinessId());
 		AppTeam appTeam=appTeamMapper.isCaptain(appUsers.getU_id());
 		if(appointmentGames.getAppointmentWay()==1){
 			//个人

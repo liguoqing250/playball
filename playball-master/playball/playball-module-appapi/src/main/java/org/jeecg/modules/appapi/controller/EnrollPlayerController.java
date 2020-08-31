@@ -14,7 +14,10 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.appapi.entity.Enroll;
 import org.jeecg.modules.appapi.entity.EnrollPlayer;
+import org.jeecg.modules.appapi.entity.Game;
+import org.jeecg.modules.appapi.entity.UserNotice;
 import org.jeecg.modules.appapi.service.IEnrollPlayerService;
 import java.util.Date;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,6 +25,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.modules.appapi.service.IEnrollService;
+import org.jeecg.modules.appapi.service.IGameService;
+import org.jeecg.modules.appapi.service.IUserNoticeService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -48,9 +54,14 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/EnrollPlayer")
 public class EnrollPlayerController extends JeecgController<EnrollPlayer, IEnrollPlayerService> {
+	 @Autowired
+	 private IEnrollService enrollService;
+	 @Autowired
+	 private IGameService gameService;
 	@Autowired
 	private IEnrollPlayerService enrollPlayerService;
-	
+	 @Autowired
+	 private IUserNoticeService userNoticeService;
 	/**
 	 * 分页列表查询
 	 *
@@ -81,8 +92,17 @@ public class EnrollPlayerController extends JeecgController<EnrollPlayer, IEnrol
 	 @PostMapping(value = "/addList")
 	 public Result<?> add(@RequestBody List<EnrollPlayer> enrollPlayerList) {
 	 	try{
+			Enroll enroll= enrollService.getById(enrollPlayerList.get(0).getEnrollId());
+			Game game= gameService.getById(enroll.getGamesId());
+
 			for (int i = 0; i < enrollPlayerList.size(); i++) {
 				enrollPlayerService.save(enrollPlayerList.get(i));
+				UserNotice userNotice=new UserNotice();
+				userNotice.setType(4);
+				userNotice.setReceiverUid(Integer.parseInt(enrollPlayerList.get(i).getUserId()));
+				enrollPlayerList.get(i).getEnrollId();
+				userNotice.setContent("球队已报名参加 "+game.getGamesName());
+				userNoticeService.save(userNotice);
 			}
 			return Result.ok("报名成功！");
 		}catch (Exception e){

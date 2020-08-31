@@ -1,6 +1,8 @@
 package org.jeecg.modules.appapi.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.encryption.AesEncryptUtil;
 import org.jeecg.common.util.encryption.EncryptedString;
 import org.jeecg.modules.appapi.entity.AppUsers;
@@ -20,14 +22,15 @@ public class AppOpenServiceImpl implements AppOpenService {
     //使用AES-128-CBC加密模式，key需要为16位,key和iv可以相同！
     private static String KEY = EncryptedString.key;
     private static String IV = EncryptedString.iv;
-
+    @Autowired
+    private RedisUtil redisUtil;
     @Autowired
     AppUsersMapper appUsersMapper;
     @Autowired
     private PlayballUsersBalanceMapper playballUsersBalanceMapper;
 
     @Override
-    public Map<String,Object> loginOrRegister(AppUsers appUsers,Boolean usePassworld) {
+    public Map<String,Object> loginOrRegister(AppUsers appUsers,Boolean usePassworld,String json) {
         Map<String,Object> out=new HashMap<>();
         AppUsers selectAppUsers= appUsersMapper.selectMyRegisterWay(appUsers);
         String defaultPassworld="00000000";
@@ -76,25 +79,55 @@ public class AppOpenServiceImpl implements AppOpenService {
                             out.put("msg","登录失败密码错误");
                         }
                     }else{
-                        out.put("appUsers",selectAppUsers);
-                        out.put("msg","登录成功");
+                        //短信登录
+                        JSONObject jsonObject = JSONObject.parseObject(json);
+                        if(redisUtil.hasKey(appUsers.getU_phoneNumber())){
+                            String code=Integer.toString((int)redisUtil.get(appUsers.getU_phoneNumber()));
+
+                            if(jsonObject.get("code").equals(code)){
+                                out.put("appUsers",selectAppUsers);
+                                out.put("msg","登录成功");
+                            }else{
+                                out.put("success",false);
+                                out.put("msg","登录失败验证码错误");
+                            }
+                        }else{
+                            out.put("success",false);
+                            out.put("msg","登录失败验证码不存在");
+                        }
+
+
                     }
                 }else{
                     if(usePassworld){
                         out.put("success",false);
                         out.put("msg","账户不存在");
                     }else{
-                        //密码加密
-                        appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
-                        appUsers.setU_name("新用户");
-                        appUsers.setU_nickName("新用户");
-                        appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
-                        appUsersMapper.insert(appUsers);
-                        PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
-                        playballUsersBalance.setUbUserId(appUsers.getU_id());
-                        playballUsersBalanceMapper.insert(playballUsersBalance);
-                        out.put("appUsers",appUsers);
-                        out.put("msg","注册成功");
+                        JSONObject jsonObject = JSONObject.parseObject(json);
+                        if(redisUtil.hasKey(appUsers.getU_phoneNumber())){
+                            String code=Integer.toString((int)redisUtil.get(appUsers.getU_phoneNumber()));
+                            if(jsonObject.get("code").equals(code)){
+                                //密码加密
+                                appUsers.setU_passworld(AesEncryptUtil.encrypt(defaultPassworld));
+                                appUsers.setU_name("新用户");
+                                appUsers.setU_nickName("新用户");
+                                appUsers.setU_headImage("https://playball.oss-cn-beijing.aliyuncs.com/upload/1597919073-IMG_0368_1597919087194.PNG");
+                                appUsersMapper.insert(appUsers);
+                                PlayballUsersBalance playballUsersBalance=new PlayballUsersBalance();
+                                playballUsersBalance.setUbUserId(appUsers.getU_id());
+                                playballUsersBalanceMapper.insert(playballUsersBalance);
+                                out.put("appUsers",appUsers);
+                                out.put("msg","注册成功");
+                            }else{
+                                out.put("success",false);
+                                out.put("msg","注册失败验证码错误");
+                            }
+                        }else{
+                            out.put("success",false);
+                            out.put("msg","注册失败验证码不存在");
+                        }
+
+
                     }
                 }
             }

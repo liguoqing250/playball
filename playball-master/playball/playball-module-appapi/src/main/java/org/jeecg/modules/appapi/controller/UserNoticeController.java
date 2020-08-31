@@ -88,6 +88,7 @@ public class UserNoticeController extends JeecgController<UserNotice, IUserNotic
 		userNotice.setReceiverUid(appUsers.getU_id());
 		QueryWrapper<UserNotice> queryWrapper = QueryGenerator.initQueryWrapper(userNotice, req.getParameterMap());
 		Page<UserNotice> page = new Page<UserNotice>(pageNo, pageSize);
+
 		IPage<UserNotice> pageList = userNoticeService.page(page, queryWrapper);
 		return Result.ok(pageList);
 	}
